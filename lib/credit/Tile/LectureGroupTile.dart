@@ -20,7 +20,7 @@ class _LectureGroupTileState extends State<LectureGroupTile> {
       child: FlatButton(
         child: Text(
           '    ${widget.lectureGroup.name} 학점 : ${widget.lectureGroup.credits}/${widget.lectureGroup.minCredits}',
-          style: TextStyle(color: ERE_YELLOW, fontSize: widget.width * 0.044
+          style: TextStyle(color: ERE_YELLOW, fontSize: widget.width * 0.041
               ),
         ),
         onPressed: () => widget.onPressed(),

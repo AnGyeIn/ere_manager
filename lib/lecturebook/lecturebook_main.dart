@@ -108,7 +108,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
     double width = screenSize.width;
     double height = screenSize.height;
     double tile_height = height * 0.05;
-    double fontsize = width * 0.038;
+    double fontsize = width * 0.034;
 
     return SafeArea(
       child: Scaffold(

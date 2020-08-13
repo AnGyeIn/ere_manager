@@ -57,9 +57,11 @@ class _AgreementActivityState extends State<AgreementActivity> {
                   checkColor: ERE_YELLOW,
                   activeColor: ERE_BLACK,
                 ),
-                Text(
-                  '상기 내용을 확인했으며 개인정보 제공에 동의합니다.',
-                  style: TextStyle(color: ERE_YELLOW, fontSize: width * 0.04),
+                Expanded(
+                  child: Text(
+                    '상기 내용을 확인했으며 개인정보 제공에 동의합니다.',
+                    style: TextStyle(color: ERE_YELLOW, fontSize: width * 0.037),
+                  ),
                 )
               ],
             ),

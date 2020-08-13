@@ -175,7 +175,7 @@ class _CreditMainActivityState extends State<CreditMainActivity> {
                   Padding(
                     padding: EdgeInsets.all(width * 0.0075),
                     child: Container(
-                      width: width * 0.63,
+                      width: width * 0.69,
                       height: height * 0.034,
                       child: EREButton(
                         text: progressingMajor,

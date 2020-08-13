@@ -15,7 +15,7 @@ class EREButton extends StatelessWidget {
       color: ERE_BLACK,
       onPressed: onPressed,
       child: Text(text,
-      style: TextStyle(fontSize: width * 0.04),),
+      style: TextStyle(fontSize: width * 0.037),),
     );
   }
 }

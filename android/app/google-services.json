@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "379293100276",
+    "firebase_url": "https://ere-manager.firebaseio.com",
+    "project_id": "ere-manager",
+    "storage_bucket": "ere-manager.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:379293100276:android:2b59ef93cfda1d4c5096a1",
+        "android_client_info": {
+          "package_name": "com.agistudio97.ere_manager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "379293100276-73p96dmkcfnpn67jrn4ql1p3q37n7535.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.agistudio97.ere_manager",
+            "certificate_hash": "5d613da59c195e19a90cf83a476f1a10210e4de9"
+          }
+        },
+        {
+          "client_id": "379293100276-0s3d51g8esvb3791sbfvl4cdc3jp5n5f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBsV9mrTdIX7V_AIhr1nHr__n1Ug-Uyhxs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "379293100276-0s3d51g8esvb3791sbfvl4cdc3jp5n5f.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "379293100276-cmgv45gobht2mq2aov9h757lr86cm5ak.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.agistudio97.ereManager"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

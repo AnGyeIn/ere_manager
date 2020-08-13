@@ -30,7 +30,7 @@ class _AddedLectureTileState extends State<AddedLectureTile> {
             child: Text(
               '          ${widget.addedLecture.name}(${widget.addedLecture.credit}학점)',
               style:
-                  TextStyle(color: ERE_YELLOW, fontSize: widget.width * 0.043),
+                  TextStyle(color: ERE_YELLOW, fontSize: widget.width * 0.04),
             ),
           ),
           Checkbox(

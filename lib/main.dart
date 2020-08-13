@@ -165,7 +165,7 @@ class _MainActivityState extends State<MainActivity> {
                       child: Text(
                         '회원탈퇴',
                         style: TextStyle(
-                            color: Color(0xffff2424), fontSize: width * 0.04),
+                            color: Color(0xaaff2424), fontSize: width * 0.04),
                       ),
                       onPressed: () async {
                         loginCheck = await showDialog<bool>(

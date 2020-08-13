@@ -36,7 +36,7 @@ class _LectureBookTileState extends State<LectureBookTile> {
   Widget build(BuildContext context) {
     double tile_padding = widget.width * 0.0075;
     double tile_height = widget.height * 0.06;
-    double fontsize = widget.width * 0.037;
+    double fontsize = widget.width * 0.034;
     final isOwner = widget.userID == widget.lectureBook.ownerID;
     Color stateColor = widget.lectureBook.isAvailable ? ERE_GREY : ERE_BLACK;
 

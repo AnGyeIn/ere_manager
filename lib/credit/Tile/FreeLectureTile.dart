@@ -32,7 +32,7 @@ class _FreeLectureTileState extends State<FreeLectureTile> {
     return Row(
       children: [
         Container(
-          width: widget.width * 0.12,
+          width: widget.width * 0.11,
         ),
         Container(
           width: widget.width * 0.3,
@@ -42,7 +42,7 @@ class _FreeLectureTileState extends State<FreeLectureTile> {
                 border: InputBorder.none,
                 hintText: '과목명 입력',
                 hintStyle: TextStyle(color: Color(0x88e4b92a))),
-            style: TextStyle(color: ERE_YELLOW, fontSize: widget.width * 0.043),
+            style: TextStyle(color: ERE_YELLOW, fontSize: widget.width * 0.04),
             onChanged: (text) => addLecName = text,
           ),
         ),
@@ -55,7 +55,7 @@ class _FreeLectureTileState extends State<FreeLectureTile> {
                 border: InputBorder.none,
                 hintText: '학점 입력',
                 hintStyle: TextStyle(color: Color(0x88e4b92a))),
-            style: TextStyle(color: ERE_YELLOW, fontSize: widget.width * 0.043),
+            style: TextStyle(color: ERE_YELLOW, fontSize: widget.width * 0.04),
             onChanged: (text) => addLecCredit = int.parse(text),
           ),
         ),
