@@ -319,6 +319,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                                     index: index + 1,
                                     lectureBookRequest:
                                         requestListForOwner[index],
+                                    requestListForOwner: requestListForOwner,
                                     width: width,
                                     height: height,
                                     refresh: () {

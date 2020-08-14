@@ -51,48 +51,60 @@ class _LectureBookTileState extends State<LectureBookTile> {
             padding: EdgeInsets.all(tile_padding),
             width: widget.width * 0.084,
             height: tile_height,
-            child: Text('${widget.index}',
-            style: TextStyle(fontSize: fontsize),),
+            child: Text(
+              '${widget.index}',
+              style: TextStyle(fontSize: fontsize),
+            ),
           ),
           Container(
             alignment: Alignment.center,
             padding: EdgeInsets.all(tile_padding),
             width: widget.width * 0.285,
             height: tile_height,
-            child: Text('${widget.lectureBook.title}',
-            style: TextStyle(fontSize: fontsize),),
+            child: Text(
+              '${widget.lectureBook.title}',
+              style: TextStyle(fontSize: fontsize),
+            ),
           ),
           Container(
             alignment: Alignment.center,
             padding: EdgeInsets.all(tile_padding),
             width: widget.width * 0.185,
             height: tile_height,
-            child: Text('${widget.lectureBook.author}',
-            style: TextStyle(fontSize: fontsize),),
+            child: Text(
+              '${widget.lectureBook.author}',
+              style: TextStyle(fontSize: fontsize),
+            ),
           ),
           Container(
             alignment: Alignment.center,
             padding: EdgeInsets.all(tile_padding),
             width: widget.width * 0.185,
             height: tile_height,
-            child: Text('${widget.lectureBook.lecture}',
-            style: TextStyle(fontSize: fontsize),),
+            child: Text(
+              '${widget.lectureBook.lecture}',
+              style: TextStyle(fontSize: fontsize),
+            ),
           ),
           Container(
             alignment: Alignment.center,
             padding: EdgeInsets.all(tile_padding),
             width: widget.width * 0.15,
             height: tile_height,
-            child: Text('${widget.lectureBook.ownerName}',
-            style: TextStyle(fontSize: fontsize),),
+            child: Text(
+              '${widget.lectureBook.ownerName}',
+              style: TextStyle(fontSize: fontsize),
+            ),
           ),
           Container(
             alignment: Alignment.center,
             padding: EdgeInsets.all(tile_padding),
             width: widget.width * 0.11,
             height: tile_height,
-            child: Text('${widget.lectureBook.option}',
-            style: TextStyle(fontSize: fontsize),),
+            child: Text(
+              '${widget.lectureBook.option}',
+              style: TextStyle(fontSize: fontsize),
+            ),
           )
         ],
       ),
@@ -189,7 +201,8 @@ class _LectureBookTileState extends State<LectureBookTile> {
                                       'receiverID': widget.userID,
                                       'receiverName': widget.userName,
                                       'option': widget.lectureBook.option,
-                                      'isAccepted': false
+                                      'isAccepted': false,
+                                      'isRejected': false
                                     });
                                     return mutableData;
                                   });

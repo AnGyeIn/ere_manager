@@ -137,7 +137,7 @@ class _LectureBookRequestTileForReceiverState
                   width: widget.width,
                 ),
               )
-            : Container(
+            : !widget.lectureBookRequest.isRejected ? Container(
                 alignment: Alignment.center,
                 padding: EdgeInsets.all(tile_padding),
                 width: widget.width * 0.2,
@@ -156,7 +156,32 @@ class _LectureBookRequestTileForReceiverState
                   },
                   width: widget.width,
                 ),
+              ) : Container(
+          alignment: Alignment.center,
+          padding: EdgeInsets.all(tile_padding),
+          width: widget.width * 0.24,
+          height: tile_height,
+          child: EREButton(
+            text: '반려 대기',
+            onPressed: () {
+              showDialog(context: context,
+              builder: (context) => AlertDialog(
+                content: Text('동일 교재에 대해 다른 신청자가 승인되어 반려된 신청입니다. 확인을 누르면 목록에서 삭제됩니다.'),
+                actions: [
+                  FlatButton(
+                    child: Text('확인'),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      reference.child('lecturebook').child('LectureBookRequest').child(widget.lectureBookRequest.id).remove();
+                    },
+                  )
+                ],
               )
+              );
+            },
+            width: widget.width,
+          ),
+        )
       ],
     );
   }

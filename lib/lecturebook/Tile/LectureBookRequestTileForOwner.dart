@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 class LectureBookRequestTileForOwner extends StatefulWidget {
   int index;
   LectureBookRequest lectureBookRequest;
+  List<LectureBookRequest> requestListForOwner;
   double width;
   double height;
   Function refresh;
@@ -17,6 +18,7 @@ class LectureBookRequestTileForOwner extends StatefulWidget {
   LectureBookRequestTileForOwner(
       {this.index,
       this.lectureBookRequest,
+      this.requestListForOwner,
       this.width,
       this.height,
       this.refresh});
@@ -90,76 +92,103 @@ class _LectureBookRequestTileForOwnerState
                   ),
                 ),
               )
-            : Container(
-                alignment: Alignment.center,
-                padding: EdgeInsets.all(tile_padding),
-                width: widget.width * 0.2,
-                height: tile_height,
-                child: EREButton(
-                  text: '승인',
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (_) => AlertDialog(
-                              content: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text('승인하면 신청자에게 연락처가 전달됩니다. 계속하시겠습니까?')
-                                ],
-                              ),
-                              actions: [
-                                FlatButton(
-                                  child: Text('승인'),
-                                  onPressed: () async {
-                                    Navigator.pop(context);
+            : !widget.lectureBookRequest.isRejected
+                ? Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(tile_padding),
+                    width: widget.width * 0.2,
+                    height: tile_height,
+                    child: EREButton(
+                      text: '승인',
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (_) => AlertDialog(
+                                  content: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                          '승인하면 신청자에게 연락처가 전달되며, 동일 교재에 대한 다른 신청들은 반려 처리됩니다. 계속하시겠습니까?')
+                                    ],
+                                  ),
+                                  actions: [
+                                    FlatButton(
+                                      child: Text('승인'),
+                                      onPressed: () async {
+                                        Navigator.pop(context);
 
-                                    final deactiveTransaction = await reference
-                                        .child('LectureBook')
-                                        .child(widget
-                                            .lectureBookRequest.lecturebookID)
-                                        .runTransaction((mutableData) async {
-                                      final lectureBook = LectureBook.fromJson(
-                                          jsonDecode(mutableData.value));
-                                      lectureBook.isAvailable = false;
-                                      mutableData.value =
-                                          jsonEncode(lectureBook.toJson());
-                                      return mutableData;
-                                    });
+                                        final deactiveTransaction =
+                                            await reference
+                                                .child('LectureBook')
+                                                .child(widget.lectureBookRequest
+                                                    .lecturebookID)
+                                                .runTransaction(
+                                                    (mutableData) async {
+                                          final lectureBook =
+                                              LectureBook.fromJson(jsonDecode(
+                                                  mutableData.value));
+                                          lectureBook.isAvailable = false;
+                                          mutableData.value =
+                                              jsonEncode(lectureBook.toJson());
+                                          return mutableData;
+                                        });
 
-                                    if (deactiveTransaction.committed) {
-                                      widget.lectureBookRequest.isAccepted =
-                                          true;
-                                      final acceptTransaction = await reference
-                                          .child('LectureBookRequest')
-                                          .child(widget.lectureBookRequest.id)
-                                          .runTransaction((mutableData) async {
-                                        mutableData.value = jsonEncode(
-                                            widget.lectureBookRequest.toJson());
-                                        return mutableData;
-                                      });
+                                        if (deactiveTransaction.committed) {
+                                          final equivList = [];
 
-                                      if (acceptTransaction.committed) {
-                                        EREToast('승인되었습니다.', context, false);
-                                        widget.refresh();
-                                      } else
-                                        EREToast(
-                                            '신청자가 취소한 신청입니다.', context, false);
-                                    }
-                                  },
-                                ),
-                                FlatButton(
-                                  child: Text('취소'),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                )
-                              ],
-                            ));
-                  },
-                  width: widget.width,
-                ),
-              )
+                                          for (var request
+                                              in widget.requestListForOwner) {
+                                            if (request.id ==
+                                                widget.lectureBookRequest.id) {
+                                              request.isAccepted = true;
+                                              equivList.add(request);
+                                            } else if (request.lecturebookID ==
+                                                widget.lectureBookRequest
+                                                    .lecturebookID) {
+                                              request.isRejected = true;
+                                              equivList.add(request);
+                                            }
+                                          }
+
+                                          try {
+                                            for (var request in equivList)
+                                              await reference
+                                                  .child('LectureBookRequest')
+                                                  .child(request.id)
+                                                  .set(jsonEncode(
+                                                      request.toJson()));
+                                            EREToast(
+                                                '승인되었습니다.', context, false);
+                                          } catch (e) {
+                                            print(e);
+                                          }
+                                        }
+                                      },
+                                    ),
+                                    FlatButton(
+                                      child: Text('취소'),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                    )
+                                  ],
+                                ));
+                      },
+                      width: widget.width,
+                    ),
+                  )
+                : Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(tile_padding),
+                    width: widget.width * 0.2,
+                    height: tile_height,
+                    child: Text(
+                      '반려',
+                      style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
+                    ),
+                  )
       ],
     );
   }

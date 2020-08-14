@@ -9,6 +9,7 @@ class LectureBookRequest {
   String option;
   DateTime requestTime;
   bool isAccepted;
+  bool isRejected;
 
   LectureBookRequest.fromJson(Map<String, dynamic> json)
       : id = json['id'],
@@ -20,7 +21,8 @@ class LectureBookRequest {
         receiverName = json['receiverName'],
         option = json['option'],
         requestTime = DateTime.parse(json['requestTime']),
-        isAccepted = json['isAccepted'] as bool;
+        isAccepted = json['isAccepted'] as bool,
+        isRejected = json['isRejected'] as bool;
 
   Map<String, dynamic> toJson() => {
         'requestTime': requestTime.toString(),
@@ -32,6 +34,7 @@ class LectureBookRequest {
         'receiverID': receiverID,
         'receiverName': receiverName,
         'option': option,
-        'isAccepted': isAccepted
+        'isAccepted': isAccepted,
+        'isRejected': isRejected
       };
 }
