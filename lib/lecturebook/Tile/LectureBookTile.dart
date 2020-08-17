@@ -186,6 +186,46 @@ class _LectureBookTileState extends State<LectureBookTile> {
                                       .push()
                                       .key;
 
+                                  reference
+                                      .root()
+                                      .child('Student')
+                                      .child(widget.userID)
+                                      .child('lecturebookRequests')
+                                      .once()
+                                      .then((snapshot) {
+                                    final num =
+                                        (snapshot.value as List<dynamic> ?? [])
+                                            .length;
+                                    reference
+                                        .root()
+                                        .child('Student')
+                                        .child(widget.userID)
+                                        .child('lecturebookRequests')
+                                        .child('$num')
+                                        .set(id);
+                                  });
+
+                                  reference
+                                      .root()
+                                      .child('Student')
+                                      .child(widget.lectureBook.ownerID)
+                                      .child('lecturebookRequests')
+                                      .runTransaction((mutableData) async {
+                                    final num =
+                                        (mutableData.value as List<dynamic> ??
+                                                [])
+                                            .length;
+                                    reference
+                                        .root()
+                                        .child('Student')
+                                        .child(widget.lectureBook.ownerID)
+                                        .child('lecturebookRequests')
+                                        .child('$num')
+                                        .set(id);
+
+                                    return mutableData;
+                                  });
+
                                   final addTransaction = await reference
                                       .child('LectureBookRequest')
                                       .child(id)

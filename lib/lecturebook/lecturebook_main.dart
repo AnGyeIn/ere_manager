@@ -602,6 +602,25 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                           .child('LectureBook')
                           .push()
                           .key;
+
+                      reference
+                          .root()
+                          .child('Student')
+                          .child(user.uid)
+                          .child('lecturebooks')
+                          .once()
+                          .then((snapshot) {
+                        final num =
+                            (snapshot.value as List<dynamic> ?? []).length;
+                        reference
+                            .root()
+                            .child('Student')
+                            .child(user.uid)
+                            .child('lecturebooks')
+                            .child('$num')
+                            .set(id);
+                      });
+
                       final registerTransaction = await reference
                           .child('lecturebook')
                           .child('LectureBook')

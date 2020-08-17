@@ -219,70 +219,11 @@ class _MainActivityState extends State<MainActivity> {
                                                       .child('sNum')
                                                       .once())
                                                   .value) {
-                                            final uid = user.uid;
-                                            await reference
+
+                                            reference
                                                 .child('Student')
-                                                .child(uid)
+                                                .child(user.uid)
                                                 .remove();
-                                            await reference
-                                                .child('credit')
-                                                .child('CreditData')
-                                                .child(uid)
-                                                .remove();
-                                            List<String> lecturebooks = [];
-                                            List<String> requests = [];
-                                            FirebaseList(
-                                                query: reference
-                                                    .child('lecturebook')
-                                                    .child('LectureBook'),
-                                                onChildAdded: (_, snapshot) {
-                                                  var lectureBook =
-                                                      LectureBook.fromJson(
-                                                          jsonDecode(
-                                                              snapshot.value));
-                                                  if (lectureBook.ownerID ==
-                                                      uid)
-                                                    lecturebooks
-                                                        .add(lectureBook.id);
-                                                },
-                                                onChildRemoved: (_, __) {},
-                                                onValue: (_) async {
-                                                  for (var id in lecturebooks)
-                                                    await reference
-                                                        .child('lecturebook')
-                                                        .child('LectureBook')
-                                                        .child(id)
-                                                        .remove();
-                                                });
-                                            FirebaseList(
-                                                query: reference
-                                                    .child('lecturebook')
-                                                    .child(
-                                                        'LectureBookRequest'),
-                                                onChildAdded: (_, snapshot) {
-                                                  var lectureBookRequest =
-                                                      LectureBookRequest
-                                                          .fromJson(jsonDecode(
-                                                              snapshot.value));
-                                                  if (lectureBookRequest
-                                                              .ownerID ==
-                                                          uid ||
-                                                      lectureBookRequest
-                                                              .receiverID ==
-                                                          uid)
-                                                    requests.add(
-                                                        lectureBookRequest.id);
-                                                },
-                                                onChildRemoved: (_, __) {},
-                                                onValue: (_) async {
-                                                  for (var id in requests)
-                                                    await reference
-                                                        .child('lecturebook')
-                                                        .child(
-                                                            'LectureBookRequest')
-                                                        .child(id)
-                                                        .remove();
-                                                });
 
                                             try {
                                               await ui.FirebaseAuthUi.instance()
