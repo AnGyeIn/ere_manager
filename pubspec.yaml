@@ -27,6 +27,7 @@ dependencies:
   firebase_auth: ^0.16.1
   firebase_auth_ui: ^1.0.1
   firebase_database: ^3.1.6
+  firebase_messaging:
   toast:
   shared_preferences:
   path_provider:

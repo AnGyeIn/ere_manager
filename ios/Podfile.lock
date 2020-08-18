@@ -27,6 +27,9 @@ PODS:
   - Firebase/Database (6.30.0):
     - Firebase/CoreOnly
     - FirebaseDatabase (~> 6.5.0)
+  - Firebase/Messaging (6.30.0):
+    - Firebase/CoreOnly
+    - FirebaseMessaging (~> 4.6.1)
   - firebase_auth (0.0.1):
     - Firebase/Auth (~> 6.3)
     - Firebase/Core
@@ -47,6 +50,10 @@ PODS:
     - Flutter
   - firebase_database (0.0.1):
     - Firebase/Database
+    - Flutter
+  - firebase_messaging (0.0.1):
+    - Firebase/Core
+    - Firebase/Messaging
     - Flutter
   - FirebaseAnalytics (6.7.2):
     - FirebaseCore (~> 6.8)
@@ -79,6 +86,19 @@ PODS:
     - GoogleUtilities/Environment (~> 6.7)
     - GoogleUtilities/UserDefaults (~> 6.7)
     - PromisesObjC (~> 1.2)
+  - FirebaseInstanceID (4.5.1):
+    - FirebaseCore (~> 6.8)
+    - FirebaseInstallations (~> 1.0)
+    - GoogleUtilities/Environment (~> 6.7)
+    - GoogleUtilities/UserDefaults (~> 6.7)
+  - FirebaseMessaging (4.6.1):
+    - FirebaseCore (~> 6.8)
+    - FirebaseInstanceID (~> 4.3)
+    - GoogleUtilities/AppDelegateSwizzler (~> 6.7)
+    - GoogleUtilities/Environment (~> 6.7)
+    - GoogleUtilities/Reachability (~> 6.7)
+    - GoogleUtilities/UserDefaults (~> 6.7)
+    - Protobuf (>= 3.9.2, ~> 3.9)
   - FirebaseUI/Auth (8.4.2):
     - Firebase/Auth (~> 6.0)
     - GoogleUtilities/UserDefaults
@@ -145,6 +165,7 @@ PODS:
   - path_provider (0.0.1):
     - Flutter
   - PromisesObjC (1.2.10)
+  - Protobuf (3.12.0)
   - shared_preferences (0.0.1):
     - Flutter
   - url_launcher (0.0.1):
@@ -155,6 +176,7 @@ DEPENDENCIES:
   - firebase_auth_ui (from `.symlinks/plugins/firebase_auth_ui/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_database (from `.symlinks/plugins/firebase_database/ios`)
+  - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - Flutter (from `Flutter`)
   - flutter_barcode_scanner (from `.symlinks/plugins/flutter_barcode_scanner/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
@@ -173,6 +195,8 @@ SPEC REPOS:
     - FirebaseCoreDiagnostics
     - FirebaseDatabase
     - FirebaseInstallations
+    - FirebaseInstanceID
+    - FirebaseMessaging
     - FirebaseUI
     - GoogleAppMeasurement
     - GoogleDataTransport
@@ -183,6 +207,7 @@ SPEC REPOS:
     - leveldb-library
     - nanopb
     - PromisesObjC
+    - Protobuf
 
 EXTERNAL SOURCES:
   firebase_auth:
@@ -193,6 +218,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_core/ios"
   firebase_database:
     :path: ".symlinks/plugins/firebase_database/ios"
+  firebase_messaging:
+    :path: ".symlinks/plugins/firebase_messaging/ios"
   Flutter:
     :path: Flutter
   flutter_barcode_scanner:
@@ -213,12 +240,15 @@ SPEC CHECKSUMS:
   firebase_auth_ui: 01517d0bcdc078de1d2d3dd37d9543adfb43e1f0
   firebase_core: 335c02abd48672b7c83c683df833d0488a72e73e
   firebase_database: 88085c38a41ad0b5c3c611ede7205831a2ece844
+  firebase_messaging: 21344b3b3a7d9d325d63a70e3750c0c798fe1e03
   FirebaseAnalytics: a299a86ef70fcc6aa011418bc65a7e101fb9636c
   FirebaseAuth: 300433de340c1b058dbb8aec224a3f1bcfda5184
   FirebaseCore: 9a41e2de78fef10f63cee30ab10e2945266bc1fc
   FirebaseCoreDiagnostics: 7535fe695737f8c5b350584292a70b7f8ff0357b
   FirebaseDatabase: d85b47213273708e48c972012b39105f76229588
   FirebaseInstallations: 45f9d44d3a8d6f780fa337ee8987dad87210fcbc
+  FirebaseInstanceID: c4ad474b87787afd27d09541800620993b457d6f
+  FirebaseMessaging: 942cfe05b4f53c95ab8959395ca35c200398b2f0
   FirebaseUI: e57e9b9c4340631151fbe67a14206d23d0974f37
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_barcode_scanner: 49cd22fac3304077a6c1672f63bee4a2572ffd85
@@ -232,6 +262,7 @@ SPEC CHECKSUMS:
   nanopb: c43f40fadfe79e8b8db116583945847910cbabc9
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   PromisesObjC: b14b1c6b68e306650688599de8a45e49fae81151
+  Protobuf: 2793fcd0622a00b546c60e7cbbcc493e043e9bb9
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
 

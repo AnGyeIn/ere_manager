@@ -5,6 +5,7 @@ import 'package:ere_manager/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_list.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
@@ -48,58 +49,82 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
     FirebaseAuth.instance.currentUser().then((curUser) {
       user = curUser;
       userID = user.uid;
+
+      lecturebookList = FirebaseList(
+          query: reference.child('lecturebook').child('LectureBook'),
+          onChildAdded: (idx, snapshot) {
+            rawLecturebooks.insert(idx, snapshot.value);
+          },
+          onChildRemoved: (idx, snapshot) {
+            rawLecturebooks.removeAt(idx);
+          },
+          onChildChanged: (idx, snapshot) {
+            rawLecturebooks.removeAt(idx);
+            rawLecturebooks.insert(idx, snapshot.value);
+          },
+          onValue: (snapshot) {
+            setState(() {
+              lecturebooks = rawLecturebooks
+                  .map<LectureBook>(
+                      (str) => LectureBook.fromJson(jsonDecode(str)))
+                  .toList();
+              lecturebooks.sort((a, b) => a.title.compareTo(b.title));
+            });
+          });
+
+      requestList = FirebaseList(
+          query: reference.child('lecturebook').child('LectureBookRequest'),
+          onChildAdded: (idx, snapshot) {
+            rawRequests.insert(idx, snapshot.value);
+          },
+          onChildRemoved: (idx, snapshot) {
+            rawRequests.removeAt(idx);
+          },
+          onChildChanged: (idx, snapshot) {
+            rawRequests.removeAt(idx);
+            rawRequests.insert(idx, snapshot.value);
+          },
+          onValue: (snapshot) {
+            setState(() {
+              requestListForOwner.clear();
+              requestListForReceiver.clear();
+              requests = rawRequests
+                  .map<LectureBookRequest>(
+                      (str) => LectureBookRequest.fromJson(jsonDecode(str)))
+                  .toList();
+              requests.sort((a, b) => a.requestTime.compareTo(b.requestTime));
+              for (var request in requests) {
+                if (request.ownerID == userID) requestListForOwner.add(request);
+                if (request.receiverID == userID)
+                  requestListForReceiver.add(request);
+              }
+            });
+          });
+
+      final firebaseMessaging = FirebaseMessaging();
+      firebaseMessaging.configure(
+          onMessage: (Map<String, dynamic> message) async {
+            EREToast('등록하신 교재에 대한 신규 신청이 들어왔습니다.', context, true);
+          },
+          onLaunch: (Map<String, dynamic> message) async {
+            setState(() {
+              isLectureBookList = false;
+            });
+          },
+          onResume: (Map<String, dynamic> message) async {
+            setState(() {
+              isLectureBookList = false;
+            });
+          }
+      );
+      firebaseMessaging.requestNotificationPermissions(const IosNotificationSettings(sound: true, badge: true, alert: true, provisional: true));
+      firebaseMessaging.getToken().then((token) async {
+        assert(token != null);
+
+        if (token != (await reference.child('Student').child(userID).child('NT').once()).value)
+          reference.child('Student').child(userID).child('NT').set(token);
+      });
     });
-
-    lecturebookList = FirebaseList(
-        query: reference.child('lecturebook').child('LectureBook'),
-        onChildAdded: (idx, snapshot) {
-          rawLecturebooks.insert(idx, snapshot.value);
-        },
-        onChildRemoved: (idx, snapshot) {
-          rawLecturebooks.removeAt(idx);
-        },
-        onChildChanged: (idx, snapshot) {
-          rawLecturebooks.removeAt(idx);
-          rawLecturebooks.insert(idx, snapshot.value);
-        },
-        onValue: (snapshot) {
-          setState(() {
-            lecturebooks = rawLecturebooks
-                .map<LectureBook>(
-                    (str) => LectureBook.fromJson(jsonDecode(str)))
-                .toList();
-            lecturebooks.sort((a, b) => a.title.compareTo(b.title));
-          });
-        });
-
-    requestList = FirebaseList(
-        query: reference.child('lecturebook').child('LectureBookRequest'),
-        onChildAdded: (idx, snapshot) {
-          rawRequests.insert(idx, snapshot.value);
-        },
-        onChildRemoved: (idx, snapshot) {
-          rawRequests.removeAt(idx);
-        },
-        onChildChanged: (idx, snapshot) {
-          rawRequests.removeAt(idx);
-          rawRequests.insert(idx, snapshot.value);
-        },
-        onValue: (snapshot) {
-          setState(() {
-            requestListForOwner.clear();
-            requestListForReceiver.clear();
-            requests = rawRequests
-                .map<LectureBookRequest>(
-                    (str) => LectureBookRequest.fromJson(jsonDecode(str)))
-                .toList();
-            requests.sort((a, b) => a.requestTime.compareTo(b.requestTime));
-            for (var request in requests) {
-              if (request.ownerID == userID) requestListForOwner.add(request);
-              if (request.receiverID == userID)
-                requestListForReceiver.add(request);
-            }
-          });
-        });
   }
 
   @override
