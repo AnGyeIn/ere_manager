@@ -104,7 +104,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
       final firebaseMessaging = FirebaseMessaging();
       firebaseMessaging.configure(
           onMessage: (Map<String, dynamic> message) async {
-            EREToast('등록하신 교재에 대한 신규 신청이 들어왔습니다.', context, true);
+            EREToast('교재 신청 내역에 변동이 생겼습니다.', context, true);
           },
           onLaunch: (Map<String, dynamic> message) async {
             setState(() {

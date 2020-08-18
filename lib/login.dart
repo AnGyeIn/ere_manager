@@ -49,7 +49,8 @@ class _LoginActivityState extends State<LoginActivity> {
                   height: height * 0.034,
                   child: Text(
                     '학번',
-                    style: TextStyle(color: ERE_YELLOW, fontSize: width * 0.043),
+                    style:
+                        TextStyle(color: ERE_YELLOW, fontSize: width * 0.043),
                   ),
                 ),
                 Container(
@@ -62,7 +63,8 @@ class _LoginActivityState extends State<LoginActivity> {
                         border: InputBorder.none,
                         hintText: 'XXXX-XXXXX',
                         hintStyle: TextStyle(color: Color(0x88e4b92a))),
-                    style: TextStyle(color: ERE_YELLOW, fontSize: width * 0.043),
+                    style:
+                        TextStyle(color: ERE_YELLOW, fontSize: width * 0.043),
                     controller: TextEditingController(text: sNum),
                     onChanged: (text) => sNum = text,
                   ),
@@ -78,7 +80,8 @@ class _LoginActivityState extends State<LoginActivity> {
                   height: height * 0.034,
                   child: Text(
                     '연락처',
-                    style: TextStyle(color: ERE_YELLOW, fontSize: width * 0.043),
+                    style:
+                        TextStyle(color: ERE_YELLOW, fontSize: width * 0.043),
                   ),
                 ),
                 Container(
@@ -91,7 +94,8 @@ class _LoginActivityState extends State<LoginActivity> {
                         border: InputBorder.none,
                         hintText: 'XXX-XXXX-XXXX',
                         hintStyle: TextStyle(color: Color(0x88e4b92a))),
-                    style: TextStyle(color: ERE_YELLOW, fontSize: width * 0.043),
+                    style:
+                        TextStyle(color: ERE_YELLOW, fontSize: width * 0.043),
                     controller: TextEditingController(text: pNum),
                     onChanged: (text) => pNum = text,
                   ),
@@ -108,22 +112,24 @@ class _LoginActivityState extends State<LoginActivity> {
                     .launchAuth([AuthProvider.email()]).then((_) async {
                   final user = await FirebaseAuth.instance.currentUser();
 
-                  final signinTransaction = await FirebaseDatabase.instance.reference().child('Student').child(user.uid).runTransaction((mutableData) async {
-                    mutableData.value = <String, dynamic>{
-                      'sNum': sNum,
-                      'pNum': pNum,
-                      'name': user.displayName
-                    };
-                    return mutableData;
-                  });
+                  try {
+                    final reference = FirebaseDatabase.instance
+                        .reference()
+                        .child('Student')
+                        .child(user.uid);
+                    reference
+                      ..child('sNum').set(sNum)
+                      ..child('pNum').set(pNum)
+                      ..child('name').set(user.displayName);
 
-                  if(signinTransaction.committed) {
-                    prefs..setString('sNum', sNum)
-                        ..setString('pNum', pNum);
+                    prefs..setString('sNum', sNum)..setString('pNum', pNum);
                     EREToast('로그인되었습니다.', context, false);
-                    Navigator.pop(context, true);
-                  } else
+                  } catch (e) {
                     EREToast('로그인 실패: 입력 정보를 확인한 후 다시 시도해주세요.', context, true);
+                    print(e);
+                  }
+
+                  Navigator.pop(context, true);
                 });
               },
               width: width,
