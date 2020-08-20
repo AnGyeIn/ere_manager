@@ -23,10 +23,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  firebase_core: ^0.4.5
-  firebase_auth: ^0.16.1
-  firebase_auth_ui: ^1.0.1
-  firebase_database: ^3.1.6
+  firebase_core:
+  firebase_auth:
+  firebase_auth_ui:
+  firebase_database:
   firebase_messaging:
   toast:
   shared_preferences:
