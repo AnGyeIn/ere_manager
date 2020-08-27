@@ -1,14 +1,11 @@
-import 'dart:convert';
 import 'dart:ui';
 
 import 'package:ere_manager/EREButton.dart';
-import 'package:ere_manager/lecturebook/model/LectureBook.dart';
-import 'package:ere_manager/lecturebook/model/LectureBookRequest.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_auth_ui/firebase_auth_ui.dart' as ui;
 import 'package:firebase_auth_ui/providers.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_database/ui/firebase_list.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
@@ -29,7 +26,7 @@ class MainActivity extends StatefulWidget {
 }
 
 class _MainActivityState extends State<MainActivity> {
-  FirebaseUser user;
+  User user;
   bool loginCheck = false;
   bool isInitial = true;
   String sNum;
@@ -43,10 +40,10 @@ class _MainActivityState extends State<MainActivity> {
     if (isInitial) {
       isInitial = false;
 
-      EREToast('자동로그인중...', context, false);
+      Firebase.initializeApp().then((_) {
+        EREToast('자동로그인중...', context, false);
 
-      FirebaseAuth.instance.currentUser().then((value) {
-        user = value;
+        user = FirebaseAuth.instance.currentUser;
         loginCheck = user != null;
 
         if (loginCheck)
@@ -219,7 +216,6 @@ class _MainActivityState extends State<MainActivity> {
                                                       .child('sNum')
                                                       .once())
                                                   .value) {
-
                                             reference
                                                 .child('Student')
                                                 .child(user.uid)
@@ -229,8 +225,8 @@ class _MainActivityState extends State<MainActivity> {
                                               await ui.FirebaseAuthUi.instance()
                                                   .launchAuth(
                                                       [AuthProvider.email()]);
-                                              user = await FirebaseAuth.instance
-                                                  .currentUser();
+                                              user = FirebaseAuth
+                                                  .instance.currentUser;
                                               await user.delete();
                                               EREToast('탈퇴처리가 완료되었습니다.',
                                                   context, true);

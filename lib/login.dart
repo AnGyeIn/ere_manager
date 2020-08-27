@@ -110,7 +110,7 @@ class _LoginActivityState extends State<LoginActivity> {
               onPressed: () {
                 ui.FirebaseAuthUi.instance()
                     .launchAuth([AuthProvider.email()]).then((_) async {
-                  final user = await FirebaseAuth.instance.currentUser();
+                  final user = FirebaseAuth.instance.currentUser;
 
                   try {
                     final reference = FirebaseDatabase.instance

@@ -21,7 +21,7 @@ class LectureBookActivity extends StatefulWidget {
 }
 
 class _LectureBookActivityState extends State<LectureBookActivity> {
-  FirebaseUser user;
+  User user;
   DatabaseReference reference;
   FirebaseList lecturebookList;
   FirebaseList requestList;
@@ -46,84 +46,83 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
     reference = FirebaseDatabase.instance.reference();
     reference.keepSynced(true);
 
-    FirebaseAuth.instance.currentUser().then((curUser) {
-      user = curUser;
-      userID = user.uid;
+    user = FirebaseAuth.instance.currentUser;
+    userID = user.uid;
 
-      lecturebookList = FirebaseList(
-          query: reference.child('lecturebook').child('LectureBook'),
-          onChildAdded: (idx, snapshot) {
-            rawLecturebooks.insert(idx, snapshot.value);
-          },
-          onChildRemoved: (idx, snapshot) {
-            rawLecturebooks.removeAt(idx);
-          },
-          onChildChanged: (idx, snapshot) {
-            rawLecturebooks.removeAt(idx);
-            rawLecturebooks.insert(idx, snapshot.value);
-          },
-          onValue: (snapshot) {
-            setState(() {
-              lecturebooks = rawLecturebooks
-                  .map<LectureBook>(
-                      (str) => LectureBook.fromJson(jsonDecode(str)))
-                  .toList();
-              lecturebooks.sort((a, b) => a.title.compareTo(b.title));
-            });
+    lecturebookList = FirebaseList(
+        query: reference.child('lecturebook').child('LectureBook'),
+        onChildAdded: (idx, snapshot) {
+          rawLecturebooks.insert(idx, snapshot.value);
+        },
+        onChildRemoved: (idx, snapshot) {
+          rawLecturebooks.removeAt(idx);
+        },
+        onChildChanged: (idx, snapshot) {
+          rawLecturebooks.removeAt(idx);
+          rawLecturebooks.insert(idx, snapshot.value);
+        },
+        onValue: (snapshot) {
+          setState(() {
+            lecturebooks = rawLecturebooks
+                .map<LectureBook>(
+                    (str) => LectureBook.fromJson(jsonDecode(str)))
+                .toList();
+            lecturebooks.sort((a, b) => a.title.compareTo(b.title));
           });
+        });
 
-      requestList = FirebaseList(
-          query: reference.child('lecturebook').child('LectureBookRequest'),
-          onChildAdded: (idx, snapshot) {
-            rawRequests.insert(idx, snapshot.value);
-          },
-          onChildRemoved: (idx, snapshot) {
-            rawRequests.removeAt(idx);
-          },
-          onChildChanged: (idx, snapshot) {
-            rawRequests.removeAt(idx);
-            rawRequests.insert(idx, snapshot.value);
-          },
-          onValue: (snapshot) {
-            setState(() {
-              requestListForOwner.clear();
-              requestListForReceiver.clear();
-              requests = rawRequests
-                  .map<LectureBookRequest>(
-                      (str) => LectureBookRequest.fromJson(jsonDecode(str)))
-                  .toList();
-              requests.sort((a, b) => a.requestTime.compareTo(b.requestTime));
-              for (var request in requests) {
-                if (request.ownerID == userID) requestListForOwner.add(request);
-                if (request.receiverID == userID)
-                  requestListForReceiver.add(request);
-              }
-            });
+    requestList = FirebaseList(
+        query: reference.child('lecturebook').child('LectureBookRequest'),
+        onChildAdded: (idx, snapshot) {
+          rawRequests.insert(idx, snapshot.value);
+        },
+        onChildRemoved: (idx, snapshot) {
+          rawRequests.removeAt(idx);
+        },
+        onChildChanged: (idx, snapshot) {
+          rawRequests.removeAt(idx);
+          rawRequests.insert(idx, snapshot.value);
+        },
+        onValue: (snapshot) {
+          setState(() {
+            requestListForOwner.clear();
+            requestListForReceiver.clear();
+            requests = rawRequests
+                .map<LectureBookRequest>(
+                    (str) => LectureBookRequest.fromJson(jsonDecode(str)))
+                .toList();
+            requests.sort((a, b) => a.requestTime.compareTo(b.requestTime));
+            for (var request in requests) {
+              if (request.ownerID == userID) requestListForOwner.add(request);
+              if (request.receiverID == userID)
+                requestListForReceiver.add(request);
+            }
           });
+        });
 
-      final firebaseMessaging = FirebaseMessaging();
-      firebaseMessaging.configure(
-          onMessage: (Map<String, dynamic> message) async {
-            EREToast('교재 신청 내역에 변동이 생겼습니다.', context, true);
-          },
-          onLaunch: (Map<String, dynamic> message) async {
-            setState(() {
-              isLectureBookList = false;
-            });
-          },
-          onResume: (Map<String, dynamic> message) async {
-            setState(() {
-              isLectureBookList = false;
-            });
-          }
-      );
-      firebaseMessaging.requestNotificationPermissions(const IosNotificationSettings(sound: true, badge: true, alert: true, provisional: true));
-      firebaseMessaging.getToken().then((token) async {
-        assert(token != null);
-
-        if (token != (await reference.child('Student').child(userID).child('NT').once()).value)
-          reference.child('Student').child(userID).child('NT').set(token);
+    final firebaseMessaging = FirebaseMessaging();
+    firebaseMessaging.configure(
+        onMessage: (Map<String, dynamic> message) async {
+      EREToast('교재 신청 내역에 변동이 생겼습니다.', context, true);
+    }, onLaunch: (Map<String, dynamic> message) async {
+      setState(() {
+        isLectureBookList = false;
       });
+    }, onResume: (Map<String, dynamic> message) async {
+      setState(() {
+        isLectureBookList = false;
+      });
+    });
+    firebaseMessaging.requestNotificationPermissions(
+        const IosNotificationSettings(
+            sound: true, badge: true, alert: true, provisional: true));
+    firebaseMessaging.getToken().then((token) async {
+      assert(token != null);
+
+      if (token !=
+          (await reference.child('Student').child(userID).child('NT').once())
+              .value)
+        reference.child('Student').child(userID).child('NT').set(token);
     });
   }
 

@@ -77,7 +77,7 @@ class CreditMainActivity extends StatefulWidget {
 }
 
 class _CreditMainActivityState extends State<CreditMainActivity> {
-  FirebaseUser user;
+  User user;
 
   _downloadData() {
     try {
@@ -195,7 +195,7 @@ class _CreditMainActivityState extends State<CreditMainActivity> {
                     padding: EdgeInsets.all(width * 0.0075),
                     child: Text(
                       '전체 학점 : $totalCredits/$minTotalCredits',
-                      style: TextStyle(color: ERE_YELLOW),
+                      style: TextStyle(color: ERE_YELLOW, fontSize: width * 0.037),
                     ),
                   ),
                   Padding(
@@ -266,7 +266,7 @@ class _CreditMainActivityState extends State<CreditMainActivity> {
                       child: EREButton(
                         text: '서버 백업',
                         onPressed: () async {
-                          user = await FirebaseAuth.instance.currentUser();
+                          user = FirebaseAuth.instance.currentUser;
 
                           if (user != null) {
                             showDialog(
@@ -355,7 +355,7 @@ class _CreditMainActivityState extends State<CreditMainActivity> {
                     duration: Duration.zero,
                     child: Text(
                       '생명존중(자살예방)교육 이수 (16학번 이후 필수)',
-                      style: TextStyle(color: ERE_YELLOW),
+                      style: TextStyle(color: ERE_YELLOW, fontSize: width * 0.037),
                     ),
                   )
                 ],
