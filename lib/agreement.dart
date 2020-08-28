@@ -40,7 +40,7 @@ class _AgreementActivityState extends State<AgreementActivity> {
                 '-성명 : 수업 교재 대여 목록에 회원 정보 게시를 위함.\n'
                 '-학번 : 회원 정보 구분을 위함.\n'
                 '-연락처 : 수업 교재 대여 승인 시 제공자와 신청자 연결을 위함.\n'
-                '상기의 개인정보는 ERE 매니저 앱 기능 사용 외의 목적으로 사용되지 않을 것을 약속드립니다.\n'  //todo: 앱 명 바뀌면 수정
+                '상기의 개인정보는 ERE 매니저 앱 기능 사용 외의 목적으로 사용되지 않을 것을 약속드립니다.\n' //todo: 앱 명 바뀌면 수정
                 '개인정보 제공에 동의하신다면 계속 진행해주세요.',
                 style: TextStyle(color: ERE_YELLOW, fontSize: width * 0.04),
               ),
@@ -60,7 +60,8 @@ class _AgreementActivityState extends State<AgreementActivity> {
                 Expanded(
                   child: Text(
                     '상기 내용을 확인했으며 개인정보 제공에 동의합니다.',
-                    style: TextStyle(color: ERE_YELLOW, fontSize: width * 0.037),
+                    style:
+                        TextStyle(color: ERE_YELLOW, fontSize: width * 0.037),
                   ),
                 )
               ],
@@ -74,11 +75,13 @@ class _AgreementActivityState extends State<AgreementActivity> {
                       ? () async {
                           final prefs = await SharedPreferences.getInstance();
                           prefs.setBool('doesAgree', doesAgree);
-                          Navigator.pop(context);
-                          return Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => LoginActivity()));
+                          Navigator.push<bool>(
+                                  context,
+                                  MaterialPageRoute<bool>(
+                                      builder: (context) => LoginActivity()))
+                              .then((result) {
+                            Navigator.pop(context, result);
+                          });
                         }
                       : null,
                   width: width,

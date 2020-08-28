@@ -105,14 +105,19 @@ class _MainActivityState extends State<MainActivity> {
                       } else {
                         final prefs = await SharedPreferences.getInstance();
                         if (prefs.getBool('doesAgree') != true)
-                          return Navigator.push(
+                          return Navigator.push<bool>(
                               context,
-                              MaterialPageRoute(
-                                  builder: (context) => AgreementActivity()));
+                              MaterialPageRoute<bool>(
+                                  builder: (context) =>
+                                      AgreementActivity())).then((result) {
+                            setState(() {
+                              loginCheck = result;
+                            });
+                          });
                         else
                           return Navigator.push<bool>(
                                   context,
-                                  MaterialPageRoute(
+                                  MaterialPageRoute<bool>(
                                       builder: (context) => LoginActivity()))
                               .then((result) {
                             setState(() {
