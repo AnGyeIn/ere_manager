@@ -27,6 +27,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
   FirebaseList requestList;
 
   String userID;
+  String userName;
   List<String> rawLecturebooks = [];
   List<LectureBook> lecturebooks = [];
   List<String> rawRequests = [];
@@ -48,6 +49,10 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
 
     user = FirebaseAuth.instance.currentUser;
     userID = user.uid;
+
+    reference.child('Student').child(userID).child('name').once().then((value) {
+      userName = value != null ? value : user.displayName;
+    });
 
     lecturebookList = FirebaseList(
         query: reference.child('lecturebook').child('LectureBook'),
@@ -258,7 +263,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                         height: height,
                         index: index + 1,
                         userID: userID,
-                        userName: user.displayName,
+                        userName: userName,
                         requestListForReceiver: requestListForReceiver,
                         refresh: () {
                           setState(() {});
@@ -655,7 +660,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                           'title': newTitle,
                           'author': newAuthor,
                           'lecture': newLecture,
-                          'ownerName': user.displayName,
+                          'ownerName': userName,
                           'ownerID': user.uid,
                           'option': newOption,
                           'isAvailable': true

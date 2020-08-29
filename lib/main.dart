@@ -112,6 +112,7 @@ class _MainActivityState extends State<MainActivity> {
                                       AgreementActivity())).then((result) {
                             setState(() {
                               loginCheck = result;
+                              user = FirebaseAuth.instance.currentUser;
                             });
                           });
                         else
@@ -122,6 +123,7 @@ class _MainActivityState extends State<MainActivity> {
                               .then((result) {
                             setState(() {
                               loginCheck = result;
+                              user = FirebaseAuth.instance.currentUser;
                             });
                           });
                       }
@@ -151,6 +153,138 @@ class _MainActivityState extends State<MainActivity> {
                           loginCheck = false;
                           EREToast('로그아웃되었습니다.', context, false);
                         });
+                      },
+                    ),
+                  )
+                : Container(),
+            loginCheck
+                ? Padding(
+                    padding: EdgeInsets.all(height * 0.01),
+                  )
+                : Container(),
+            loginCheck
+                ? Align(
+                    alignment: Alignment.center,
+                    child: FlatButton(
+                      child: Text(
+                        '개인정보 수정',
+                        style: TextStyle(
+                            color: ERE_YELLOW, fontSize: width * 0.04),
+                      ),
+                      onPressed: () async {
+                        final reference = FirebaseDatabase.instance
+                            .reference()
+                            .child('Student')
+                            .child(user.uid);
+                        String curName =
+                            (await reference.child('name').once()).value ?? '';
+                        String curSNum =
+                            (await reference.child('sNum').once()).value ?? '';
+                        String curPNum =
+                            (await reference.child('pNum').once()).value ?? '';
+
+                        showDialog(
+                            context: context,
+                            builder: (_) => AlertDialog(
+                                  title: Text(
+                                    '개인정보 수정',
+                                  ),
+                                  content: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text('개인정보를 수정한 후 [수정] 버튼을 눌러주세요.'),
+                                      Row(
+                                        children: [
+                                          Container(
+                                            alignment: Alignment.center,
+                                            width: width * 0.2,
+                                            height: height * 0.034,
+                                            child: Text('이름 : '),
+                                          ),
+                                          Container(
+                                            alignment: Alignment.center,
+                                            width: width * 0.4,
+                                            child: TextField(
+                                              decoration: InputDecoration(
+                                                border: InputBorder.none,
+                                              ),
+                                              controller: TextEditingController(
+                                                  text: curName),
+                                              onChanged: (text) =>
+                                                  curName = text,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Container(
+                                            alignment: Alignment.center,
+                                            width: width * 0.2,
+                                            height: height * 0.034,
+                                            child: Text('학번 : '),
+                                          ),
+                                          Container(
+                                            alignment: Alignment.center,
+                                            width: width * 0.4,
+                                            child: TextField(
+                                              decoration: InputDecoration(
+                                                  border: InputBorder.none),
+                                              controller: TextEditingController(
+                                                  text: curSNum),
+                                              onChanged: (text) =>
+                                                  curSNum = text,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Container(
+                                            alignment: Alignment.center,
+                                            width: width * 0.2,
+                                            height: height * 0.034,
+                                            child: Text('연락처 : '),
+                                          ),
+                                          Container(
+                                            alignment: Alignment.center,
+                                            width: width * 0.4,
+                                            child: TextField(
+                                              decoration: InputDecoration(
+                                                  border: InputBorder.none),
+                                              controller: TextEditingController(
+                                                  text: curPNum),
+                                              onChanged: (text) =>
+                                                  curPNum = text,
+                                            ),
+                                          )
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                  actions: [
+                                    FlatButton(
+                                      child: Text('수정'),
+                                      onPressed: () {
+                                        reference
+                                          ..child('name').set(curName)
+                                          ..child('sNum').set(curSNum)
+                                          ..child('pNum').set(curPNum);
+                                        EREToast(
+                                            '개인정보를 수정했습니다.', context, false);
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                    FlatButton(
+                                      child: Text('취소'),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                    )
+                                  ],
+                                ));
                       },
                     ),
                   )

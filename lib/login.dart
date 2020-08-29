@@ -124,12 +124,11 @@ class _LoginActivityState extends State<LoginActivity> {
 
                     prefs..setString('sNum', sNum)..setString('pNum', pNum);
                     EREToast('로그인되었습니다.', context, false);
+                    Navigator.pop(context, true);
                   } catch (e) {
                     EREToast('로그인 실패: 입력 정보를 확인한 후 다시 시도해주세요.', context, true);
                     print(e);
                   }
-
-                  Navigator.pop(context, true);
                 });
               },
               width: width,

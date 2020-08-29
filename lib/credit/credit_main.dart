@@ -81,14 +81,21 @@ class _CreditMainActivityState extends State<CreditMainActivity> {
 
   _downloadData() {
     try {
-      FirebaseDatabase.instance.reference().child('credit').child('CreditData').child(user.uid).once().then((snapshot) {
+      FirebaseDatabase.instance
+          .reference()
+          .child('credit')
+          .child('CreditData')
+          .child(user.uid)
+          .once()
+          .then((snapshot) {
         final jsons = jsonDecode(snapshot.value) as Map<String, dynamic>;
         setState(() {
           culture = instantiation(jsons['culTot'] as Map<String, dynamic>);
           major = instantiation(jsons['majTot'] as Map<String, dynamic>);
           normal = instantiation(jsons['norTot'] as Map<String, dynamic>);
 
-          forLectures = ForLectures.fromJson(jsons['forLectures'] as Map<String, dynamic>);
+          forLectures = ForLectures.fromJson(
+              jsons['forLectures'] as Map<String, dynamic>);
           progressingMajor = jsons['progressingMajor'];
           isLifeChecked = jsons['isLifeChecked'] as bool;
           studentNum = jsons['studentNum'] as int;
@@ -96,8 +103,11 @@ class _CreditMainActivityState extends State<CreditMainActivity> {
           EREToast('서버에서 불러오기 성공', context, false);
           _setting();
         });
+      }).catchError((e) {
+        print(e);
+        EREToast('서버에서 불러오기 실패', context, false);
       });
-    } catch(e) {
+    } catch (e) {
       print(e);
       EREToast('서버에서 불러오기 실패', context, false);
     }
@@ -105,19 +115,24 @@ class _CreditMainActivityState extends State<CreditMainActivity> {
 
   _uploadData(Map<String, dynamic> data) async {
     try {
-      final transactionResult = await FirebaseDatabase.instance.reference().child('credit').child('CreditData').child(user.uid).runTransaction((mutableData) async {
+      final transactionResult = await FirebaseDatabase.instance
+          .reference()
+          .child('credit')
+          .child('CreditData')
+          .child(user.uid)
+          .runTransaction((mutableData) async {
         mutableData.value = jsonEncode(data);
         return mutableData;
       });
 
-      if(transactionResult.committed)
+      if (transactionResult.committed)
         EREToast('서버에 저장 성공', context, false);
       else {
         EREToast('서버에 저장 실패', context, false);
-        if(transactionResult.error != null)
+        if (transactionResult.error != null)
           print(transactionResult.error.message);
       }
-    } catch(e) {
+    } catch (e) {
       EREToast('서버에 저장 실패', context, false);
       print(e);
     }
@@ -195,7 +210,8 @@ class _CreditMainActivityState extends State<CreditMainActivity> {
                     padding: EdgeInsets.all(width * 0.0075),
                     child: Text(
                       '전체 학점 : $totalCredits/$minTotalCredits',
-                      style: TextStyle(color: ERE_YELLOW, fontSize: width * 0.037),
+                      style:
+                          TextStyle(color: ERE_YELLOW, fontSize: width * 0.037),
                     ),
                   ),
                   Padding(
@@ -355,7 +371,8 @@ class _CreditMainActivityState extends State<CreditMainActivity> {
                     duration: Duration.zero,
                     child: Text(
                       '생명존중(자살예방)교육 이수 (16학번 이후 필수)',
-                      style: TextStyle(color: ERE_YELLOW, fontSize: width * 0.037),
+                      style:
+                          TextStyle(color: ERE_YELLOW, fontSize: width * 0.037),
                     ),
                   )
                 ],
@@ -401,17 +418,20 @@ CreditManager instantiation(Map<String, dynamic> jsons) {
       parseCreditPiece(jsons['names']).map((e) => e as String).toList();
   final creditss =
       parseCreditPiece(jsons['creditss']).map((e) => e as int).toList();
-  final minCredits =
-      parseCreditPiece(jsons['minCredits']).map((e) => e as int ?? null).toList();
+  final minCredits = parseCreditPiece(jsons['minCredits'])
+      .map((e) => e as int ?? null)
+      .toList();
   final codes = parseCreditPiece(jsons['codes']).map((e) => e as int).toList();
   final underManagers = parseCreditPiece(jsons['underManagers'])
       .map((e) => parseCreditPiece(e).map((f) => f as int).toList())
       .toList();
   final credits =
       parseCreditPiece(jsons['credits']).map((e) => e as int ?? null).toList();
-  final upperManagers =
-      parseCreditPiece(jsons['upperManagers']).map((e) => e as int ?? null).toList();
-  final nums = parseCreditPiece(jsons['nums']).map((e) => e as int ?? null).toList();
+  final upperManagers = parseCreditPiece(jsons['upperManagers'])
+      .map((e) => e as int ?? null)
+      .toList();
+  final nums =
+      parseCreditPiece(jsons['nums']).map((e) => e as int ?? null).toList();
 
   final totNum = names.length;
   final tot = List<CreditManager>(totNum);
@@ -838,7 +858,8 @@ void _initialization(int studentNum) {
     culture.addUnderManagerAll(
         [culture_basic, culture_world, culture_engineering]);
 
-    culture_basic.addUnderManagerAll([thiExp, foreign, numAnaInf, sciThiExp, comInfApp]);
+    culture_basic
+        .addUnderManagerAll([thiExp, foreign, numAnaInf, sciThiExp, comInfApp]);
 
     thiExp.addUnderManager(sciEngWri);
 

@@ -81,15 +81,13 @@ class _LectureBookRequestTileForOwnerState
         ),
         widget.lectureBookRequest.isAccepted
             ? Container(
-                child: Container(
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.all(tile_padding),
-                  width: widget.width * 0.2,
-                  height: tile_height,
-                  child: Text(
-                    '승인 완료',
-                    style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
-                  ),
+                alignment: Alignment.center,
+                padding: EdgeInsets.all(tile_padding),
+                width: widget.width * 0.2,
+                height: tile_height,
+                child: Text(
+                  '승인 완료',
+                  style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                 ),
               )
             : !widget.lectureBookRequest.isRejected
