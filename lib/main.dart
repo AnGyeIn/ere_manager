@@ -105,24 +105,24 @@ class _MainActivityState extends State<MainActivity> {
                       } else {
                         final prefs = await SharedPreferences.getInstance();
                         if (prefs.getBool('doesAgree') != true)
-                          return Navigator.push<bool>(
+                          Navigator.push<bool>(
                               context,
                               MaterialPageRoute<bool>(
                                   builder: (context) =>
                                       AgreementActivity())).then((result) {
                             setState(() {
-                              loginCheck = result;
+                              loginCheck = result ?? false;
                               user = FirebaseAuth.instance.currentUser;
                             });
                           });
                         else
-                          return Navigator.push<bool>(
+                          Navigator.push<bool>(
                                   context,
                                   MaterialPageRoute<bool>(
                                       builder: (context) => LoginActivity()))
                               .then((result) {
                             setState(() {
-                              loginCheck = result;
+                              loginCheck = result ?? false;
                               user = FirebaseAuth.instance.currentUser;
                             });
                           });
@@ -230,6 +230,9 @@ class _MainActivityState extends State<MainActivity> {
                                             alignment: Alignment.center,
                                             width: width * 0.4,
                                             child: TextField(
+                                              keyboardType: TextInputType
+                                                  .numberWithOptions(
+                                                      signed: true),
                                               decoration: InputDecoration(
                                                   border: InputBorder.none),
                                               controller: TextEditingController(
@@ -252,6 +255,9 @@ class _MainActivityState extends State<MainActivity> {
                                             alignment: Alignment.center,
                                             width: width * 0.4,
                                             child: TextField(
+                                              keyboardType: TextInputType
+                                                  .numberWithOptions(
+                                                      signed: true),
                                               decoration: InputDecoration(
                                                   border: InputBorder.none),
                                               controller: TextEditingController(
@@ -305,91 +311,98 @@ class _MainActivityState extends State<MainActivity> {
                       ),
                       onPressed: () async {
                         loginCheck = await showDialog<bool>(
-                            context: context,
-                            builder: (_) => AlertDialog(
-                                  title: Text('회원탈퇴 안내'),
-                                  content: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                          '탈퇴할 경우 회원가입 시 제공해주신 개인정보와 함께 학점 체크리스트 백업 데이터, 등록한 교재 정보, 교재 대여 신청 내역 등이 삭제됩니다. 탈퇴를 진행하시겠습니까?'),
-                                      Row(
+                                context: context,
+                                builder: (_) => AlertDialog(
+                                      title: Text('회원탈퇴 안내'),
+                                      content: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
-                                          Container(
-                                              alignment: Alignment.center,
-                                              width: width * 0.2,
-                                              height: height * 0.034,
-                                              child: Text('학번 : ')),
-                                          Container(
-                                              alignment: Alignment.center,
-                                              width: width * 0.4,
-                                              child: TextField(
-                                                keyboardType: TextInputType
-                                                    .numberWithOptions(
-                                                        signed: true),
-                                                decoration: InputDecoration(
-                                                    border: InputBorder.none,
-                                                    hintText: 'XXXX-XXXXX'),
-                                                onChanged: (text) =>
-                                                    sNum = text,
-                                              ))
+                                          Text(
+                                              '탈퇴할 경우 회원가입 시 제공해주신 개인정보와 함께 학점 체크리스트 백업 데이터, 등록한 교재 정보, 교재 대여 신청 내역 등이 삭제됩니다. 탈퇴를 진행하시겠습니까?'),
+                                          Row(
+                                            children: [
+                                              Container(
+                                                  alignment: Alignment.center,
+                                                  width: width * 0.2,
+                                                  height: height * 0.034,
+                                                  child: Text('학번 : ')),
+                                              Container(
+                                                  alignment: Alignment.center,
+                                                  width: width * 0.4,
+                                                  child: TextField(
+                                                    keyboardType: TextInputType
+                                                        .numberWithOptions(
+                                                            signed: true),
+                                                    decoration: InputDecoration(
+                                                        border:
+                                                            InputBorder.none,
+                                                        hintText: 'XXXX-XXXXX'),
+                                                    onChanged: (text) =>
+                                                        sNum = text,
+                                                  ))
+                                            ],
+                                          )
                                         ],
-                                      )
-                                    ],
-                                  ),
-                                  actions: [
-                                    FlatButton(
-                                      child: Text('회원탈퇴'),
-                                      textColor: Color(0xffff2424),
-                                      onPressed: () async {
-                                        if (sNum != null) {
-                                          final reference = FirebaseDatabase
-                                              .instance
-                                              .reference();
-                                          if (sNum ==
-                                              (await reference
-                                                      .child('Student')
-                                                      .child(user.uid)
-                                                      .child('sNum')
-                                                      .once())
-                                                  .value) {
-                                            reference
-                                                .child('Student')
-                                                .child(user.uid)
-                                                .remove();
+                                      ),
+                                      actions: [
+                                        FlatButton(
+                                          child: Text('회원탈퇴'),
+                                          textColor: Color(0xffff2424),
+                                          onPressed: () async {
+                                            if (sNum != null) {
+                                              final reference = FirebaseDatabase
+                                                  .instance
+                                                  .reference();
+                                              if (sNum ==
+                                                  (await reference
+                                                          .child('Student')
+                                                          .child(user.uid)
+                                                          .child('sNum')
+                                                          .once())
+                                                      .value) {
+                                                reference
+                                                    .child('Student')
+                                                    .child(user.uid)
+                                                    .remove();
 
-                                            try {
-                                              await ui.FirebaseAuthUi.instance()
-                                                  .launchAuth(
-                                                      [AuthProvider.email()]);
-                                              user = FirebaseAuth
-                                                  .instance.currentUser;
-                                              await user.delete();
-                                              EREToast('탈퇴처리가 완료되었습니다.',
-                                                  context, true);
-                                              Navigator.pop(context, false);
-                                            } catch (e) {
-                                              EREToast('탈퇴 실패', context, false);
-                                              print(e);
-                                            }
-                                          } else
-                                            EREToast('학번을 형식에 맞게 정확히 입력해주세요.',
-                                                context, false);
-                                        } else
-                                          EREToast(
-                                              '학번을 입력해주세요.', context, false);
-                                      },
-                                    ),
-                                    FlatButton(
-                                      child: Text('취소'),
-                                      onPressed: () {
-                                        Navigator.pop(context, true);
-                                      },
-                                    )
-                                  ],
-                                ));
+                                                try {
+                                                  await ui.FirebaseAuthUi
+                                                          .instance()
+                                                      .launchAuth([
+                                                    AuthProvider.email()
+                                                  ]);
+                                                  user = FirebaseAuth
+                                                      .instance.currentUser;
+                                                  await user.delete();
+                                                  EREToast('탈퇴처리가 완료되었습니다.',
+                                                      context, true);
+                                                  Navigator.pop(context, false);
+                                                } catch (e) {
+                                                  EREToast(
+                                                      '탈퇴 실패', context, false);
+                                                  print(e);
+                                                }
+                                              } else
+                                                EREToast(
+                                                    '학번을 형식에 맞게 정확히 입력해주세요.',
+                                                    context,
+                                                    false);
+                                            } else
+                                              EREToast('학번을 입력해주세요.', context,
+                                                  false);
+                                          },
+                                        ),
+                                        FlatButton(
+                                          child: Text('취소'),
+                                          onPressed: () {
+                                            Navigator.pop(context, true);
+                                          },
+                                        )
+                                      ],
+                                    )) ??
+                            false;
                         setState(() {});
                       },
                     ),

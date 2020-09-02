@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:ere_manager/EREButton.dart';
 import 'package:ere_manager/credit/Data.dart';
@@ -217,7 +218,7 @@ class _CreditMainActivityState extends State<CreditMainActivity> {
                   Padding(
                     padding: EdgeInsets.all(width * 0.0075),
                     child: Container(
-                      width: width * 0.2,
+                      width: width * 0.19,
                       height: height * 0.034,
                       child: EREButton(
                         text: '반영',
@@ -232,7 +233,7 @@ class _CreditMainActivityState extends State<CreditMainActivity> {
                   Padding(
                     padding: EdgeInsets.all(width * 0.0075),
                     child: Container(
-                      width: width * 0.2,
+                      width: width * 0.19,
                       height: height * 0.034,
                       child: EREButton(
                         text: '저장',
@@ -246,7 +247,7 @@ class _CreditMainActivityState extends State<CreditMainActivity> {
                   Padding(
                     padding: EdgeInsets.all(width * 0.0075),
                     child: Container(
-                      width: width * 0.2,
+                      width: width * 0.19,
                       height: height * 0.034,
                       child: EREButton(
                         text: '닫기',
@@ -484,6 +485,10 @@ void _apply() {
       culture.sumCredits();
       major.sumCredits();
       normal.sumCredits();
+      var culCredits = max(culture.credits, culture.minCredits);
+      var majCredits = max(major.credits, major.minCredits);
+      var norCredits = minTotalCredits - culCredits - majCredits;
+      normal.minCredits = max(norCredits, 0);
       totalCredits = culture.credits + major.credits + normal.credits;
       break;
     case OthernERE:
