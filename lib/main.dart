@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:ere_manager/EREButton.dart';
+import 'package:ere_manager/string_values.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_auth_ui/firebase_auth_ui.dart' as ui;
 import 'package:firebase_auth_ui/providers.dart';
@@ -19,6 +20,8 @@ const ERE_BLACK = Color(0xff080404);
 const ERE_YELLOW = Color(0xffe4b92a);
 const ERE_GREY = Color(0xff2f2f2f);
 
+Str str;
+
 void main() => runApp(MaterialApp(home: MainActivity()));
 
 class MainActivity extends StatefulWidget {
@@ -30,6 +33,7 @@ class _MainActivityState extends State<MainActivity> {
   bool loginCheck = false;
   bool isInitial = true;
   String sNum;
+  String lang = '한국어';
 
   @override
   Widget build(BuildContext context) {
@@ -40,374 +44,426 @@ class _MainActivityState extends State<MainActivity> {
     if (isInitial) {
       isInitial = false;
 
+      str = Str();
+
       Firebase.initializeApp().then((_) {
-        EREToast('자동로그인중...', context, false);
+        EREToast(str.duringAutoLogin, context, false);
 
         user = FirebaseAuth.instance.currentUser;
         loginCheck = user != null;
 
         if (loginCheck)
-          EREToast('로그인 성공', context, false);
+          EREToast(str.loginSuccess, context, false);
         else
-          EREToast('자동로그인 정보가 없습니다.', context, false);
+          EREToast(str.autoLoginError, context, false);
 
         setState(() {});
       });
     }
 
+    str.lang = lang;
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: ERE_GREY,
         body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Align(
-              alignment: Alignment.center,
+              alignment: Alignment.topRight,
               child: Container(
-                child: ButtonTheme(
-                  minWidth: width * 0.8,
-                  height: height * 0.05,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  child: EREButton(
-                    text: '학점 체크리스트',
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => CreditMainActivity(
-                                  storage: CreditStorage())));
-                    },
-                    width: width,
+                child: DropdownButton<String>(
+                  value: lang,
+                  style: TextStyle(color: ERE_YELLOW, fontSize: width * 0.043),
+                  dropdownColor: ERE_GREY,
+                  underline: Container(
+                    color: ERE_GREY,
                   ),
+                  onChanged: (newValue) {
+                    setState(() {
+                      lang = newValue;
+                    });
+                  },
+                  items: ['한국어', 'English']
+                      .map<DropdownMenuItem<String>>(
+                          (value) => DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              ))
+                      .toList(),
                 ),
               ),
             ),
             Padding(
               padding: EdgeInsets.all(height * 0.08),
             ),
-            Align(
-              alignment: Alignment.center,
-              child: Container(
-                child: ButtonTheme(
-                  minWidth: width * 0.8,
-                  height: height * 0.05,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  child: EREButton(
-                    text: '수업 교재 대여',
-                    onPressed: () async {
-                      if (loginCheck) {
-                        return Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => LectureBookActivity()));
-                      } else {
-                        final prefs = await SharedPreferences.getInstance();
-                        if (prefs.getBool('doesAgree') != true)
-                          Navigator.push<bool>(
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    child: ButtonTheme(
+                      minWidth: width * 0.8,
+                      height: height * 0.05,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                      child: EREButton(
+                        text: str.creditsChecklist,
+                        onPressed: () {
+                          Navigator.push(
                               context,
-                              MaterialPageRoute<bool>(
-                                  builder: (context) =>
-                                      AgreementActivity())).then((result) {
-                            setState(() {
-                              loginCheck = result ?? false;
-                              user = FirebaseAuth.instance.currentUser;
-                            });
-                          });
-                        else
-                          Navigator.push<bool>(
-                                  context,
-                                  MaterialPageRoute<bool>(
-                                      builder: (context) => LoginActivity()))
-                              .then((result) {
-                            setState(() {
-                              loginCheck = result ?? false;
-                              user = FirebaseAuth.instance.currentUser;
-                            });
-                          });
-                      }
-                    },
-                    width: width,
+                              MaterialPageRoute(
+                                  builder: (context) => CreditMainActivity(
+                                      storage: CreditStorage())));
+                        },
+                        width: width,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-            loginCheck
-                ? Padding(
-                    padding: EdgeInsets.all(height * 0.03),
-                  )
-                : Container(),
-            loginCheck
-                ? Align(
-                    alignment: Alignment.center,
-                    child: FlatButton(
-                      child: Text(
-                        '로그아웃',
-                        style: TextStyle(
-                            color: ERE_YELLOW, fontSize: width * 0.04),
+                Padding(
+                  padding: EdgeInsets.all(height * 0.08),
+                ),
+                Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    child: ButtonTheme(
+                      minWidth: width * 0.8,
+                      height: height * 0.05,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                      child: EREButton(
+                        text: str.lectureBookLoan,
+                        onPressed: () async {
+                          if (loginCheck) {
+                            return Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        LectureBookActivity()));
+                          } else {
+                            final prefs = await SharedPreferences.getInstance();
+                            if (prefs.getBool('doesAgree') != true)
+                              Navigator.push<bool>(
+                                  context,
+                                  MaterialPageRoute<bool>(
+                                      builder: (context) =>
+                                          AgreementActivity())).then((result) {
+                                setState(() {
+                                  loginCheck = result ?? false;
+                                  user = FirebaseAuth.instance.currentUser;
+                                });
+                              });
+                            else
+                              Navigator.push<bool>(
+                                  context,
+                                  MaterialPageRoute<bool>(
+                                      builder: (context) =>
+                                          LoginActivity())).then((result) {
+                                setState(() {
+                                  loginCheck = result ?? false;
+                                  user = FirebaseAuth.instance.currentUser;
+                                });
+                              });
+                          }
+                        },
+                        width: width,
                       ),
-                      onPressed: () async {
-                        await ui.FirebaseAuthUi.instance().logout();
-                        setState(() {
-                          loginCheck = false;
-                          EREToast('로그아웃되었습니다.', context, false);
-                        });
-                      },
                     ),
-                  )
-                : Container(),
-            loginCheck
-                ? Padding(
-                    padding: EdgeInsets.all(height * 0.01),
-                  )
-                : Container(),
-            loginCheck
-                ? Align(
-                    alignment: Alignment.center,
-                    child: FlatButton(
-                      child: Text(
-                        '개인정보 수정',
-                        style: TextStyle(
-                            color: ERE_YELLOW, fontSize: width * 0.04),
-                      ),
-                      onPressed: () async {
-                        final reference = FirebaseDatabase.instance
-                            .reference()
-                            .child('Student')
-                            .child(user.uid);
-                        String curName =
-                            (await reference.child('name').once()).value ?? '';
-                        String curSNum =
-                            (await reference.child('sNum').once()).value ?? '';
-                        String curPNum =
-                            (await reference.child('pNum').once()).value ?? '';
+                  ),
+                ),
+                loginCheck
+                    ? Padding(
+                        padding: EdgeInsets.all(height * 0.03),
+                      )
+                    : Container(),
+                loginCheck
+                    ? Align(
+                        alignment: Alignment.center,
+                        child: FlatButton(
+                          child: Text(
+                            str.logout,
+                            style: TextStyle(
+                                color: ERE_YELLOW, fontSize: width * 0.04),
+                          ),
+                          onPressed: () async {
+                            await ui.FirebaseAuthUi.instance().logout();
+                            setState(() {
+                              loginCheck = false;
+                              EREToast(str.logoutSuccess, context, false);
+                            });
+                          },
+                        ),
+                      )
+                    : Container(),
+                loginCheck
+                    ? Padding(
+                        padding: EdgeInsets.all(height * 0.01),
+                      )
+                    : Container(),
+                loginCheck
+                    ? Align(
+                        alignment: Alignment.center,
+                        child: FlatButton(
+                          child: Text(
+                            str.editPersonalData,
+                            style: TextStyle(
+                                color: ERE_YELLOW, fontSize: width * 0.04),
+                          ),
+                          onPressed: () async {
+                            final reference = FirebaseDatabase.instance
+                                .reference()
+                                .child('Student')
+                                .child(user.uid);
+                            String curName =
+                                (await reference.child('name').once()).value ??
+                                    '';
+                            String curSNum =
+                                (await reference.child('sNum').once()).value ??
+                                    '';
+                            String curPNum =
+                                (await reference.child('pNum').once()).value ??
+                                    '';
 
-                        showDialog(
-                            context: context,
-                            builder: (_) => AlertDialog(
-                                  title: Text(
-                                    '개인정보 수정',
-                                  ),
-                                  content: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text('개인정보를 수정한 후 [수정] 버튼을 눌러주세요.'),
-                                      Row(
-                                        children: [
-                                          Container(
-                                            alignment: Alignment.center,
-                                            width: width * 0.2,
-                                            height: height * 0.034,
-                                            child: Text('이름 : '),
-                                          ),
-                                          Container(
-                                            alignment: Alignment.center,
-                                            width: width * 0.4,
-                                            child: TextField(
-                                              decoration: InputDecoration(
-                                                border: InputBorder.none,
-                                              ),
-                                              controller: TextEditingController(
-                                                  text: curName),
-                                              onChanged: (text) =>
-                                                  curName = text,
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          Container(
-                                            alignment: Alignment.center,
-                                            width: width * 0.2,
-                                            height: height * 0.034,
-                                            child: Text('학번 : '),
-                                          ),
-                                          Container(
-                                            alignment: Alignment.center,
-                                            width: width * 0.4,
-                                            child: TextField(
-                                              keyboardType: TextInputType
-                                                  .numberWithOptions(
-                                                      signed: true),
-                                              decoration: InputDecoration(
-                                                  border: InputBorder.none),
-                                              controller: TextEditingController(
-                                                  text: curSNum),
-                                              onChanged: (text) =>
-                                                  curSNum = text,
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          Container(
-                                            alignment: Alignment.center,
-                                            width: width * 0.2,
-                                            height: height * 0.034,
-                                            child: Text('연락처 : '),
-                                          ),
-                                          Container(
-                                            alignment: Alignment.center,
-                                            width: width * 0.4,
-                                            child: TextField(
-                                              keyboardType: TextInputType
-                                                  .numberWithOptions(
-                                                      signed: true),
-                                              decoration: InputDecoration(
-                                                  border: InputBorder.none),
-                                              controller: TextEditingController(
-                                                  text: curPNum),
-                                              onChanged: (text) =>
-                                                  curPNum = text,
-                                            ),
-                                          )
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                  actions: [
-                                    FlatButton(
-                                      child: Text('수정'),
-                                      onPressed: () {
-                                        reference
-                                          ..child('name').set(curName)
-                                          ..child('sNum').set(curSNum)
-                                          ..child('pNum').set(curPNum);
-                                        EREToast(
-                                            '개인정보를 수정했습니다.', context, false);
-                                        Navigator.pop(context);
-                                      },
-                                    ),
-                                    FlatButton(
-                                      child: Text('취소'),
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                    )
-                                  ],
-                                ));
-                      },
-                    ),
-                  )
-                : Container(),
-            loginCheck
-                ? Padding(
-                    padding: EdgeInsets.all(height * 0.01),
-                  )
-                : Container(),
-            loginCheck
-                ? Align(
-                    alignment: Alignment.center,
-                    child: FlatButton(
-                      child: Text(
-                        '회원탈퇴',
-                        style: TextStyle(
-                            color: Color(0xaaff2424), fontSize: width * 0.04),
-                      ),
-                      onPressed: () async {
-                        loginCheck = await showDialog<bool>(
+                            showDialog(
                                 context: context,
                                 builder: (_) => AlertDialog(
-                                      title: Text('회원탈퇴 안내'),
+                                      title: Text(
+                                        str.editPersonalData,
+                                      ),
                                       content: Column(
                                         mainAxisSize: MainAxisSize.min,
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Text(
-                                              '탈퇴할 경우 회원가입 시 제공해주신 개인정보와 함께 학점 체크리스트 백업 데이터, 등록한 교재 정보, 교재 대여 신청 내역 등이 삭제됩니다. 탈퇴를 진행하시겠습니까?'),
+                                          Text(str.editPersonalDataDetail),
                                           Row(
                                             children: [
                                               Container(
-                                                  alignment: Alignment.center,
-                                                  width: width * 0.2,
-                                                  height: height * 0.034,
-                                                  child: Text('학번 : ')),
+                                                alignment: Alignment.center,
+                                                width: width * 0.2,
+                                                height: height * 0.034,
+                                                child: Text('${str.name} : '),
+                                              ),
                                               Container(
-                                                  alignment: Alignment.center,
-                                                  width: width * 0.4,
-                                                  child: TextField(
-                                                    keyboardType: TextInputType
-                                                        .numberWithOptions(
-                                                            signed: true),
-                                                    decoration: InputDecoration(
-                                                        border:
-                                                            InputBorder.none,
-                                                        hintText: 'XXXX-XXXXX'),
-                                                    onChanged: (text) =>
-                                                        sNum = text,
-                                                  ))
+                                                alignment: Alignment.center,
+                                                width: width * 0.4,
+                                                child: TextField(
+                                                  decoration: InputDecoration(
+                                                    border: InputBorder.none,
+                                                  ),
+                                                  controller:
+                                                      TextEditingController(
+                                                          text: curName),
+                                                  onChanged: (text) =>
+                                                      curName = text,
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                          Row(
+                                            children: [
+                                              Container(
+                                                alignment: Alignment.center,
+                                                width: width * 0.2,
+                                                height: height * 0.034,
+                                                child:
+                                                    Text('${str.studentID} : '),
+                                              ),
+                                              Container(
+                                                alignment: Alignment.center,
+                                                width: width * 0.4,
+                                                child: TextField(
+                                                  keyboardType: TextInputType
+                                                      .numberWithOptions(
+                                                          signed: true),
+                                                  decoration: InputDecoration(
+                                                      border: InputBorder.none),
+                                                  controller:
+                                                      TextEditingController(
+                                                          text: curSNum),
+                                                  onChanged: (text) =>
+                                                      curSNum = text,
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                          Row(
+                                            children: [
+                                              Container(
+                                                alignment: Alignment.center,
+                                                width: width * 0.2,
+                                                height: height * 0.034,
+                                                child: Text(
+                                                    '${str.phoneNumber} : '),
+                                              ),
+                                              Container(
+                                                alignment: Alignment.center,
+                                                width: width * 0.4,
+                                                child: TextField(
+                                                  keyboardType: TextInputType
+                                                      .numberWithOptions(
+                                                          signed: true),
+                                                  decoration: InputDecoration(
+                                                      border: InputBorder.none),
+                                                  controller:
+                                                      TextEditingController(
+                                                          text: curPNum),
+                                                  onChanged: (text) =>
+                                                      curPNum = text,
+                                                ),
+                                              )
                                             ],
                                           )
                                         ],
                                       ),
                                       actions: [
                                         FlatButton(
-                                          child: Text('회원탈퇴'),
-                                          textColor: Color(0xffff2424),
-                                          onPressed: () async {
-                                            if (sNum != null) {
-                                              final reference = FirebaseDatabase
-                                                  .instance
-                                                  .reference();
-                                              if (sNum ==
-                                                  (await reference
-                                                          .child('Student')
-                                                          .child(user.uid)
-                                                          .child('sNum')
-                                                          .once())
-                                                      .value) {
-                                                reference
-                                                    .child('Student')
-                                                    .child(user.uid)
-                                                    .remove();
-
-                                                try {
-                                                  await ui.FirebaseAuthUi
-                                                          .instance()
-                                                      .launchAuth([
-                                                    AuthProvider.email()
-                                                  ]);
-                                                  user = FirebaseAuth
-                                                      .instance.currentUser;
-                                                  await user.delete();
-                                                  EREToast('탈퇴처리가 완료되었습니다.',
-                                                      context, true);
-                                                  Navigator.pop(context, false);
-                                                } catch (e) {
-                                                  EREToast(
-                                                      '탈퇴 실패', context, false);
-                                                  print(e);
-                                                }
-                                              } else
-                                                EREToast(
-                                                    '학번을 형식에 맞게 정확히 입력해주세요.',
-                                                    context,
-                                                    false);
-                                            } else
-                                              EREToast('학번을 입력해주세요.', context,
-                                                  false);
+                                          child: Text(str.edit),
+                                          onPressed: () {
+                                            reference
+                                              ..child('name').set(curName)
+                                              ..child('sNum').set(curSNum)
+                                              ..child('pNum').set(curPNum);
+                                            EREToast(str.editSuccess, context,
+                                                false);
+                                            Navigator.pop(context);
                                           },
                                         ),
                                         FlatButton(
-                                          child: Text('취소'),
+                                          child: Text(str.cancel),
                                           onPressed: () {
-                                            Navigator.pop(context, true);
+                                            Navigator.pop(context);
                                           },
                                         )
                                       ],
-                                    )) ??
-                            false;
-                        setState(() {});
-                      },
-                    ),
-                  )
-                : Container()
+                                    ));
+                          },
+                        ),
+                      )
+                    : Container(),
+                loginCheck
+                    ? Padding(
+                        padding: EdgeInsets.all(height * 0.01),
+                      )
+                    : Container(),
+                loginCheck
+                    ? Align(
+                        alignment: Alignment.center,
+                        child: FlatButton(
+                          child: Text(
+                            str.signOut,
+                            style: TextStyle(
+                                color: Color(0xaaff2424),
+                                fontSize: width * 0.04),
+                          ),
+                          onPressed: () async {
+                            loginCheck = await showDialog<bool>(
+                                    context: context,
+                                    builder: (_) => AlertDialog(
+                                          title: Text(str.signOutInfo),
+                                          content: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(str.signOutDetail),
+                                              Row(
+                                                children: [
+                                                  Container(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      width: width * 0.2,
+                                                      height: height * 0.034,
+                                                      child: Text(
+                                                          '${str.studentID} : ')),
+                                                  Container(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      width: width * 0.4,
+                                                      child: TextField(
+                                                        keyboardType: TextInputType
+                                                            .numberWithOptions(
+                                                                signed: true),
+                                                        decoration:
+                                                            InputDecoration(
+                                                                border:
+                                                                    InputBorder
+                                                                        .none,
+                                                                hintText:
+                                                                    'XXXX-XXXXX'),
+                                                        onChanged: (text) =>
+                                                            sNum = text,
+                                                      ))
+                                                ],
+                                              )
+                                            ],
+                                          ),
+                                          actions: [
+                                            FlatButton(
+                                              child: Text(str.signOut),
+                                              textColor: Color(0xffff2424),
+                                              onPressed: () async {
+                                                if (sNum != null) {
+                                                  final reference =
+                                                      FirebaseDatabase.instance
+                                                          .reference();
+                                                  if (sNum ==
+                                                      (await reference
+                                                              .child('Student')
+                                                              .child(user.uid)
+                                                              .child('sNum')
+                                                              .once())
+                                                          .value) {
+                                                    reference
+                                                        .child('Student')
+                                                        .child(user.uid)
+                                                        .remove();
+
+                                                    try {
+                                                      await ui.FirebaseAuthUi
+                                                              .instance()
+                                                          .launchAuth([
+                                                        AuthProvider.email()
+                                                      ]);
+                                                      user = FirebaseAuth
+                                                          .instance.currentUser;
+                                                      await user.delete();
+                                                      EREToast(
+                                                          str.signOutSuccess,
+                                                          context,
+                                                          true);
+                                                      Navigator.pop(
+                                                          context, false);
+                                                    } catch (e) {
+                                                      EREToast(str.signOutFail,
+                                                          context, false);
+                                                      print(e);
+                                                    }
+                                                  } else
+                                                    EREToast(str.sNumMatchError,
+                                                        context, false);
+                                                } else
+                                                  EREToast(str.sNumMissError,
+                                                      context, false);
+                                              },
+                                            ),
+                                            FlatButton(
+                                              child: Text(str.cancel),
+                                              onPressed: () {
+                                                Navigator.pop(context, true);
+                                              },
+                                            )
+                                          ],
+                                        )) ??
+                                false;
+                            setState(() {});
+                          },
+                        ),
+                      )
+                    : Container()
+              ],
+            ),
           ],
         ),
       ),

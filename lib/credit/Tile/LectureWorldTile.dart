@@ -19,9 +19,8 @@ class _LectureWorldTileState extends State<LectureWorldTile> {
       alignment: Alignment.topLeft,
       child: FlatButton(
         child: Text(
-          '    ${widget.lectureWorld.name}',
-          style: TextStyle(color: ERE_YELLOW, fontSize: widget.width * 0.044
-              ),
+          '    ${str.translate(widget.lectureWorld.name)}',
+          style: TextStyle(color: ERE_YELLOW, fontSize: widget.width * 0.044),
         ),
         onPressed: () => widget.onPressed(),
       ),

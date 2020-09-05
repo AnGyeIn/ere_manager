@@ -19,9 +19,8 @@ class _LectureFieldTileState extends State<LectureFieldTile> {
       alignment: Alignment.topLeft,
       child: FlatButton(
         child: Text(
-          '  ${widget.lectureField.name} 학점 : ${widget.lectureField.credits}/${widget.lectureField.minCredits}',
-          style: TextStyle(color: ERE_YELLOW, fontSize: widget.width * 0.05
-              ),
+          '  ${str.translate(widget.lectureField.name)} ${str.credits} : ${widget.lectureField.credits}/${widget.lectureField.minCredits}',
+          style: TextStyle(color: ERE_YELLOW, fontSize: widget.width * 0.05),
         ),
         onPressed: () => widget.onPressed(),
       ),

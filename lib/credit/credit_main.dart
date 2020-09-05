@@ -101,16 +101,16 @@ class _CreditMainActivityState extends State<CreditMainActivity> {
           isLifeChecked = jsons['isLifeChecked'] as bool;
           studentNum = jsons['studentNum'] as int;
 
-          EREToast('서버에서 불러오기 성공', context, false);
+          EREToast(str.downloadSuccess, context, false);
           _setting();
         });
       }).catchError((e) {
         print(e);
-        EREToast('서버에서 불러오기 실패', context, false);
+        EREToast(str.downloadFail, context, false);
       });
     } catch (e) {
       print(e);
-      EREToast('서버에서 불러오기 실패', context, false);
+      EREToast(str.downloadFail, context, false);
     }
   }
 
@@ -127,14 +127,14 @@ class _CreditMainActivityState extends State<CreditMainActivity> {
       });
 
       if (transactionResult.committed)
-        EREToast('서버에 저장 성공', context, false);
+        EREToast(str.uploadSuccess, context, false);
       else {
-        EREToast('서버에 저장 실패', context, false);
+        EREToast(str.uploadFail, context, false);
         if (transactionResult.error != null)
           print(transactionResult.error.message);
       }
     } catch (e) {
-      EREToast('서버에 저장 실패', context, false);
+      EREToast(str.uploadFail, context, false);
       print(e);
     }
   }
@@ -146,13 +146,13 @@ class _CreditMainActivityState extends State<CreditMainActivity> {
     widget.storage.readData().then((_) {
       setState(() {
         if (studentNum == -1) {
-          EREToast('불러오기 실패', context, false);
+          EREToast(str.loadFail, context, false);
           final year = DateTime.now().year % 100;
           studentNum = year;
           _changeMajorProcess();
           isLifeChecked = false;
         } else {
-          EREToast('불러오기 성공', context, false);
+          EREToast(str.loadSuccess, context, false);
           _setting();
         }
       });
@@ -177,9 +177,10 @@ class _CreditMainActivityState extends State<CreditMainActivity> {
                     padding: EdgeInsets.all(width * 0.0075),
                     child: Container(
                       width: width * 0.21,
-                      height: height * 0.034,
+                      height: height * (str.lang == '한국어' ? 0.034 : 0.05),
                       child: EREButton(
-                        text: '$studentNum학번',
+                        text:
+                            str.lang == '한국어' ? '$studentNum학번' : '$studentNum',
                         onPressed: () async {
                           await _changeStudentNumClicked(context);
                           setState(() {});
@@ -192,9 +193,9 @@ class _CreditMainActivityState extends State<CreditMainActivity> {
                     padding: EdgeInsets.all(width * 0.0075),
                     child: Container(
                       width: width * 0.69,
-                      height: height * 0.034,
+                      height: height * (str.lang == '한국어' ? 0.034 : 0.05),
                       child: EREButton(
-                        text: progressingMajor,
+                        text: str.translate(progressingMajor),
                         onPressed: () async {
                           await _onMultiMajorButton(context);
                           setState(() {});
@@ -210,7 +211,7 @@ class _CreditMainActivityState extends State<CreditMainActivity> {
                   Padding(
                     padding: EdgeInsets.all(width * 0.0075),
                     child: Text(
-                      '전체 학점 : $totalCredits/$minTotalCredits',
+                      '${str.totalCredits} : $totalCredits/$minTotalCredits',
                       style:
                           TextStyle(color: ERE_YELLOW, fontSize: width * 0.037),
                     ),
@@ -221,7 +222,7 @@ class _CreditMainActivityState extends State<CreditMainActivity> {
                       width: width * 0.19,
                       height: height * 0.034,
                       child: EREButton(
-                        text: '반영',
+                        text: str.apply,
                         onPressed: () {
                           _apply();
                           setState(() {});
@@ -236,7 +237,7 @@ class _CreditMainActivityState extends State<CreditMainActivity> {
                       width: width * 0.19,
                       height: height * 0.034,
                       child: EREButton(
-                        text: '저장',
+                        text: str.save,
                         onPressed: () {
                           _save(context, widget.storage);
                         },
@@ -250,7 +251,7 @@ class _CreditMainActivityState extends State<CreditMainActivity> {
                       width: width * 0.19,
                       height: height * 0.034,
                       child: EREButton(
-                        text: '닫기',
+                        text: str.close,
                         onPressed: () {
                           _save(context, widget.storage);
                           Navigator.pop(context);
@@ -266,9 +267,9 @@ class _CreditMainActivityState extends State<CreditMainActivity> {
                   Padding(
                     padding: EdgeInsets.all(width * 0.0075),
                     child: Container(
-                      height: height * 0.045,
+                      height: height * (str.lang == '한국어' ? 0.045 : 0.06),
                       child: EREButton(
-                        text: '외국어진행강좌 수강 체크',
+                        text: str.foreignLectureCheck,
                         onPressed: () {
                           _openForLecLayout(context);
                         },
@@ -279,9 +280,9 @@ class _CreditMainActivityState extends State<CreditMainActivity> {
                   Padding(
                     padding: EdgeInsets.all(width * 0.0075),
                     child: Container(
-                      height: height * 0.045,
+                      height: height * (str.lang == '한국어' ? 0.045 : 0.06),
                       child: EREButton(
-                        text: '서버 백업',
+                        text: str.serverBackup,
                         onPressed: () async {
                           user = FirebaseAuth.instance.currentUser;
 
@@ -289,14 +290,14 @@ class _CreditMainActivityState extends State<CreditMainActivity> {
                             showDialog(
                                 context: context,
                                 builder: (context) => AlertDialog(
-                                      content: Text(
-                                          '서버에 데이터를 백업하거나 서버로부터 백업 데이터를 내려받을 수 있습니다.'),
+                                      content: Text(str.serverBackupDetail),
                                       actions: [
                                         FlatButton(
-                                          child: Text('서버에 백업'),
+                                          child: Text(str.uploadBackup),
                                           onPressed: () {
                                             Navigator.pop(context);
-                                            EREToast('서버에 백업 중', context, true);
+                                            EREToast(str.duringUpload, context,
+                                                true);
 
                                             final culTot =
                                                 _totalization(culture);
@@ -319,11 +320,11 @@ class _CreditMainActivityState extends State<CreditMainActivity> {
                                           },
                                         ),
                                         FlatButton(
-                                          child: Text('백업 데이터 내려받기'),
+                                          child: Text(str.downloadBackup),
                                           onPressed: () {
                                             Navigator.pop(context);
-                                            EREToast(
-                                                '백업 데이터 내려받는 중', context, true);
+                                            EREToast(str.duringDownload,
+                                                context, true);
 
                                             _downloadData();
                                           },
@@ -370,10 +371,14 @@ class _CreditMainActivityState extends State<CreditMainActivity> {
                   AnimatedOpacity(
                     opacity: studentNum >= 16 ? 1 : 0,
                     duration: Duration.zero,
-                    child: Text(
-                      '생명존중(자살예방)교육 이수 (16학번 이후 필수)',
-                      style:
-                          TextStyle(color: ERE_YELLOW, fontSize: width * 0.037),
+                    child: Expanded(
+                      child: Text(
+                        str.life,
+                        style: TextStyle(
+                            color: ERE_YELLOW,
+                            fontSize:
+                                width * (str.lang == '한국어' ? 0.037 : 0.033)),
+                      ),
                     ),
                   )
                 ],
@@ -615,28 +620,28 @@ void _clearAll() {
   korean = CreditManager(LECTURE, '대학국어', null, 3);
   colWri1 = CreditManager(LECTURE, '대학 글쓰기 1', null, 2);
   colWri2 = CreditManager(LECTURE, '대학 글쓰기 2: 과학기술 글쓰기', null, 2);
-  math1 = CreditManager(LECTURE, '(고급)수학 및 연습1', null, 3);
-  math2 = CreditManager(LECTURE, '(고급)수학 및 연습2', null, 3);
-  mathPra1 = CreditManager(LECTURE, '수학 1과 수학연습 1', null, 3);
-  mathPra2 = CreditManager(LECTURE, '수학 2와 수학연습 2', null, 3);
-  engMat1 = CreditManager(LECTURE, '공학수학1', null, 3);
-  engMat2 = CreditManager(LECTURE, '공학수학2', null, 3);
-  physics1 = CreditManager(LECTURE, '(고급)물리학1(물리의 기본1)', null, 3);
+  math1 = CreditManager(LECTURE, '(고급)수학 및 연습 1', null, 3);
+  math2 = CreditManager(LECTURE, '(고급)수학 및 연습 2', null, 3);
+  mathPra1 = CreditManager(LECTURE, '(고급)수학연습 1', null, 1);
+  mathPra2 = CreditManager(LECTURE, '(고급)수학연습 2', null, 1);
+  engMat1 = CreditManager(LECTURE, '공학수학 1', null, 3);
+  engMat2 = CreditManager(LECTURE, '공학수학 2', null, 3);
+  physics1 = CreditManager(LECTURE, '(고급)물리학 1(물리의 기본 1)', null, 3);
   phyExp1 = CreditManager(LECTURE, '물리학실험1', null, 1);
-  physics2 = CreditManager(LECTURE, '(고급)물리학2(물리의 기본2)', null, 3);
-  phyExp2 = CreditManager(LECTURE, '물리학실험2', null, 1);
+  physics2 = CreditManager(LECTURE, '(고급)물리학 2(물리의 기본 2)', null, 3);
+  phyExp2 = CreditManager(LECTURE, '물리학실험 2', null, 1);
   physics = CreditManager(LECTURE, '물리학', null, 3);
   phyExp = CreditManager(LECTURE, '물리학실험', null, 1);
-  chemistry1 = CreditManager(LECTURE, '화학1', null, 3);
-  cheExp1 = CreditManager(LECTURE, '화학실험1', null, 1);
-  chemistry2 = CreditManager(LECTURE, '화학2', null, 3);
-  cheExp2 = CreditManager(LECTURE, '화학실험2', null, 1);
+  chemistry1 = CreditManager(LECTURE, '화학 1', null, 3);
+  cheExp1 = CreditManager(LECTURE, '화학실험 1', null, 1);
+  chemistry2 = CreditManager(LECTURE, '화학 2', null, 3);
+  cheExp2 = CreditManager(LECTURE, '화학실험 2', null, 1);
   chemistry = CreditManager(LECTURE, '화학', null, 3);
   cheExp = CreditManager(LECTURE, '화학실험', null, 1);
-  biology1 = CreditManager(LECTURE, '생물학1', null, 3);
-  bioExp1 = CreditManager(LECTURE, '생물학실험1', null, 1);
-  biology2 = CreditManager(LECTURE, '생물학2', null, 3);
-  bioExp2 = CreditManager(LECTURE, '생물학실험2', null, 1);
+  biology1 = CreditManager(LECTURE, '생물학 1', null, 3);
+  bioExp1 = CreditManager(LECTURE, '생물학실험 1', null, 1);
+  biology2 = CreditManager(LECTURE, '생물학 2', null, 3);
+  bioExp2 = CreditManager(LECTURE, '생물학실험 2', null, 1);
   biology = CreditManager(LECTURE, '생물학', null, 3);
   bioExp = CreditManager(LECTURE, '생물학실험', null, 1);
   statistics = CreditManager(LECTURE, '통계학', null, 3);
@@ -1008,9 +1013,19 @@ void _initialization(int studentNum) {
       ..minCredits = 4
       ..addUnderManagerAll([colWri1, colWri2]);
 
-    foreign.addUnderManager(foreignFree);
+    foreign
+      ..name = '외국어 2개 교과목\n    (TEPS 900점(New TEPS 525점) 이하 영어 1과목 필수)'
+      ..addUnderManager(foreignFree);
 
-    numAnaInf.addUnderManagerAll([mathPra1, mathPra2, engMat1, engMat2]);
+    numAnaInf.addUnderManagerAll(
+        [math1, mathPra1, math2, mathPra2, engMat1, engMat2]);
+
+    math1
+      ..name = '(고급)수학 1'
+      ..credit = 2;
+    math2
+      ..name = '(고급)수학 2'
+      ..credit = 2;
 
     sciThiExp.addUnderManagerAll([
       physics1,
@@ -1086,9 +1101,19 @@ void _initialization(int studentNum) {
       ..minCredits = 4
       ..addUnderManagerAll([colWri1, colWri2]);
 
-    foreign.addUnderManager(foreignFree);
+    foreign
+      ..name = '외국어 2개 교과목\n    (TEPS 900점(New TEPS 525점) 이하 영어 1과목 필수)'
+      ..addUnderManager(foreignFree);
 
-    numAnaInf.addUnderManagerAll([mathPra1, mathPra2, engMat1, engMat2]);
+    numAnaInf.addUnderManagerAll(
+        [math1, mathPra1, math2, mathPra2, engMat1, engMat2]);
+
+    math1
+      ..name = '(고급)수학 1'
+      ..credit = 2;
+    math2
+      ..name = '(고급)수학 2'
+      ..credit = 2;
 
     sciThiExp.addUnderManagerAll([
       physics1,
@@ -1157,19 +1182,18 @@ _changeStudentNumClicked(BuildContext context) async {
   final doChange = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
-            title: Text('학번 수정 안내'),
-            content: Text(
-                '학번 설정을 수정할 경우 과목들을 체크 및 추가해 놓은 데이터가 초기화됩니다.\n그래도 괜찮으시면 [확인] 버튼을 눌러주세요.'),
+            title: Text(str.changeSNumInfo),
+            content: Text(str.changeSNumDetail),
             actions: [
               FlatButton(
-                child: Text('확인'),
+                child: Text(str.ok),
                 onPressed: () {
                   _clearAll();
                   Navigator.pop(context, true);
                 },
               ),
               FlatButton(
-                child: Text('취소'),
+                child: Text(str.cancel),
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
@@ -1193,41 +1217,57 @@ _onMultiMajorButton(BuildContext context) async {
   await showCupertinoDialog(
       context: context,
       builder: (_) => CupertinoAlertDialog(
-            title: Text('전공과정 변경 안내'),
+            title: Text(str.changeMajorInfo),
             content: Text(
-              '전공과정 변경 시 과목들을 체크 및 추가해 놓은 데이터가 초기화됩니다.\n전공과정 변경 후 다시 설정해 주세요.',
+              str.changeMajorDetail,
+              textAlign: TextAlign.left,
             ),
             actions: [
               FlatButton(
-                child: Text(EREOnly),
+                child: Text(
+                  str.translate(EREOnly),
+                  textAlign: TextAlign.center,
+                ),
                 onPressed: () {
                   progressingMajor = EREOnly;
                   Navigator.pop(context);
                 },
               ),
               FlatButton(
-                child: Text(EREnOther),
+                child: Text(
+                  str.translate(EREnOther),
+                  textAlign: TextAlign.center,
+                ),
                 onPressed: () {
                   progressingMajor = EREnOther;
                   Navigator.pop(context);
                 },
               ),
               FlatButton(
-                child: Text(OthernERE),
+                child: Text(
+                  str.translate(OthernERE),
+                  textAlign: TextAlign.center,
+                ),
                 onPressed: () {
                   progressingMajor = OthernERE;
                   Navigator.pop(context);
                 },
               ),
               FlatButton(
-                child: Text(OthernSubERE),
+                child: Text(
+                  str.translate(OthernSubERE),
+                  textAlign: TextAlign.center,
+                ),
                 onPressed: () {
                   progressingMajor = OthernSubERE;
                   Navigator.pop(context);
                 },
               ),
               FlatButton(
-                child: Text('취소'),
+                child: Text(
+                  str.cancel,
+                  textAlign: TextAlign.center,
+                ),
                 onPressed: () {
                   Navigator.pop(context);
                 },
@@ -1237,7 +1277,12 @@ _onMultiMajorButton(BuildContext context) async {
 
   if (progressingMajor != preMajor) {
     _changeMajorProcess();
-    EREToast('$progressingMajor을 선택하셨습니다.', context, false);
+    EREToast(
+        str.lang == '한국어'
+            ? '$progressingMajor을 선택하셨습니다.'
+            : 'Selected ${str.translate(progressingMajor)}.',
+        context,
+        false);
   }
 }
 
@@ -1257,9 +1302,9 @@ void _save(BuildContext context, CreditStorage storage) async {
       'studentNum': studentNum
     });
 
-    EREToast('저장되었습니다.', context, false);
+    EREToast(str.saveSuccess, context, false);
   } catch (e) {
-    EREToast('저장 실패', context, false);
+    EREToast(str.saveFail, context, false);
     print(e);
   }
 }
@@ -1322,15 +1367,14 @@ void _onAdviceButtonClicked(BuildContext context) {
   showDialog(
       context: context,
       builder: (_) => AlertDialog(
-            title: Text('도움말'),
+            title: Text(str.info),
             content: Text(
-              "본 앱은 에자공 학부생 개인이 만든 것으로 각 항목들은 정확하지 않을 수 있습니다. 마이스누 > 학사정보 > 졸업 > 졸업사정(자가진단)처리 전공내역에서 '이수규정 및 내규조회' 및 졸업시뮬레이션 또는 학과사무실에 문의를 통해 정확한 졸업 요건을 확인하시기 바랍니다.\n"
-              "학과사무실: 02-880-7219",
+              str.infoDetail,
               textAlign: TextAlign.left,
             ),
             actions: [
               FlatButton(
-                child: Text('에너지자원공학과 홈페이지 링크'),
+                child: Text(str.ereLink),
                 onPressed: () async {
                   const url = 'http://ere.snu.ac.kr/ko/node/26';
                   if (await canLaunch(url))
@@ -1340,7 +1384,7 @@ void _onAdviceButtonClicked(BuildContext context) {
                 },
               ),
               FlatButton(
-                child: Text('확인'),
+                child: Text(str.ok),
                 onPressed: () => Navigator.pop(context),
               )
             ],

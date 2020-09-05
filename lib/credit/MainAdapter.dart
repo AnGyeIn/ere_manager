@@ -71,6 +71,7 @@ class MainAdapter {
         output = LectureTile(
           lecture: creditManager,
           width: width,
+          height: height,
         );
         break;
 

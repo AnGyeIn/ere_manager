@@ -19,7 +19,7 @@ class _LectureTypeTileState extends State<LectureTypeTile> {
       alignment: Alignment.topLeft,
       child: FlatButton(
         child: Text(
-          '${widget.lectureType.name} 학점 : ${widget.lectureType.credits}/${widget.lectureType.minCredits}',
+          '${str.translate(widget.lectureType.name)} ${str.credits} : ${widget.lectureType.credits}/${widget.lectureType.minCredits}',
           style: TextStyle(color: ERE_YELLOW, fontSize: widget.width * 0.05),
         ),
         onPressed: () {

@@ -28,7 +28,7 @@ class _AddedLectureTileState extends State<AddedLectureTile> {
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              '          ${widget.addedLecture.name}(${widget.addedLecture.credit}학점)',
+              '          ${str.translate(widget.addedLecture.name)}(${widget.addedLecture.credit}${str.lang == '한국어' ? '학점' : ''})',
               style:
                   TextStyle(color: ERE_YELLOW, fontSize: widget.width * 0.04),
             ),
@@ -48,13 +48,13 @@ class _AddedLectureTileState extends State<AddedLectureTile> {
             opacity: widget.adapter.isEditable ? 1 : 0,
             duration: Duration.zero,
             child: Container(
-              width: widget.width * 0.16,
+              width: widget.width * (str.lang == '한국어' ? 0.16 : 0.21),
               child: EREButton(
-                text: '삭제',
+                text: str.delete,
                 onPressed: widget.adapter.isEditable
                     ? () {
                         widget.addedLecture.removeThis();
-                        EREToast('과목이 삭제되었습니다.', context, false);
+                        EREToast(str.deleteAddedLectureSuccess, context, false);
                         widget.delFunc();
                       }
                     : null,

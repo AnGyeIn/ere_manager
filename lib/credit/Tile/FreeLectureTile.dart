@@ -40,7 +40,7 @@ class _FreeLectureTileState extends State<FreeLectureTile> {
             cursorColor: ERE_YELLOW,
             decoration: InputDecoration(
                 border: InputBorder.none,
-                hintText: '과목명 입력',
+                hintText: str.freeLectureNameHint,
                 hintStyle: TextStyle(color: Color(0x88e4b92a))),
             style: TextStyle(color: ERE_YELLOW, fontSize: widget.width * 0.04),
             onChanged: (text) => addLecName = text,
@@ -53,7 +53,7 @@ class _FreeLectureTileState extends State<FreeLectureTile> {
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
                 border: InputBorder.none,
-                hintText: '학점 입력',
+                hintText: str.freeLectureCreditsHint,
                 hintStyle: TextStyle(color: Color(0x88e4b92a))),
             style: TextStyle(color: ERE_YELLOW, fontSize: widget.width * 0.04),
             onChanged: (text) => addLecCredit = int.parse(text),
@@ -64,7 +64,7 @@ class _FreeLectureTileState extends State<FreeLectureTile> {
           child: Container(
             width: widget.width * 0.16,
             child: EREButton(
-              text: '추가',
+              text: str.add,
               onPressed: () {
                 if (addLecCredit != null) {
                   final addLecture = CreditManager(ADDED_LECTURE, addLecName,
@@ -72,10 +72,10 @@ class _FreeLectureTileState extends State<FreeLectureTile> {
                   widget.freeLecture.upperManager
                       .insertUnderManager(widget.freeLecture.num, addLecture);
                   widget.freeLecture.incNum();
-                  EREToast('과목이 추가되었습니다.', context, false);
+                  EREToast(str.addAddedLectureSuccess, context, false);
                   widget.addFunc(addLecture);
                 } else
-                  EREToast('학점을 반드시 입력해주세요.', context, false);
+                  EREToast(str.creditsMissError, context, false);
               },
               width: widget.width,
             ),
@@ -86,7 +86,7 @@ class _FreeLectureTileState extends State<FreeLectureTile> {
           child: Container(
             width: widget.width * 0.16,
             child: EREButton(
-              text: widget.adapter.isEditable ? '확인' : '편집',
+              text: widget.adapter.isEditable ? str.ok : str.edit2,
               onPressed: () {
                 widget.adapter.isEditable = !widget.adapter.isEditable;
                 widget.onPressed();
