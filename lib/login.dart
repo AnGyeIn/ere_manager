@@ -45,12 +45,12 @@ class _LoginActivityState extends State<LoginActivity> {
               children: [
                 Container(
                   alignment: Alignment.center,
-                  width: width * 0.15,
+                  width: width * 0.25,
                   height: height * 0.034,
                   child: Text(
-                    '학번',
+                    str.studentID,
                     style:
-                        TextStyle(color: ERE_YELLOW, fontSize: width * 0.043),
+                        TextStyle(color: ERE_YELLOW, fontSize: width * (str.lang == '한국어' ? 0.043 : 0.03)),
                   ),
                 ),
                 Container(
@@ -76,12 +76,12 @@ class _LoginActivityState extends State<LoginActivity> {
               children: [
                 Container(
                   alignment: Alignment.center,
-                  width: width * 0.15,
+                  width: width * 0.25,
                   height: height * 0.034,
                   child: Text(
-                    '연락처',
+                    str.phoneNumber,
                     style:
-                        TextStyle(color: ERE_YELLOW, fontSize: width * 0.043),
+                        TextStyle(color: ERE_YELLOW, fontSize: width * (str.lang == '한국어' ? 0.043 : 0.03)),
                   ),
                 ),
                 Container(
@@ -106,7 +106,7 @@ class _LoginActivityState extends State<LoginActivity> {
               padding: EdgeInsets.all(width * 0.15),
             ),
             EREButton(
-              text: '로그인/회원가입',
+              text: str.login,
               onPressed: () {
                 ui.FirebaseAuthUi.instance()
                     .launchAuth([AuthProvider.email()]).then((_) async {
@@ -123,10 +123,10 @@ class _LoginActivityState extends State<LoginActivity> {
                       ..child('name').set(user.displayName);
 
                     prefs..setString('sNum', sNum)..setString('pNum', pNum);
-                    EREToast('로그인되었습니다.', context, false);
+                    EREToast(str.loginSuccess, context, false);
                     Navigator.pop(context, true);
                   } catch (e) {
-                    EREToast('로그인 실패: 입력 정보를 확인한 후 다시 시도해주세요.', context, true);
+                    EREToast(str.loginFail, context, true);
                     print(e);
                   }
                 });

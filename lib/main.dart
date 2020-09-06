@@ -57,6 +57,10 @@ class _MainActivityState extends State<MainActivity> {
         else
           EREToast(str.autoLoginError, context, false);
 
+        SharedPreferences.getInstance().then((pref) {
+          lang = pref.getString('lang') ?? '한국어';
+        });
+
         setState(() {});
       });
     }
@@ -73,12 +77,15 @@ class _MainActivityState extends State<MainActivity> {
               child: Container(
                 child: DropdownButton<String>(
                   value: lang,
-                  style: TextStyle(color: ERE_YELLOW, fontSize: width * 0.043),
+                  style: TextStyle(color: ERE_YELLOW, fontSize: width * 0.04),
                   dropdownColor: ERE_GREY,
                   underline: Container(
                     color: ERE_GREY,
                   ),
                   onChanged: (newValue) {
+                    SharedPreferences.getInstance().then((pref) {
+                      pref.setString('lang', newValue);
+                    });
                     setState(() {
                       lang = newValue;
                     });
@@ -241,9 +248,13 @@ class _MainActivityState extends State<MainActivity> {
                                             children: [
                                               Container(
                                                 alignment: Alignment.center,
-                                                width: width * 0.2,
+                                                width: width * 0.25,
                                                 height: height * 0.034,
-                                                child: Text('${str.name} : '),
+                                                child: Text(
+                                                  str.name,
+                                                  style: TextStyle(
+                                                      fontSize: width * 0.04),
+                                                ),
                                               ),
                                               Container(
                                                 alignment: Alignment.center,
@@ -265,10 +276,13 @@ class _MainActivityState extends State<MainActivity> {
                                             children: [
                                               Container(
                                                 alignment: Alignment.center,
-                                                width: width * 0.2,
+                                                width: width * 0.25,
                                                 height: height * 0.034,
-                                                child:
-                                                    Text('${str.studentID} : '),
+                                                child: Text(
+                                                  str.studentID,
+                                                  style: TextStyle(
+                                                      fontSize: width * 0.04),
+                                                ),
                                               ),
                                               Container(
                                                 alignment: Alignment.center,
@@ -292,10 +306,16 @@ class _MainActivityState extends State<MainActivity> {
                                             children: [
                                               Container(
                                                 alignment: Alignment.center,
-                                                width: width * 0.2,
+                                                width: width * 0.25,
                                                 height: height * 0.034,
                                                 child: Text(
-                                                    '${str.phoneNumber} : '),
+                                                  str.phoneNumber,
+                                                  style: TextStyle(
+                                                      fontSize: width *
+                                                          (str.lang == '한국어'
+                                                              ? 0.04
+                                                              : 0.03)),
+                                                ),
                                               ),
                                               Container(
                                                 alignment: Alignment.center,

@@ -98,12 +98,12 @@ class _LectureBookTileState extends State<LectureBookTile> {
           ),
           Container(
             alignment: Alignment.center,
-            padding: EdgeInsets.all(tile_padding),
             width: widget.width * 0.11,
             height: tile_height,
             child: Text(
-              '${widget.lectureBook.option}',
-              style: TextStyle(fontSize: fontsize),
+              '${str.translate(widget.lectureBook.option)}',
+              style:
+                  TextStyle(fontSize: fontsize * (str.lang == '한국어' ? 1 : 0.7)),
             ),
           )
         ],
@@ -130,24 +130,28 @@ class _LectureBookTileState extends State<LectureBookTile> {
                               mainAxisSize: MainAxisSize.min,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('교재명 : ${widget.lectureBook.title}'),
-                                Padding(
-                                  padding: EdgeInsets.all(tile_padding),
-                                ),
-                                Text('저자 : ${widget.lectureBook.author}'),
-                                Padding(
-                                  padding: EdgeInsets.all(tile_padding),
-                                ),
-                                Text('과목 : ${widget.lectureBook.lecture}'),
+                                Text(
+                                    '${str.lectureBookTitle} : ${widget.lectureBook.title}'),
                                 Padding(
                                   padding: EdgeInsets.all(tile_padding),
                                 ),
                                 Text(
-                                    '빌려주는 사람 : ${widget.lectureBook.ownerName}'),
+                                    '${str.author} : ${widget.lectureBook.author}'),
                                 Padding(
                                   padding: EdgeInsets.all(tile_padding),
                                 ),
-                                Text('방식 : ${widget.lectureBook.option}'),
+                                Text(
+                                    '${str.lecture} : ${widget.lectureBook.lecture}'),
+                                Padding(
+                                  padding: EdgeInsets.all(tile_padding),
+                                ),
+                                Text(
+                                    '${str.owner} : ${widget.lectureBook.ownerName}'),
+                                Padding(
+                                  padding: EdgeInsets.all(tile_padding),
+                                ),
+                                Text(
+                                    '${str.option} : ${widget.lectureBook.option}'),
                                 Padding(
                                   padding: EdgeInsets.all(tile_padding),
                                 )
@@ -155,15 +159,18 @@ class _LectureBookTileState extends State<LectureBookTile> {
                             ),
                             actions: [
                               FlatButton(
-                                child: Text('신청'),
+                                child: Text(str.request),
                                 onPressed: () async {
                                   Navigator.pop(context);
 
                                   for (var request
                                       in widget.requestListForReceiver)
                                     if (request.lecturebookID ==
-                                        widget.lectureBook.id) {
-                                      EREToast('이미 신청한 교재입니다.', context, false);
+                                            widget.lectureBook.id &&
+                                        !request.isAccepted &&
+                                        !request.isRejected) {
+                                      EREToast(str.duplicateRequestError,
+                                          context, false);
                                       return;
                                     }
 
@@ -174,8 +181,11 @@ class _LectureBookTileState extends State<LectureBookTile> {
                                   if (widget.lectureBook.ownerName == '학생회' &&
                                       now.compareTo(openTime) < 0) {
                                     EREToast(
-                                        '학생회 소유 교재는 개시 시각 이후에 신청해주세요.\n'
-                                        '개시 시각: ${openTime.year}년 ${openTime.month}월 ${openTime.day}일 ${openTime.hour}시 ${openTime.minute}분',
+                                        str.lang == '한국어'
+                                            ? '학생회 소유 교재는 개시 시각 이후에 신청해주세요.\n'
+                                                '개시 시각: ${openTime.year}년 ${openTime.month}월 ${openTime.day}일 ${openTime.hour}시 ${openTime.minute}분'
+                                            : 'It is not the open time of textbook of student council yet.\n'
+                                                'open time: ${openTime.hour}:${openTime.minute} ${openTime.day}/${openTime.month}/${openTime.year}',
                                         context,
                                         true);
                                     return;
@@ -248,17 +258,19 @@ class _LectureBookTileState extends State<LectureBookTile> {
                                   });
                                   if (addTransaction.committed) {
                                     EREToast(
-                                        '${widget.lectureBook.option} 신청이 접수되었습니다.',
+                                        str.lang == '한국어'
+                                            ? '${widget.lectureBook.option} 신청이 접수되었습니다.'
+                                            : 'Succeeded to request ${str.translate(widget.lectureBook.option)}',
                                         context,
                                         false);
                                     widget.refresh();
                                   } else
-                                    EREToast(
-                                        '신청이 비활성화된 교재입니다.', context, false);
+                                    EREToast(str.lectureBookDeactiveError,
+                                        context, false);
                                 },
                               ),
                               FlatButton(
-                                child: Text('닫기'),
+                                child: Text(str.close),
                                 onPressed: () => Navigator.pop(context),
                               )
                             ],

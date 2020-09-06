@@ -6,7 +6,7 @@ class Str {
   final values = {
     '한국어': {
       'duringAutoLogin': '자동로그인중...',
-      'loginSuccess': '로그인 성공',
+      'loginSuccess': '로그인되었습니다.',
       'autoLoginError': '자동로그인 정보가 없습니다.',
       'creditsChecklist': '학점 체크리스트',
       'lectureBookLoan': '수업 교재 대여',
@@ -78,10 +78,48 @@ class Str {
       'creditsMissError': '학점을 반드시 입력해주세요.',
       'edit2': '편집',
       'credits': '학점',
+      'lectureBookRequestChange': '교재 신청 내역에 변동이 생겼습니다.',
+      'lectureBookList': '수업 교재 목록',
+      'myPage': '마이페이지',
+      'number': '번호',
+      'lectureBookTitle': '교재명',
+      'author': '저자',
+      'lecture': '과목',
+      'owner': '제공자',
+      'option': '방식',
+      'lectureBookRequestToMe': '나에게 온 신청',
+      'receiver': '신청자',
+      'noLectureBookRequestToMe': '받은 신청이 없습니다.',
+      'lectureBookRequestFromMe': '내가 보낸 신청',
+      'noLectureBookRequestFromMe': '보낸 신청이 없습니다.',
+      'lectureBookRegister': '교재 등록',
+      'lectureBookOptionHint': "'대여' 또는 '양도' 입력",
+      'barcodeScanError': '국립중앙도서관에 등록정보가 없습니다. 양식을 직접 입력해주세요.',
+      'register': '등록',
+      'lectureBookRegisterError': '빈칸을 모두 입력해주세요.',
+      'lectureBookRegisterSuccess': '교재가 등록되었습니다.',
+      'accepted': '승인 완료',
+      'accept': '승인',
+      'lectureBookRequestAcceptDetail':
+          '승인하면 신청자에게 연락처가 전달되며, 동일 교재에 대한 다른 신청들은 반려 처리됩니다. 계속하시겠습니까?',
+      'acceptSuccess': '승인되었습니다.',
+      'rejected': '반려',
+      'message': '문자 보내기',
+      'rejected2': '반려 대기',
+      'rejectedDetail':
+          '동일 교재에 대해 다른 신청자가 승인되어 반려된 신청입니다. [확인]을 누르면 목록에서 삭제됩니다.',
+      'request': '신청',
+      'duplicateRequestError': '이미 신청한 교재입니다.',
+      'lectureBookDeactiveError': '신청이 비활성화된 교재입니다.',
+      'login': '로그인/회원가입',
+      'loginFail': '로그인 실패: 입력 정보를 확인한 후 다시 시도해주세요.',
+      'agreementInfo': '개인정보 수집 동의',
+      'agreementCheck': '상기 내용을 확인했으며 개인정보 제공에 동의합니다.',
+      'continue': '계속',
     },
     'English': {
       'duringAutoLogin': 'Logging in automatically...',
-      'loginSuccess': 'Login success',
+      'loginSuccess': 'Succeeded to log in.',
       'autoLoginError': 'There is no data for auto login.',
       'creditsChecklist': 'Credits checklist',
       'lectureBookLoan': 'Textbook loan',
@@ -155,6 +193,48 @@ class Str {
       'creditsMissError': 'Please type in the credits of the subject.',
       'edit2': 'Edit',
       'credits': 'credits',
+      'lectureBookRequestChange':
+          'Your textbook loan request has been modified.',
+      'lectureBookList': 'Textbook list',
+      'myPage': 'My page',
+      'number': 'No.',
+      'lectureBookTitle': 'Title',
+      'author': 'Author',
+      'lecture': 'Subject',
+      'owner': 'Owner',
+      'option': 'Option',
+      'lectureBookRequestToMe': 'Textbook loan requests to you',
+      'receiver': 'Receiver',
+      'noLectureBookRequestToMe': 'There is no textbook loan request to you.',
+      'lectureBookRequestFromMe': 'Textbook loan requests from you',
+      'noLectureBookRequestFromMe':
+          'There is no textbook loan request from you.',
+      'lectureBookRegister': 'Register textbook',
+      'lectureBookOptionHint': "'Rental' or 'Transfer'",
+      'barcodeScanError':
+          'This textbook has not registered in National Library of Korea. Please fill the form by yourself.',
+      'register': 'Register',
+      'lectureBookRegisterError': 'Please fill in all the blanks.',
+      'lectureBookRegisterSuccess': 'Succeeded to register the textbook.',
+      'accepted': 'Accepted',
+      'accept': 'Accept',
+      'lectureBookRequestAcceptDetail':
+          'As accepting the request, your phone number will be sent to the receiver and other requests for the textbook will be rejected. Would you accept the request?',
+      'acceptSuccess': 'Succeeded to accept the request.',
+      'rejected': 'Rejected',
+      'message': 'Text message',
+      'rejected2': 'Rejected',
+      'rejectedDetail':
+          'This request has been rejected because another student has been accepted. The request will be removed from the list as you press [OK].',
+      'request': 'Request',
+      'duplicateRequestError': 'You have already requested the textbook.',
+      'lectureBookDeactiveError': 'The textbook is not available.',
+      'login': 'Log in/Sign in',
+      'loginFail': 'Failed to log in: Please try again.',
+      'agreementInfo': 'Consent to personal information collection',
+      'agreementCheck':
+          'I verified the above statements and agree to provide personal information.',
+      'continue': 'Continue',
     }
   };
 
@@ -293,6 +373,86 @@ class Str {
   String get edit2 => values[lang]['edit2'];
 
   String get credits => values[lang]['credits'];
+
+  String get lectureBookRequestChange =>
+      values[lang]['lectureBookRequestChange'];
+
+  String get lectureBookList => values[lang]['lectureBookList'];
+
+  String get myPage => values[lang]['myPage'];
+
+  String get number => values[lang]['number'];
+
+  String get lectureBookTitle => values[lang]['lectureBookTitle'];
+
+  String get author => values[lang]['author'];
+
+  String get lecture => values[lang]['lecture'];
+
+  String get owner => values[lang]['owner'];
+
+  String get option => values[lang]['option'];
+
+  String get lectureBookRequestToMe => values[lang]['lectureBookRequestToMe'];
+
+  String get receiver => values[lang]['receiver'];
+
+  String get noLectureBookRequestToMe =>
+      values[lang]['noLectureBookRequestToMe'];
+
+  String get lectureBookRequestFromMe =>
+      values[lang]['lectureBookRequestFromMe'];
+
+  String get noLectureBookRequestFromMe =>
+      values[lang]['noLectureBookRequestFromMe'];
+
+  String get lectureBookRegister => values[lang]['lectureBookRegister'];
+
+  String get lectureBookOptionHint => values[lang]['lectureBookOptionHint'];
+
+  String get barcodeScanError => values[lang]['barcodeScanError'];
+
+  String get register => values[lang]['register'];
+
+  String get lectureBookRegisterError =>
+      values[lang]['lectureBookRegisterError'];
+
+  String get lectureBookRegisterSuccess =>
+      values[lang]['lectureBookRegisterSuccess'];
+
+  String get accepted => values[lang]['accepted'];
+
+  String get accept => values[lang]['accept'];
+
+  String get lectureBookRequestAcceptDetail =>
+      values[lang]['lectureBookRequestAcceptDetail'];
+
+  String get acceptSuccess => values[lang]['acceptSuccess'];
+
+  String get rejected => values[lang]['rejected'];
+
+  String get message => values[lang]['message'];
+
+  String get rejected2 => values[lang]['rejected2'];
+
+  String get rejectedDetail => values[lang]['rejectedDetail'];
+
+  String get request => values[lang]['request'];
+
+  String get duplicateRequestError => values[lang]['duplicateRequestError'];
+
+  String get lectureBookDeactiveError =>
+      values[lang]['lectureBookDeactiveError'];
+
+  String get login => values[lang]['login'];
+
+  String get loginFail => values[lang]['loginFail'];
+
+  String get agreementInfo => values[lang]['agreementInfo'];
+
+  String get agreementCheck => values[lang]['agreementCheck'];
+
+  String get continueStr => values[lang]['continue'];
 
   String translate(String text) {
     if (lang != '한국어')
@@ -499,6 +659,10 @@ class Str {
           return 'Resource Engineering Practice';
         case '자원공학설계':
           return 'Resource Engineering Design';
+        case '대여':
+          return 'Rental';
+        case '양도':
+          return 'Transfer';
         default:
           return text;
       }
@@ -509,6 +673,12 @@ class Str {
         case 'General':
         case 'General Education':
           return '교양';
+        case 'Rental':
+        case 'rental':
+          return '대여';
+        case 'Transfer':
+        case 'transfer':
+          return '양도';
         default:
           return text;
       }

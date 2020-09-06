@@ -71,12 +71,13 @@ class _LectureBookRequestTileForOwnerState
         ),
         Container(
           alignment: Alignment.center,
-          padding: EdgeInsets.all(tile_padding),
           width: widget.width * 0.11,
           height: tile_height,
           child: Text(
-            '${widget.lectureBookRequest.option}',
-            style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
+            '${str.translate(widget.lectureBookRequest.option)}',
+            style: TextStyle(
+                color: ERE_YELLOW,
+                fontSize: fontsize * (str.lang == '한국어' ? 1 : 0.7)),
           ),
         ),
         widget.lectureBookRequest.isAccepted
@@ -86,18 +87,18 @@ class _LectureBookRequestTileForOwnerState
                 width: widget.width * 0.2,
                 height: tile_height,
                 child: Text(
-                  '승인 완료',
+                  str.accepted,
                   style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                 ),
               )
             : !widget.lectureBookRequest.isRejected
                 ? Container(
                     alignment: Alignment.center,
-                    padding: EdgeInsets.all(tile_padding),
+                    // padding: EdgeInsets.all(tile_padding),
                     width: widget.width * 0.2,
                     height: tile_height,
                     child: EREButton(
-                      text: '승인',
+                      text: str.accept,
                       onPressed: () {
                         showDialog(
                             context: context,
@@ -107,13 +108,12 @@ class _LectureBookRequestTileForOwnerState
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                          '승인하면 신청자에게 연락처가 전달되며, 동일 교재에 대한 다른 신청들은 반려 처리됩니다. 계속하시겠습니까?')
+                                      Text(str.lectureBookRequestAcceptDetail)
                                     ],
                                   ),
                                   actions: [
                                     FlatButton(
-                                      child: Text('승인'),
+                                      child: Text(str.accept),
                                       onPressed: () async {
                                         Navigator.pop(context);
 
@@ -157,8 +157,8 @@ class _LectureBookRequestTileForOwnerState
                                                   .child(request.id)
                                                   .set(jsonEncode(
                                                       request.toJson()));
-                                            EREToast(
-                                                '승인되었습니다.', context, false);
+                                            EREToast(str.acceptSuccess, context,
+                                                false);
                                           } catch (e) {
                                             print(e);
                                           }
@@ -166,7 +166,7 @@ class _LectureBookRequestTileForOwnerState
                                       },
                                     ),
                                     FlatButton(
-                                      child: Text('취소'),
+                                      child: Text(str.cancel),
                                       onPressed: () {
                                         Navigator.pop(context);
                                       },
@@ -174,7 +174,7 @@ class _LectureBookRequestTileForOwnerState
                                   ],
                                 ));
                       },
-                      width: widget.width,
+                      width: widget.width * (str.lang == '한국어' ? 1 : 0.9),
                     ),
                   )
                 : Container(
@@ -183,7 +183,7 @@ class _LectureBookRequestTileForOwnerState
                     width: widget.width * 0.2,
                     height: tile_height,
                     child: Text(
-                      '반려',
+                      str.rejected,
                       style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                     ),
                   )

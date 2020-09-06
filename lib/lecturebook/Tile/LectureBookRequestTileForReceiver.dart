@@ -71,12 +71,13 @@ class _LectureBookRequestTileForReceiverState
         ),
         Container(
           alignment: Alignment.center,
-          padding: EdgeInsets.all(tile_padding),
           width: widget.width * 0.11,
           height: tile_height,
           child: Text(
-            '${widget.lectureBookRequest.option}',
-            style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
+            '${str.translate(widget.lectureBookRequest.option)}',
+            style: TextStyle(
+                color: ERE_YELLOW,
+                fontSize: fontsize * (str.lang == '한국어' ? 1 : 0.7)),
           ),
         ),
         widget.lectureBookRequest.isAccepted
@@ -85,7 +86,7 @@ class _LectureBookRequestTileForReceiverState
                 width: widget.width * 0.24,
                 height: tile_height,
                 child: EREButton(
-                  text: '승인 완료',
+                  text: str.accepted,
                   onPressed: () async {
                     final lectureBookStr = (await reference
                             .child('lecturebook')
@@ -110,13 +111,13 @@ class _LectureBookRequestTileForReceiverState
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                      '제공자 : ${widget.lectureBookRequest.ownerName}\n'
-                                      '연락처 : $pNum')
+                                      '${str.owner} : ${widget.lectureBookRequest.ownerName}\n'
+                                      '${str.phoneNumber} : $pNum')
                                 ],
                               ),
                               actions: [
                                 FlatButton(
-                                  child: Text('문자 보내기'),
+                                  child: Text(str.message),
                                   onPressed: () async {
                                     final url = 'sms:$pNum';
                                     if (await canLaunch(url))
@@ -126,7 +127,7 @@ class _LectureBookRequestTileForReceiverState
                                   },
                                 ),
                                 FlatButton(
-                                  child: Text('닫기'),
+                                  child: Text(str.close),
                                   onPressed: () {
                                     Navigator.pop(context);
                                   },
@@ -134,17 +135,16 @@ class _LectureBookRequestTileForReceiverState
                               ],
                             ));
                   },
-                  width: widget.width,
+                  width: widget.width * (str.lang == '한국어' ? 1 : 0.9),
                 ),
               )
             : !widget.lectureBookRequest.isRejected
                 ? Container(
                     alignment: Alignment.center,
-                    padding: EdgeInsets.all(tile_padding),
-                    width: widget.width * 0.2,
+                    width: widget.width * 0.21,
                     height: tile_height,
                     child: EREButton(
-                      text: '취소',
+                      text: str.cancel,
                       onPressed: () {
                         reference
                             .child('lecturebook')
@@ -163,16 +163,15 @@ class _LectureBookRequestTileForReceiverState
                     width: widget.width * 0.24,
                     height: tile_height,
                     child: EREButton(
-                      text: '반려 대기',
+                      text: str.rejected2,
                       onPressed: () {
                         showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
-                                  content: Text(
-                                      '동일 교재에 대해 다른 신청자가 승인되어 반려된 신청입니다. 확인을 누르면 목록에서 삭제됩니다.'),
+                                  content: Text(str.rejectedDetail),
                                   actions: [
                                     FlatButton(
-                                      child: Text('확인'),
+                                      child: Text(str.ok),
                                       onPressed: () {
                                         Navigator.pop(context);
                                         reference
@@ -185,7 +184,7 @@ class _LectureBookRequestTileForReceiverState
                                   ],
                                 ));
                       },
-                      width: widget.width,
+                      width: widget.width * (str.lang == '한국어' ? 1 : 0.9),
                     ),
                   )
       ],

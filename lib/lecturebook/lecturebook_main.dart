@@ -50,8 +50,8 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
     user = FirebaseAuth.instance.currentUser;
     userID = user.uid;
 
-    reference.child('Student').child(userID).child('name').once().then((value) {
-      userName = value != null ? value : user.displayName;
+    reference.child('Student').child(userID).child('name').once().then((snapshot) {
+      userName = snapshot.value ?? user.displayName;
     });
 
     lecturebookList = FirebaseList(
@@ -108,7 +108,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
     final firebaseMessaging = FirebaseMessaging();
     firebaseMessaging.configure(
         onMessage: (Map<String, dynamic> message) async {
-      EREToast('교재 신청 내역에 변동이 생겼습니다.', context, true);
+      EREToast(str.lectureBookRequestChange, context, true);
     }, onLaunch: (Map<String, dynamic> message) async {
       setState(() {
         isLectureBookList = false;
@@ -150,7 +150,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                   child: FlatButton(
                     color: ERE_BLACK,
                     child: Text(
-                      '수업 교재 목록',
+                      str.lectureBookList,
                       style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                     ),
                     onPressed: !isLectureBookList
@@ -166,7 +166,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                   child: FlatButton(
                     color: ERE_BLACK,
                     child: Text(
-                      '마이페이지',
+                      str.myPage,
                       style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                     ),
                     onPressed: isLectureBookList
@@ -189,7 +189,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                         width: width * 0.084,
                         height: tile_height,
                         child: Text(
-                          '번호',
+                          str.number,
                           style:
                               TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                         ),
@@ -200,7 +200,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                         width: width * 0.285,
                         height: tile_height,
                         child: Text(
-                          '교재명',
+                          str.lectureBookTitle,
                           style:
                               TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                         ),
@@ -211,7 +211,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                         width: width * 0.185,
                         height: tile_height,
                         child: Text(
-                          '저자',
+                          str.author,
                           style:
                               TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                         ),
@@ -222,7 +222,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                         width: width * 0.185,
                         height: tile_height,
                         child: Text(
-                          '과목',
+                          str.lecture,
                           style:
                               TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                         ),
@@ -233,7 +233,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                         width: width * 0.15,
                         height: tile_height,
                         child: Text(
-                          '제공자',
+                          str.owner,
                           style:
                               TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                           textAlign: TextAlign.center,
@@ -241,13 +241,12 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                       ),
                       Container(
                         alignment: Alignment.center,
-                        padding: EdgeInsets.all(width * 0.0075),
                         width: width * 0.11,
                         height: tile_height,
                         child: Text(
-                          '방식',
+                          str.option,
                           style:
-                              TextStyle(color: ERE_YELLOW, fontSize: fontsize),
+                              TextStyle(color: ERE_YELLOW, fontSize: fontsize * (str.lang == '한국어' ? 1 : 0.9)),
                         ),
                       )
                     ],
@@ -280,7 +279,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                           height: tile_height,
                           color: ERE_BLACK,
                           child: Text(
-                            '나에게 온 신청',
+                            str.lectureBookRequestToMe,
                             style: TextStyle(
                                 color: ERE_YELLOW, fontSize: fontsize),
                           ),
@@ -294,7 +293,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                                     width: width * 0.15,
                                     height: tile_height,
                                     child: Text(
-                                      '순번',
+                                      str.number,
                                       style: TextStyle(
                                           color: ERE_YELLOW,
                                           fontSize: fontsize),
@@ -306,7 +305,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                                     width: width * 0.35,
                                     height: tile_height,
                                     child: Text(
-                                      '교재명',
+                                      str.lectureBookTitle,
                                       style: TextStyle(
                                           color: ERE_YELLOW,
                                           fontSize: fontsize),
@@ -314,11 +313,10 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                                   ),
                                   Container(
                                     alignment: Alignment.center,
-                                    padding: EdgeInsets.all(width * 0.0075),
                                     width: width * 0.15,
                                     height: tile_height,
                                     child: Text(
-                                      '신청자',
+                                      str.receiver,
                                       style: TextStyle(
                                           color: ERE_YELLOW,
                                           fontSize: fontsize),
@@ -326,11 +324,10 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                                   ),
                                   Container(
                                     alignment: Alignment.center,
-                                    padding: EdgeInsets.all(width * 0.0075),
-                                    width: width * 0.11,
+                                    width: width * 0.12,
                                     height: tile_height,
                                     child: Text(
-                                      '방식',
+                                      str.option,
                                       style: TextStyle(
                                           color: ERE_YELLOW,
                                           fontSize: fontsize),
@@ -362,7 +359,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                                 padding: EdgeInsets.all(width * 0.015),
                                 height: tile_height,
                                 child: Text(
-                                  '받은 신청이 없습니다.',
+                                  str.noLectureBookRequestToMe,
                                   style: TextStyle(
                                       color: ERE_YELLOW, fontSize: fontsize),
                                 ),
@@ -373,7 +370,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                           height: tile_height,
                           color: ERE_BLACK,
                           child: Text(
-                            '내가 보낸 신청',
+                            str.lectureBookRequestFromMe,
                             style: TextStyle(
                                 color: ERE_YELLOW, fontSize: fontsize),
                           ),
@@ -387,7 +384,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                                     width: width * 0.15,
                                     height: tile_height,
                                     child: Text(
-                                      '순번',
+                                      str.number,
                                       style: TextStyle(
                                           color: ERE_YELLOW,
                                           fontSize: fontsize),
@@ -399,7 +396,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                                     width: width * 0.35,
                                     height: tile_height,
                                     child: Text(
-                                      '교재명',
+                                      str.lectureBookTitle,
                                       style: TextStyle(
                                           color: ERE_YELLOW,
                                           fontSize: fontsize),
@@ -411,7 +408,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                                     width: width * 0.15,
                                     height: tile_height,
                                     child: Text(
-                                      '제공자',
+                                      str.owner,
                                       style: TextStyle(
                                           color: ERE_YELLOW,
                                           fontSize: fontsize),
@@ -419,11 +416,10 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                                   ),
                                   Container(
                                     alignment: Alignment.center,
-                                    padding: EdgeInsets.all(width * 0.0075),
-                                    width: width * 0.11,
+                                    width: width * 0.12,
                                     height: tile_height,
                                     child: Text(
-                                      '방식',
+                                      str.option,
                                       style: TextStyle(
                                           color: ERE_YELLOW,
                                           fontSize: fontsize),
@@ -454,7 +450,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                                 padding: EdgeInsets.all(width * 0.015),
                                 height: tile_height,
                                 child: Text(
-                                  '보낸 신청이 없습니다.',
+                                  str.noLectureBookRequestFromMe,
                                   style: TextStyle(
                                       color: ERE_YELLOW, fontSize: fontsize),
                                 ),
@@ -463,7 +459,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                     ),
                   ),
             EREButton(
-              text: '교재 등록',
+              text: str.lectureBookRegister,
               onPressed: () {
                 newTitle = '';
                 newAuthor = '';
@@ -499,13 +495,13 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                     children: [
                       Container(
                         alignment: Alignment.center,
-                        width: width * 0.15,
+                        width: width * 0.16,
                         height: height * 0.034,
-                        child: Text('교재명'),
+                        child: Text(str.lectureBookTitle),
                       ),
                       Container(
                         alignment: Alignment.center,
-                        width: width * 0.5,
+                        width: width * 0.49,
                         child: TextField(
                           onChanged: (text) => newTitle = text,
                           controller: TextEditingController(text: newTitle),
@@ -517,13 +513,13 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                     children: [
                       Container(
                         alignment: Alignment.center,
-                        width: width * 0.15,
+                        width: width * 0.16,
                         height: height * 0.034,
-                        child: Text('저자'),
+                        child: Text(str.author),
                       ),
                       Container(
                         alignment: Alignment.center,
-                        width: width * 0.5,
+                        width: width * 0.49,
                         child: TextField(
                           onChanged: (text) => newAuthor = text,
                           controller: TextEditingController(text: newAuthor),
@@ -535,13 +531,13 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                     children: [
                       Container(
                         alignment: Alignment.center,
-                        width: width * 0.15,
+                        width: width * 0.16,
                         height: height * 0.034,
-                        child: Text('과목'),
+                        child: Text(str.lecture),
                       ),
                       Container(
                         alignment: Alignment.center,
-                        width: width * 0.5,
+                        width: width * 0.49,
                         child: TextField(
                           onChanged: (text) => newLecture = text,
                         ),
@@ -552,16 +548,16 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                     children: [
                       Container(
                         alignment: Alignment.center,
-                        width: width * 0.15,
+                        width: width * 0.16,
                         height: height * 0.034,
-                        child: Text('방식'),
+                        child: Text(str.option),
                       ),
                       Container(
                         alignment: Alignment.center,
-                        width: width * 0.5,
+                        width: width * 0.49,
                         child: TextField(
-                          decoration:
-                              InputDecoration(hintText: "'대여' 또는 '양도' 입력"),
+                          decoration: InputDecoration(
+                              hintText: str.lectureBookOptionHint),
                           onChanged: (text) => newOption = text,
                         ),
                       )
@@ -576,7 +572,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                     Navigator.pop(context);
 
                     final isbn = await FlutterBarcodeScanner.scanBarcode(
-                        '#ffe4b92a', '취소', true, ScanMode.BARCODE);
+                        '#ffe4b92a', str.cancel, true, ScanMode.BARCODE);
 
                     if (isbn == '-1') {
                       _registerLectureBook(context, width, height);
@@ -606,8 +602,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                       } else
                         newAuthor = newAuthor.substring(22, authorLength - 17);
                     } catch (e) {
-                      EREToast(
-                          '국립중앙도서관에 등록정보가 없습니다. 양식을 직접 입력해주세요.', context, true);
+                      EREToast(str.barcodeScanError, context, true);
                       newTitle = '';
                       newAuthor = '';
                     }
@@ -616,13 +611,13 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                   },
                 ),
                 FlatButton(
-                  child: Text('등록'),
+                  child: Text(str.register),
                   onPressed: () async {
                     if (newTitle == null ||
                         newAuthor == null ||
                         newLecture == null ||
                         newOption == null)
-                      EREToast('빈칸을 모두 입력해주세요.', context, false);
+                      EREToast(str.lectureBookRegisterError, context, false);
                     else {
                       Navigator.pop(context);
 
@@ -669,14 +664,15 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                       });
 
                       if (registerTransaction.committed) {
-                        EREToast('교재가 등록되었습니다.', context, false);
+                        EREToast(
+                            str.lectureBookRegisterSuccess, context, false);
                         setState(() {});
                       }
                     }
                   },
                 ),
                 FlatButton(
-                  child: Text('취소'),
+                  child: Text(str.cancel),
                   onPressed: () {
                     Navigator.pop(context);
                   },
