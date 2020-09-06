@@ -352,37 +352,31 @@ class _CreditMainActivityState extends State<CreditMainActivity> {
                   )
                 ],
               ),
-              Row(
-                children: [
-                  AnimatedOpacity(
-                    opacity: studentNum >= 16 ? 1 : 0,
-                    duration: Duration.zero,
-                    child: Checkbox(
-                      value: isLifeChecked,
-                      onChanged: (_) {
-                        setState(() {
-                          isLifeChecked = !isLifeChecked;
-                        });
-                      },
-                      checkColor: ERE_YELLOW,
-                      activeColor: ERE_BLACK,
-                    ),
-                  ),
-                  AnimatedOpacity(
-                    opacity: studentNum >= 16 ? 1 : 0,
-                    duration: Duration.zero,
-                    child: Expanded(
-                      child: Text(
-                        str.life,
-                        style: TextStyle(
-                            color: ERE_YELLOW,
-                            fontSize:
-                                width * (str.lang == '한국어' ? 0.037 : 0.033)),
-                      ),
-                    ),
-                  )
-                ],
-              ),
+              studentNum >= 16
+                  ? Row(
+                      children: [
+                        Checkbox(
+                          value: isLifeChecked,
+                          onChanged: (_) {
+                            setState(() {
+                              isLifeChecked = !isLifeChecked;
+                            });
+                          },
+                          checkColor: ERE_YELLOW,
+                          activeColor: ERE_BLACK,
+                        ),
+                        Expanded(
+                          child: Text(
+                            str.life,
+                            style: TextStyle(
+                                color: ERE_YELLOW,
+                                fontSize: width *
+                                    (str.lang == '한국어' ? 0.037 : 0.033)),
+                          ),
+                        )
+                      ],
+                    )
+                  : Container(),
               Expanded(
                 child: ListView.builder(
                   itemCount: adapter.getSize(),
