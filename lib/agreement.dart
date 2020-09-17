@@ -27,6 +27,7 @@ class _AgreementActivityState extends State<AgreementActivity> {
               alignment: Alignment.center,
               child: Text(
                 str.agreementInfo,
+                textAlign: TextAlign.center,
                 style: TextStyle(color: ERE_YELLOW, fontSize: width * 0.05),
               ),
             ),
@@ -46,7 +47,7 @@ class _AgreementActivityState extends State<AgreementActivity> {
                         '개인정보 제공에 동의하신다면 계속 진행해주세요.'
                     : "We collect your personal information below to provide services of the application. If you don't need any more services, you can delete all of your personal information by signing out.\n\n"
                         '-Name : To post your name with the textbook you registered on the textbook loan list\n'
-                        '-Student ID : To identify membership information\n'
+                        '-Student ID : To identify users\n'
                         '-Phone number : To connect the owner and receiver in textbook loan\n'
                         'The information above will not used for any other purpose than providing the services of ERE manager application.\n'
                         'If you agree, please continue.',

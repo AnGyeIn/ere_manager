@@ -179,18 +179,18 @@ class Str {
       'studentIDError': 'Please type in a integer with 2 digits.',
       'major': 'Major',
       'foreignLectureRegulation':
-          'More than 3 subjects with foreign language including at least 1 major subject(except College English)',
+          'More than 3 courses with foreign language including at least 1 major course(except College English)',
       'culture': 'General',
-      'forLecNameHint': 'Name of subject',
+      'forLecNameHint': 'Name of course',
       'add': 'Add',
       'delete': 'Delete',
-      'addForLecSuccess': 'Succeeded to add the subject.',
-      'addForLecFail': 'Please type in the type and the name of the subject.',
-      'deleteAddedLectureSuccess': 'Succeeded to delete the subject.',
+      'addForLecSuccess': 'Succeeded to add the course.',
+      'addForLecFail': 'Please type in the type and the name of the course.',
+      'deleteAddedLectureSuccess': 'Succeeded to delete the course.',
       'freeLectureNameHint': 'Name',
       'freeLectureCreditsHint': 'Credits',
-      'addAddedLectureSuccess': 'Succeeded to add the subject.',
-      'creditsMissError': 'Please type in the credits of the subject.',
+      'addAddedLectureSuccess': 'Succeeded to add the course.',
+      'creditsMissError': 'Please type in the credits of the course.',
       'edit2': 'Edit',
       'credits': 'credits',
       'lectureBookRequestChange':
@@ -200,7 +200,7 @@ class Str {
       'number': 'No.',
       'lectureBookTitle': 'Title',
       'author': 'Author',
-      'lecture': 'Subject',
+      'lecture': 'Course',
       'owner': 'Owner',
       'option': 'Option',
       'lectureBookRequestToMe': 'Textbook loan requests to you',
@@ -468,7 +468,7 @@ class Str {
         case '전공':
           return 'Major';
         case '전공필수':
-          return 'Required subjects of major';
+          return 'Required courses of major';
         case '교양':
           return 'General Education';
         case '그 외':
@@ -484,9 +484,9 @@ class Str {
         case '공대 사회/창의성':
           return 'Courses for Entrepreneurship/Creativity of College of Engineering';
         case '전공선택필수':
-          return 'Required elective subjects of major';
+          return 'Required elective courses of major';
         case '전공선택':
-          return 'Elective subjects of major';
+          return 'Elective courses of major';
         case '공대 타학과개론':
           return 'Introduction of other engineering major';
         case '사고와 표현':
