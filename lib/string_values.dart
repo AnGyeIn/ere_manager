@@ -22,9 +22,8 @@ class Str {
       'cancel': '취소',
       'signOut': '회원탈퇴',
       'signOutInfo': '회원탈퇴 안내',
-      //todo: 에자공 도서관 추가 시 수정
       'signOutDetail':
-          '탈퇴할 경우 회원가입 시 제공해주신 개인정보와 함께 학점 체크리스트 백업 데이터, 등록한 교재 정보, 교재 대여 신청 내역 등이 삭제됩니다. 탈퇴를 진행하시겠습니까?',
+          '탈퇴할 경우 회원가입 시 제공해주신 개인정보와 함께 학점 체크리스트 백업 데이터, 등록한 교재 정보, 교재 대여 신청 내역 등이 삭제됩니다. 탈퇴는 에자공 도서관 미납 도서가 없는 경우에만 가능합니다. 탈퇴를 진행하시겠습니까?',
       'signOutSuccess': '탈퇴처리가 완료되었습니다.',
       'signOutFail': '회원탈퇴 실패',
       'sNumMatchError': '학번을 형식에 맞게 정확히 입력해주세요.',
@@ -116,6 +115,26 @@ class Str {
       'agreementInfo': '개인정보 수집 동의',
       'agreementCheck': '상기 내용을 확인했으며 개인정보 제공에 동의합니다.',
       'continue': '계속',
+      'ERELibrary': '에자공 도서관',
+      'loginEmail': '로그인 Email',
+      'bookList': '도서 목록',
+      'admin': '관리자',
+      'bookTitle': '도서명',
+      'borrowedBooks': '대출 중인 도서',
+      'dueDate': '반납기한',
+      'noBorrowedBook': '대출 중인 도서가 없습니다.',
+      'borrowerList': '대출자 목록',
+      'borrower': '대출자',
+      'noBorrower': '대출 중인 회원이 없습니다.',
+      'bookRequestList': '구비 신청 목록',
+      'all': '전체',
+      'requester': '신청자',
+      'noBookRequest': '도서 구비 신청이 없습니다.',
+      'bookRequest': '도서 신청',
+      'addBook': '도서 추가',
+      'text': '수합',
+      'removeBook': '도서 제거',
+      'borrow': '대출',
     },
     'English': {
       'duringAutoLogin': 'Logging in automatically...',
@@ -135,9 +154,8 @@ class Str {
       'cancel': 'Cancel',
       'signOut': 'Sign out',
       'signOutInfo': 'Sign out Info',
-      //todo: 에자공 도서관 추가 시 수정
       'signOutDetail':
-          'If you sign out, all the personal data you provided when you signed in and the data of your credits checklist backup, the textbooks you registered, and the textbook loan requests related with you will be deleted. Do you want to sign out?',
+          'If you sign out, all the personal data you provided when you signed in and the data of your credits checklist backup, the textbooks you registered, and the textbook loan requests related with you will be deleted. You can sign out only if there is no book you are borrowing from ERE library. Do you want to sign out?',
       'signOutSuccess': 'Succeeded to sign out.',
       'signOutFail': 'Failed to sign out.',
       'sNumMatchError': 'Please type in your student ID correctly.',
@@ -235,6 +253,26 @@ class Str {
       'agreementCheck':
           'I verified the above statements and agree to provide personal information.',
       'continue': 'Continue',
+      'ERELibrary': 'ERE Library',
+      'loginEmail': 'login Email',
+      'bookList': 'Book list',
+      'admin': 'Admin',
+      'bookTitle': 'Title',
+      'borrowedBooks': 'Borrowed books',
+      'dueDate': 'Due date',
+      'noBorrowedBook': 'There is no book you are borrowing.',
+      'borrowerList': 'Borrower list',
+      'borrower': 'Borrower',
+      'noBorrower': 'There is no user borrowing any book.',
+      'bookRequestList': 'Book request list',
+      'all': 'All',
+      'requester': 'Requester',
+      'noBookRequest': 'There is no book request.',
+      'bookRequest': 'Request',
+      'addBook': 'Add',
+      'text': 'Text',
+      'removeBook': 'Remove',
+      'borrow': 'Borrow',
     }
   };
 
@@ -453,6 +491,46 @@ class Str {
   String get agreementCheck => values[lang]['agreementCheck'];
 
   String get continueStr => values[lang]['continue'];
+
+  String get ERELibrary => values[lang]['ERELibrary'];
+
+  String get loginEmail => values[lang]['loginEmail'];
+
+  String get bookList => values[lang]['bookList'];
+
+  String get admin => values[lang]['admin'];
+
+  String get bookTitle => values[lang]['bookTitle'];
+
+  String get borrowedBooks => values[lang]['borrowedBooks'];
+
+  String get dueDate => values[lang]['dueDate'];
+
+  String get noBorrowedBook => values[lang]['noBorrowedBook'];
+
+  String get borrowerList => values[lang]['borrowerList'];
+
+  String get borrower => values[lang]['borrower'];
+
+  String get noBorrower => values[lang]['noBorrower'];
+
+  String get bookRequestList => values[lang]['bookRequestList'];
+
+  String get all => values[lang]['all'];
+
+  String get requester => values[lang]['requester'];
+
+  String get noBookRequest => values[lang]['noBookRequest'];
+
+  String get bookRequest => values[lang]['bookRequest'];
+
+  String get addBook => values[lang]['addBook'];
+
+  String get text => values[lang]['text'];
+  
+  String get removeBook => values[lang]['removeBook'];
+
+  String get borrow => values[lang]['borrow'];
 
   String translate(String text) {
     if (lang != '한국어')

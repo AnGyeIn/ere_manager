@@ -41,6 +41,8 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
   String newLecture = '';
   String newOption = '';
 
+  bool isWaiting = true;
+
   @override
   void initState() {
     super.initState();
@@ -50,7 +52,12 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
     user = FirebaseAuth.instance.currentUser;
     userID = user.uid;
 
-    reference.child('Student').child(userID).child('name').once().then((snapshot) {
+    reference
+        .child('Student')
+        .child(userID)
+        .child('name')
+        .once()
+        .then((snapshot) {
       userName = snapshot.value ?? user.displayName;
     });
 
@@ -73,6 +80,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                     (str) => LectureBook.fromJson(jsonDecode(str)))
                 .toList();
             lecturebooks.sort((a, b) => a.title.compareTo(b.title));
+            isWaiting = false;
           });
         });
 
@@ -245,31 +253,42 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                         height: tile_height,
                         child: Text(
                           str.option,
-                          style:
-                              TextStyle(color: ERE_YELLOW, fontSize: fontsize * (str.lang == '한국어' ? 1 : 0.9)),
+                          style: TextStyle(
+                              color: ERE_YELLOW,
+                              fontSize:
+                                  fontsize * (str.lang == '한국어' ? 1 : 0.9)),
                         ),
                       )
                     ],
                   )
                 : Container(),
             isLectureBookList
-                ? Expanded(
-                    child: ListView.builder(
-                      itemCount: lecturebooks.length,
-                      itemBuilder: (context, index) => LectureBookTile(
-                        lectureBook: lecturebooks[index],
-                        width: width,
-                        height: height,
-                        index: index + 1,
-                        userID: userID,
-                        userName: userName,
-                        requestListForReceiver: requestListForReceiver,
-                        refresh: () {
-                          setState(() {});
-                        },
-                      ),
-                    ),
-                  )
+                ? (isWaiting
+                    ? Expanded(
+              child: Align(
+                alignment: Alignment.center,
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(ERE_YELLOW),
+                ),
+              ),
+            )
+                    : Expanded(
+                        child: ListView.builder(
+                          itemCount: lecturebooks.length,
+                          itemBuilder: (context, index) => LectureBookTile(
+                            lectureBook: lecturebooks[index],
+                            width: width,
+                            height: height,
+                            index: index + 1,
+                            userID: userID,
+                            userName: userName,
+                            requestListForReceiver: requestListForReceiver,
+                            refresh: () {
+                              setState(() {});
+                            },
+                          ),
+                        ),
+                      ))
                 : Expanded(
                     child: Column(
                       children: [

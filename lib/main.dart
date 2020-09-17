@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:ere_manager/EREButton.dart';
+import 'package:ere_manager/library/library_main.dart';
 import 'package:ere_manager/string_values.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_auth_ui/firebase_auth_ui.dart' as ui;
@@ -34,6 +35,34 @@ class _MainActivityState extends State<MainActivity> {
   bool isInitial = true;
   String sNum;
   String lang = '한국어';
+
+  _move(StatefulWidget activity) async {
+    if (loginCheck) {
+      return Navigator.push(
+          context, MaterialPageRoute(builder: (context) => activity));
+    } else {
+      final prefs = await SharedPreferences.getInstance();
+      if (prefs.getBool('doesAgree') != true)
+        Navigator.push<bool>(
+            context,
+            MaterialPageRoute<bool>(
+                builder: (context) => AgreementActivity())).then((result) {
+          setState(() {
+            loginCheck = result ?? false;
+            user = FirebaseAuth.instance.currentUser;
+          });
+        });
+      else
+        Navigator.push<bool>(context,
+                MaterialPageRoute<bool>(builder: (context) => LoginActivity()))
+            .then((result) {
+          setState(() {
+            loginCheck = result ?? false;
+            user = FirebaseAuth.instance.currentUser;
+          });
+        });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +130,7 @@ class _MainActivityState extends State<MainActivity> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.all(height * 0.08),
+              padding: EdgeInsets.all(height * 0.04),
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -129,7 +158,7 @@ class _MainActivityState extends State<MainActivity> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(height * 0.08),
+                  padding: EdgeInsets.all(height * 0.04),
                 ),
                 Align(
                   alignment: Alignment.center,
@@ -141,38 +170,29 @@ class _MainActivityState extends State<MainActivity> {
                           borderRadius: BorderRadius.circular(10)),
                       child: EREButton(
                         text: str.lectureBookLoan,
-                        onPressed: () async {
-                          if (loginCheck) {
-                            return Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        LectureBookActivity()));
-                          } else {
-                            final prefs = await SharedPreferences.getInstance();
-                            if (prefs.getBool('doesAgree') != true)
-                              Navigator.push<bool>(
-                                  context,
-                                  MaterialPageRoute<bool>(
-                                      builder: (context) =>
-                                          AgreementActivity())).then((result) {
-                                setState(() {
-                                  loginCheck = result ?? false;
-                                  user = FirebaseAuth.instance.currentUser;
-                                });
-                              });
-                            else
-                              Navigator.push<bool>(
-                                  context,
-                                  MaterialPageRoute<bool>(
-                                      builder: (context) =>
-                                          LoginActivity())).then((result) {
-                                setState(() {
-                                  loginCheck = result ?? false;
-                                  user = FirebaseAuth.instance.currentUser;
-                                });
-                              });
-                          }
+                        onPressed: () {
+                          _move(LectureBookActivity());
+                        },
+                        width: width,
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(height * 0.04),
+                ),
+                Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    child: ButtonTheme(
+                      minWidth: width * 0.8,
+                      height: height * 0.05,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                      child: EREButton(
+                        text: str.ERELibrary,
+                        onPressed: () {
+                          _move(LibraryAcitivity());
                         },
                         width: width,
                       ),
@@ -182,6 +202,21 @@ class _MainActivityState extends State<MainActivity> {
                 loginCheck
                     ? Padding(
                         padding: EdgeInsets.all(height * 0.03),
+                      )
+                    : Container(),
+                loginCheck
+                    ? Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          "${str.loginEmail} : ${user.email}",
+                          style: TextStyle(
+                              color: ERE_YELLOW, fontSize: width * 0.04),
+                        ),
+                      )
+                    : Container(),
+                loginCheck
+                    ? Padding(
+                        padding: EdgeInsets.all(height * 0.02),
                       )
                     : Container(),
                 loginCheck
@@ -201,11 +236,6 @@ class _MainActivityState extends State<MainActivity> {
                             });
                           },
                         ),
-                      )
-                    : Container(),
-                loginCheck
-                    ? Padding(
-                        padding: EdgeInsets.all(height * 0.01),
                       )
                     : Container(),
                 loginCheck
@@ -360,11 +390,6 @@ class _MainActivityState extends State<MainActivity> {
                                     ));
                           },
                         ),
-                      )
-                    : Container(),
-                loginCheck
-                    ? Padding(
-                        padding: EdgeInsets.all(height * 0.01),
                       )
                     : Container(),
                 loginCheck
