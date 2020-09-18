@@ -67,7 +67,7 @@ class Str {
       'culture': '교양',
       'forLecNameHint': '과목명을 입력하세요.',
       'add': '추가',
-      'delete': '삭제',
+      'remove': '삭제',
       'addForLecSuccess': '외국어진행강좌가 추가되었습니다.',
       'addForLecFail': '과목의 종류와 과목명을 입력해주세요.',
       'deleteAddedLectureSuccess': '과목이 삭제되었습니다.',
@@ -95,7 +95,7 @@ class Str {
       'lectureBookOptionHint': "'대여' 또는 '양도' 입력",
       'barcodeScanError': '국립중앙도서관에 등록정보가 없습니다. 양식을 직접 입력해주세요.',
       'register': '등록',
-      'lectureBookRegisterError': '빈칸을 모두 입력해주세요.',
+      'blankError': '빈칸을 모두 입력해주세요.',
       'lectureBookRegisterSuccess': '교재가 등록되었습니다.',
       'accepted': '승인 완료',
       'accept': '승인',
@@ -135,6 +135,18 @@ class Str {
       'text': '수합',
       'removeBook': '도서 제거',
       'borrow': '대출',
+      'bookFurnishingRequest': '도서 구비 신청',
+      'returnStr': '반납',
+      'candidacyAdmin': '관리자 지원',
+      'candidacyAdminInfo': '에자공 도서관 관리자 지원',
+      'apply2': '신청',
+      'email': '이메일로 보내기',
+      'candidate': '관리자 지원자',
+      'recruitAdmin': '관리자 모집',
+      'noCandidate': '지원자가 없습니다.',
+      'approve': '승인',
+      'cancelRecruitAdmin': '관리자 모집 취소',
+      'approveERELibraryAdminInfo': '에자공 도서관 관리자 선정',
     },
     'English': {
       'duringAutoLogin': 'Logging in automatically...',
@@ -201,7 +213,7 @@ class Str {
       'culture': 'General',
       'forLecNameHint': 'Name of course',
       'add': 'Add',
-      'delete': 'Delete',
+      'remove': 'Remove',
       'addForLecSuccess': 'Succeeded to add the course.',
       'addForLecFail': 'Please type in the type and the name of the course.',
       'deleteAddedLectureSuccess': 'Succeeded to delete the course.',
@@ -232,7 +244,7 @@ class Str {
       'barcodeScanError':
           'This textbook has not registered in National Library of Korea. Please fill the form by yourself.',
       'register': 'Register',
-      'lectureBookRegisterError': 'Please fill in all the blanks.',
+      'blankError': 'Please fill in all the blanks.',
       'lectureBookRegisterSuccess': 'Succeeded to register the textbook.',
       'accepted': 'Accepted',
       'accept': 'Accept',
@@ -256,7 +268,7 @@ class Str {
       'ERELibrary': 'ERE Library',
       'loginEmail': 'login Email',
       'bookList': 'Book list',
-      'admin': 'Admin',
+      'admin': 'Administrator',
       'bookTitle': 'Title',
       'borrowedBooks': 'Borrowed books',
       'dueDate': 'Due date',
@@ -273,6 +285,18 @@ class Str {
       'text': 'Text',
       'removeBook': 'Remove',
       'borrow': 'Borrow',
+      'bookFurnishingRequest': 'Request to furnish book',
+      'returnStr': 'Return',
+      'candidacyAdmin': 'Candidacy for administrator',
+      'candidacyAdminInfo': 'Candidacy for administrator of ERE library',
+      'apply2': 'Apply',
+      'email': 'Send email',
+      'candidate': 'Candidates for the administrator',
+      'recruitAdmin': 'Recruit the administrator',
+      'noCandidate': 'There is no candidate.',
+      'approve': 'Approve',
+      'cancelRecruitAdmin': 'Cancel recruiting administrator',
+      'approveERELibraryAdminInfo': 'Approve the administrator of ERE library',
     }
   };
 
@@ -391,7 +415,7 @@ class Str {
 
   String get add => values[lang]['add'];
 
-  String get delete => values[lang]['delete'];
+  String get remove => values[lang]['remove'];
 
   String get addForLecSuccess => values[lang]['addForLecSuccess'];
 
@@ -452,8 +476,8 @@ class Str {
 
   String get register => values[lang]['register'];
 
-  String get lectureBookRegisterError =>
-      values[lang]['lectureBookRegisterError'];
+  String get blankError =>
+      values[lang]['blankError'];
 
   String get lectureBookRegisterSuccess =>
       values[lang]['lectureBookRegisterSuccess'];
@@ -531,6 +555,30 @@ class Str {
   String get removeBook => values[lang]['removeBook'];
 
   String get borrow => values[lang]['borrow'];
+
+  String get bookFurnishingRequest => values[lang]['bookFurnishingRequest'];
+
+  String get returnStr => values[lang]['returnStr'];
+
+  String get candidacyAdmin => values[lang]['candidacyAdmin'];
+
+  String get candidacyAdminInfo => values[lang]['candidacyAdminInfo'];
+
+  String get apply2 => values[lang]['apply2'];
+
+  String get email => values[lang]['email'];
+
+  String get candidate => values[lang]['candidate'];
+
+  String get recruitAdmin => values[lang]['recruitAdmin'];
+
+  String get noCandidate => values[lang]['noCandidate'];
+
+  String get approve => values[lang]['approve'];
+
+  String get cancelRecruitAdmin => values[lang]['cancelRecruitAdmin'];
+
+  String get approveERELibraryAdminInfo => values[lang]['approveERELibraryAdminInfo'];
 
   String translate(String text) {
     if (lang != '한국어')

@@ -50,7 +50,7 @@ class _AddedLectureTileState extends State<AddedLectureTile> {
             child: Container(
               width: widget.width * (str.lang == '한국어' ? 0.16 : 0.21),
               child: EREButton(
-                text: str.delete,
+                text: str.remove,
                 onPressed: widget.adapter.isEditable
                     ? () {
                         widget.addedLecture.removeThis();

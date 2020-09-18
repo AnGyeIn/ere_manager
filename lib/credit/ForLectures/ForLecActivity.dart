@@ -111,7 +111,7 @@ class _ForLecActivityState extends State<ForLecActivity> {
                       width: width * (str.lang == '한국어' ? 0.16 : 0.21),
                       height: height * 0.045,
                       child: EREButton(
-                        text: str.delete,
+                        text: str.remove,
                         onPressed: () {
                           setState(() {
                             widget.forLectures.removeForLecture(index);

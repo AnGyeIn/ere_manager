@@ -632,11 +632,11 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                 FlatButton(
                   child: Text(str.register),
                   onPressed: () async {
-                    if (newTitle == null ||
-                        newAuthor == null ||
-                        newLecture == null ||
-                        newOption == null)
-                      EREToast(str.lectureBookRegisterError, context, false);
+                    if (newTitle.isEmpty ||
+                        newAuthor.isEmpty ||
+                        newLecture.isEmpty ||
+                        newOption.isEmpty)
+                      EREToast(str.blankError, context, false);
                     else {
                       Navigator.pop(context);
 
