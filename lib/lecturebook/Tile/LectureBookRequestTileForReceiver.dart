@@ -146,7 +146,7 @@ class _LectureBookRequestTileForReceiverState
                           ..child(widget.lectureBookRequest.ownerID)
                               .child('LectureBookRequest')
                               .child(widget.lectureBookRequest.id)
-                              .remove(); //todo: 문제 있으면 여기에 refresh() 실행
+                              .remove();
                       },
                       width: widget.width,
                     ),
