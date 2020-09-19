@@ -192,7 +192,7 @@ class _MainActivityState extends State<MainActivity> {
                       child: EREButton(
                         text: str.ERELibrary,
                         onPressed: () {
-                          _move(LibraryAcitivity());
+                          _move(LibraryActivity());
                         },
                         width: width,
                       ),
@@ -403,106 +403,134 @@ class _MainActivityState extends State<MainActivity> {
                                 fontSize: width * 0.04),
                           ),
                           onPressed: () async {
-                            loginCheck = await showDialog<bool>(
-                                    context: context,
-                                    builder: (_) => AlertDialog(
-                                          title: Text(str.signOutInfo),
-                                          content: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(str.signOutDetail),
-                                              Row(
-                                                children: [
-                                                  Container(
-                                                      alignment:
-                                                          Alignment.center,
-                                                      width: width * 0.2,
-                                                      height: height * 0.034,
-                                                      child: Text(
-                                                          '${str.studentID} : ')),
-                                                  Container(
-                                                      alignment:
-                                                          Alignment.center,
-                                                      width: width * 0.4,
-                                                      child: TextField(
-                                                        keyboardType: TextInputType
-                                                            .numberWithOptions(
-                                                                signed: true),
-                                                        decoration:
-                                                            InputDecoration(
-                                                                border:
-                                                                    InputBorder
-                                                                        .none,
-                                                                hintText:
-                                                                    'XXXX-XXXXX'),
-                                                        onChanged: (text) =>
-                                                            sNum = text,
-                                                      ))
-                                                ],
+                            final reference =
+                                FirebaseDatabase.instance.reference();
+                            final notReturnedBook = (await reference
+                                        .child('Student')
+                                        .child(user.uid)
+                                        .child('rentals')
+                                        .once())
+                                    .value !=
+                                null;
+
+                            if (notReturnedBook)
+                              EREToast(
+                                  str.lang == '한국어'
+                                      ? '에자공 도서관에서 대출 후 미반납 도서가 있습니다. 모든 도서의 반납 절차 후 탈퇴해주세요.'
+                                      : 'There are some books not returned to ERE library. Please return all the books and then sign out.',
+                                  context,
+                                  true);
+                            else {
+                              loginCheck = await showDialog<bool>(
+                                      context: context,
+                                      builder: (_) => AlertDialog(
+                                            title: Text(str.signOutInfo),
+                                            content: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(str.signOutDetail),
+                                                Row(
+                                                  children: [
+                                                    Container(
+                                                        alignment:
+                                                            Alignment.center,
+                                                        width: width * 0.2,
+                                                        height: height * 0.034,
+                                                        child: Text(
+                                                            '${str.studentID} : ')),
+                                                    Container(
+                                                        alignment:
+                                                            Alignment.center,
+                                                        width: width * 0.4,
+                                                        child: TextField(
+                                                          keyboardType:
+                                                              TextInputType
+                                                                  .numberWithOptions(
+                                                                      signed:
+                                                                          true),
+                                                          decoration:
+                                                              InputDecoration(
+                                                                  border:
+                                                                      InputBorder
+                                                                          .none,
+                                                                  hintText:
+                                                                      'XXXX-XXXXX'),
+                                                          onChanged: (text) =>
+                                                              sNum = text,
+                                                        ))
+                                                  ],
+                                                )
+                                              ],
+                                            ),
+                                            actions: [
+                                              FlatButton(
+                                                child: Text(str.signOut),
+                                                textColor: Color(0xffff2424),
+                                                onPressed: () async {
+                                                  if (sNum != null) {
+                                                    final reference =
+                                                        FirebaseDatabase
+                                                            .instance
+                                                            .reference();
+                                                    if (sNum ==
+                                                        (await reference
+                                                                .child(
+                                                                    'Student')
+                                                                .child(user.uid)
+                                                                .child('sNum')
+                                                                .once())
+                                                            .value) {
+                                                      reference
+                                                          .child('Student')
+                                                          .child(user.uid)
+                                                          .remove();
+
+                                                      try {
+                                                        await ui.FirebaseAuthUi
+                                                                .instance()
+                                                            .launchAuth([
+                                                          AuthProvider.email()
+                                                        ]);
+                                                        user = FirebaseAuth
+                                                            .instance
+                                                            .currentUser;
+                                                        await user.delete();
+                                                        EREToast(
+                                                            str.signOutSuccess,
+                                                            context,
+                                                            true);
+                                                        Navigator.pop(
+                                                            context, false);
+                                                      } catch (e) {
+                                                        EREToast(
+                                                            str.signOutFail,
+                                                            context,
+                                                            false);
+                                                        print(e);
+                                                      }
+                                                    } else
+                                                      EREToast(
+                                                          str.sNumMatchError,
+                                                          context,
+                                                          false);
+                                                  } else
+                                                    EREToast(str.sNumMissError,
+                                                        context, false);
+                                                },
+                                              ),
+                                              FlatButton(
+                                                child: Text(str.cancel),
+                                                onPressed: () {
+                                                  Navigator.pop(context, true);
+                                                },
                                               )
                                             ],
-                                          ),
-                                          actions: [
-                                            FlatButton(
-                                              child: Text(str.signOut),
-                                              textColor: Color(0xffff2424),
-                                              onPressed: () async {
-                                                if (sNum != null) {
-                                                  final reference =
-                                                      FirebaseDatabase.instance
-                                                          .reference();
-                                                  if (sNum ==
-                                                      (await reference
-                                                              .child('Student')
-                                                              .child(user.uid)
-                                                              .child('sNum')
-                                                              .once())
-                                                          .value) {
-                                                    reference
-                                                        .child('Student')
-                                                        .child(user.uid)
-                                                        .remove();
-
-                                                    try {
-                                                      await ui.FirebaseAuthUi
-                                                              .instance()
-                                                          .launchAuth([
-                                                        AuthProvider.email()
-                                                      ]);
-                                                      user = FirebaseAuth
-                                                          .instance.currentUser;
-                                                      await user.delete();
-                                                      EREToast(
-                                                          str.signOutSuccess,
-                                                          context,
-                                                          true);
-                                                      Navigator.pop(
-                                                          context, false);
-                                                    } catch (e) {
-                                                      EREToast(str.signOutFail,
-                                                          context, false);
-                                                      print(e);
-                                                    }
-                                                  } else
-                                                    EREToast(str.sNumMatchError,
-                                                        context, false);
-                                                } else
-                                                  EREToast(str.sNumMissError,
-                                                      context, false);
-                                              },
-                                            ),
-                                            FlatButton(
-                                              child: Text(str.cancel),
-                                              onPressed: () {
-                                                Navigator.pop(context, true);
-                                              },
-                                            )
-                                          ],
-                                        )) ??
-                                false;
-                            setState(() {});
+                                          )) ??
+                                  false;
+                              setState(() {});
+                            }
                           },
                         ),
                       )

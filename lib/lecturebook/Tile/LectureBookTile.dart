@@ -30,7 +30,7 @@ class LectureBookTile extends StatefulWidget {
 }
 
 class _LectureBookTileState extends State<LectureBookTile> {
-  final reference = FirebaseDatabase.instance.reference().child('lecturebook');
+  final reference = FirebaseDatabase.instance.reference();
 
   @override
   Widget build(BuildContext context) {
@@ -112,6 +112,7 @@ class _LectureBookTileState extends State<LectureBookTile> {
           ? () async {
               widget.lectureBook.isAvailable = !widget.lectureBook.isAvailable;
               final activeTransaction = await reference
+                  .child('lecturebook')
                   .child('LectureBook')
                   .child('${widget.lectureBook.id}')
                   .runTransaction((mutableData) async {
@@ -175,7 +176,10 @@ class _LectureBookTileState extends State<LectureBookTile> {
                                     }
 
                                   final openTime = DateTime.parse(
-                                      (await reference.child('openTime').once())
+                                      (await reference
+                                              .child('lecturebook')
+                                              .child('openTime')
+                                              .once())
                                           .value);
                                   final now = DateTime.now();
                                   if (widget.lectureBook.ownerName == '학생회' &&
@@ -192,71 +196,86 @@ class _LectureBookTileState extends State<LectureBookTile> {
                                   }
 
                                   final id = reference
+                                      .child('Student')
+                                      .child(widget.userID)
                                       .child('LectureBookRequest')
                                       .push()
                                       .key;
 
                                   reference
-                                      .root()
                                       .child('Student')
                                       .child(widget.userID)
-                                      .child('lecturebookRequests')
+                                      .child('lecturebookRequestIDs')
                                       .once()
                                       .then((snapshot) {
                                     final num =
                                         (snapshot.value as List<dynamic> ?? [])
                                             .length;
                                     reference
-                                        .root()
                                         .child('Student')
                                         .child(widget.userID)
-                                        .child('lecturebookRequests')
+                                        .child('lecturebookRequestIDs')
                                         .child('$num')
                                         .set(id);
                                   });
 
                                   reference
-                                      .root()
                                       .child('Student')
                                       .child(widget.lectureBook.ownerID)
-                                      .child('lecturebookRequests')
+                                      .child('lecturebookRequestIDs')
                                       .runTransaction((mutableData) async {
                                     final num =
                                         (mutableData.value as List<dynamic> ??
                                                 [])
                                             .length;
                                     reference
-                                        .root()
                                         .child('Student')
                                         .child(widget.lectureBook.ownerID)
-                                        .child('lecturebookRequests')
+                                        .child('lecturebookRequestIDs')
                                         .child('$num')
                                         .set(id);
 
                                     return mutableData;
                                   });
 
-                                  final addTransaction = await reference
+                                  final newRequest = {
+                                    'requestTime': now.toString(),
+                                    'id': id,
+                                    'lecturebookID': widget.lectureBook.id,
+                                    'lecturebookTitle':
+                                        widget.lectureBook.title,
+                                    'ownerID': widget.lectureBook.ownerID,
+                                    'ownerName': widget.lectureBook.ownerName,
+                                    'receiverID': widget.userID,
+                                    'receiverName': widget.userName,
+                                    'option': widget.lectureBook.option,
+                                    'isAccepted': false,
+                                    'isRejected': false
+                                  };
+
+                                  final addToReceiverTransaction =
+                                      await reference
+                                          .child('Student')
+                                          .child(widget.userID)
+                                          .child('LectureBookRequest')
+                                          .child(id)
+                                          .runTransaction((mutableData) async {
+                                    mutableData.value = jsonEncode(newRequest);
+                                    return mutableData;
+                                  });
+
+                                  final addToOwnerTransaction = await reference
+                                      .child('Student')
+                                      .child(widget.lectureBook.ownerID)
                                       .child('LectureBookRequest')
                                       .child(id)
                                       .runTransaction((mutableData) async {
-                                    mutableData.value = jsonEncode({
-                                      'requestTime': now.toString(),
-                                      'id': id,
-                                      'lecturebookID': widget.lectureBook.id,
-                                      'lecturebookTitle':
-                                          widget.lectureBook.title,
-                                      'ownerID': widget.lectureBook.ownerID,
-                                      'ownerName': widget.lectureBook.ownerName,
-                                      'receiverID': widget.userID,
-                                      'receiverName': widget.userName,
-                                      'option': widget.lectureBook.option,
-                                      'isAccepted': false,
-                                      'isRejected': false
-                                    });
+                                    mutableData.value = jsonEncode(newRequest);
                                     return mutableData;
                                   });
-                                  if (addTransaction.committed) {
+
+                                  if (addToReceiverTransaction.committed &&
+                                      addToOwnerTransaction.committed) {
                                     EREToast(
                                         str.lang == '한국어'
                                             ? '${widget.lectureBook.option} 신청이 접수되었습니다.'

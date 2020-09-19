@@ -1,11 +1,13 @@
 import 'dart:convert';
 
 import 'package:ere_manager/library/Tile/BookRequestTile.dart';
+import 'package:ere_manager/library/Tile/BorrowerTile.dart';
 import 'package:ere_manager/library/model/Book.dart';
 import 'package:ere_manager/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_list.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:http/http.dart' as http;
@@ -17,19 +19,20 @@ import 'Tile/BorrowedBookTile.dart';
 import 'model/BookRequest.dart';
 import 'model/Rental.dart';
 
-class LibraryAcitivity extends StatefulWidget {
+class LibraryActivity extends StatefulWidget {
   _LibraryActivityState createState() => _LibraryActivityState();
 }
 
 enum TabState { bookList, myPage, admin }
 
-class _LibraryActivityState extends State<LibraryAcitivity> {
+class _LibraryActivityState extends State<LibraryActivity> {
   User user;
   DatabaseReference reference;
   FirebaseList bookList;
   FirebaseList personalRentalList;
   FirebaseList bookRequestList;
   FirebaseList candidateList;
+  FirebaseList borrowerList;
 
   String userID;
   String userName;
@@ -41,6 +44,8 @@ class _LibraryActivityState extends State<LibraryAcitivity> {
   List<BookRequest> bookRequests = [];
   List<String> rawCandidates = [];
   List<Map<String, dynamic>> candidates = [];
+  List<String> rawBorrowers = [];
+  List<Rental> borrowers = [];
 
   TabState tab = TabState.bookList;
   bool isAdmin = false;
@@ -53,8 +58,6 @@ class _LibraryActivityState extends State<LibraryAcitivity> {
   String newTitle = '';
   String newAuthor = '';
   String newISBN = '';
-
-  List<String> borrowers = ['test1', 'test2', 'test3'];
 
   @override
   void initState() {
@@ -116,7 +119,7 @@ class _LibraryActivityState extends State<LibraryAcitivity> {
             personalRentals = rawPersonalRentals
                 .map<Rental>((str) => Rental.fromJson(jsonDecode(str)))
                 .toList();
-            personalRentals.sort((a, b) => a.bookTitle.compareTo(b.bookTitle));
+            personalRentals.sort((a, b) => a.dueDate.compareTo(b.dueDate));
           });
         });
 
@@ -158,11 +161,52 @@ class _LibraryActivityState extends State<LibraryAcitivity> {
             },
             onValue: (snapshot) {
               setState(() {
-                candidates = rawCandidates.map<Map<String, dynamic>>((str) => jsonDecode(str)).toList();
+                candidates = rawCandidates
+                    .map<Map<String, dynamic>>((str) => jsonDecode(str))
+                    .toList();
               });
-            }
-        );
+            });
+        borrowerList = FirebaseList(
+            query: reference.child('library').child('Rental'),
+            onChildAdded: (idx, snapshot) {
+              rawBorrowers.insert(idx, snapshot.value);
+            },
+            onChildRemoved: (idx, snapshot) {
+              rawBorrowers.removeAt(idx);
+            },
+            onChildChanged: (idx, snapshot) {
+              rawBorrowers.removeAt(idx);
+              rawBorrowers.insert(idx, snapshot.value);
+            },
+            onValue: (snapshot) {
+              setState(() {
+                borrowers = rawBorrowers
+                    .map<Rental>((str) => Rental.fromJson(jsonDecode(str)))
+                    .toList();
+                borrowers.sort((a, b) => a.dueDate.compareTo(b.dueDate));
+              });
+            });
       }
+    });
+
+    final firebaseMessaging = FirebaseMessaging();
+    firebaseMessaging.configure(
+        onMessage: (Map<String, dynamic> message) async {
+      EREToast(
+          '${message['notification']['title']}: ${message['notification']['body']}',
+          context,
+          true);
+    });
+    firebaseMessaging.requestNotificationPermissions(
+        const IosNotificationSettings(
+            sound: true, badge: true, alert: true, provisional: true));
+    firebaseMessaging.getToken().then((token) async {
+      assert(token != null);
+
+      if (token !=
+          (await reference.child('Student').child(userID).child('NT').once())
+              .value)
+        reference.child('Student').child(userID).child('NT').set(token);
     });
   }
 
@@ -341,7 +385,16 @@ class _LibraryActivityState extends State<LibraryAcitivity> {
                                                             false);
                                                         Navigator.pop(context);
                                                       } else {
-                                                        final sNum = (await reference.child('Student').child(userID).child('sNum').once()).value;
+                                                        final sNum =
+                                                            (await reference
+                                                                    .child(
+                                                                        'Student')
+                                                                    .child(
+                                                                        userID)
+                                                                    .child(
+                                                                        'sNum')
+                                                                    .once())
+                                                                .value;
                                                         final candidacyTransaction =
                                                             await reference
                                                                 .child(
@@ -351,7 +404,8 @@ class _LibraryActivityState extends State<LibraryAcitivity> {
                                                                 .child(userID)
                                                                 .runTransaction(
                                                                     (mutableData) async {
-                                                          mutableData.value = jsonEncode({
+                                                          mutableData.value =
+                                                              jsonEncode({
                                                             'id': userID,
                                                             'name': userName,
                                                             'sNum': sNum,
@@ -470,113 +524,164 @@ class _LibraryActivityState extends State<LibraryAcitivity> {
                     : Expanded(
                         //tab == TabState.admin
                         child: Column(children: [
-                          !isAdminChanging ? EREButton(
-                            text: str.recruitAdmin,
-                            onPressed: () async {
-                              isAdminChanging = true;
-                              await reference.child('library').child('isAdminChanging').set(true);
-                              setState(() {});
-                            },
-                            width: width,
-                          ) : EREButton(
-                            text: str.cancelRecruitAdmin,
-                            onPressed: () async {
-                              isAdminChanging = false;
-                              await reference.child('library').child('isAdminChanging').set(false);
-                              setState(() {});
-                            },
-                            width: width,
-                          ),
-                          isAdminChanging ? Container(
-                            alignment: Alignment.centerLeft,
-                            padding: EdgeInsets.all(width * 0.015),
-                            height: tile_height,
-                            color: ERE_BLACK,
-                            child: Text(
-                              str.candidate,
-                              style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
-                            ),
-                          ) : Container(),
-                          isAdminChanging ?
-                          candidates.length > 0 ?
-                          Expanded(
-                            child: ListView.builder(
-                              itemCount: candidates.length,
-                              itemBuilder: (context, index) => Row(
-                                children: [
-                                  Container(
-                                    alignment: Alignment.center,
-                                    padding: EdgeInsets.all(width * 0.0075),
-                                    width: width * 0.2,
-                                    height: tile_height,
-                                    child: Text(candidates[index]['name'], style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),),
+                          !isAdminChanging
+                              ? EREButton(
+                                  text: str.recruitAdmin,
+                                  onPressed: () async {
+                                    isAdminChanging = true;
+                                    await reference
+                                        .child('library')
+                                        .child('isAdminChanging')
+                                        .set(true);
+                                    setState(() {});
+                                  },
+                                  width: width,
+                                )
+                              : EREButton(
+                                  text: str.cancelRecruitAdmin,
+                                  onPressed: () async {
+                                    isAdminChanging = false;
+                                    await reference
+                                        .child('library')
+                                        .child('isAdminChanging')
+                                        .set(false);
+                                    setState(() {});
+                                  },
+                                  width: width,
+                                ),
+                          isAdminChanging
+                              ? Container(
+                                  alignment: Alignment.centerLeft,
+                                  padding: EdgeInsets.all(width * 0.015),
+                                  height: tile_height,
+                                  color: ERE_BLACK,
+                                  child: Text(
+                                    str.candidate,
+                                    style: TextStyle(
+                                        color: ERE_YELLOW, fontSize: fontsize),
                                   ),
-                                  Container(
-                                    alignment: Alignment.center,
-                                    padding: EdgeInsets.all(width * 0.0075),
-                                    width: width * 0.3,
-                                    height: tile_height,
-                                    child: Text(candidates[index]['sNum'], style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),),
-                                  ),
-                                  Container(
-                                    alignment: Alignment.center,
-                                    width: width * 0.2,
-                                    height: tile_height,
-                                    child: EREButton(
-                                      text: str.approve,
-                                      onPressed: () {
-                                        showDialog(
-                                          context: context,
-                                          builder: (_) => AlertDialog(
-                                            title: Text(str.approveERELibraryAdminInfo),
-                                            content: Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Text('${str.lang == '한국어' ? '관리자 선정을 승인하면 즉시 관리자로서의 책임과 권한이 인계됩니다.\n지원자를 승인하시겠습니까?' :
-                                                'As you approve the candidate, the responsibility and the authority as the administrator are transferred to the candidate.\nWould you approve the candidate?'}\n\n'
-                                                    '${str.name} : ${candidates[index]['name']}, ${str.studentID} : ${candidates[index]['sNum']}'),
-                                              ],
-                                            ),
-                                            actions: [
-                                              FlatButton(
-                                                child: Text(str.approve),
-                                                onPressed: () {
-                                                  reference.child('library')..child('admin').set(candidates[index]['id'])
-                                                  ..child('adminCandidates').remove()
-                                                  ..child('isAdminChanging').set(false);
-                                                  EREToast(str.lang == '한국어' ? '새로운 관리자가 선정되었습니다.' : 'Succeeded to nominate new administrator.', context, false);
-                                                  Navigator.pop(context);
-                                                  setState(() async {
-                                                    isAdminChanging = false;
-                                                    isAdmin = userID == (await reference.child('library').child('admin').once()).value;
-                                                  });
-                                                },
+                                )
+                              : Container(),
+                          isAdminChanging
+                              ? candidates.length > 0
+                                  ? Expanded(
+                                      child: ListView.builder(
+                                        itemCount: candidates.length,
+                                        itemBuilder: (context, index) => Row(
+                                          children: [
+                                            Container(
+                                              alignment: Alignment.center,
+                                              padding: EdgeInsets.all(
+                                                  width * 0.0075),
+                                              width: width * 0.2,
+                                              height: tile_height,
+                                              child: Text(
+                                                candidates[index]['name'],
+                                                style: TextStyle(
+                                                    color: ERE_YELLOW,
+                                                    fontSize: fontsize),
                                               ),
-                                              FlatButton(
-                                                child: Text(str.cancel),
+                                            ),
+                                            Container(
+                                              alignment: Alignment.center,
+                                              padding: EdgeInsets.all(
+                                                  width * 0.0075),
+                                              width: width * 0.3,
+                                              height: tile_height,
+                                              child: Text(
+                                                candidates[index]['sNum'],
+                                                style: TextStyle(
+                                                    color: ERE_YELLOW,
+                                                    fontSize: fontsize),
+                                              ),
+                                            ),
+                                            Container(
+                                              alignment: Alignment.center,
+                                              width: width * 0.3,
+                                              height: tile_height,
+                                              child: EREButton(
+                                                text: str.approve,
                                                 onPressed: () {
-                                                  Navigator.pop(context);
+                                                  showDialog(
+                                                      context: context,
+                                                      builder:
+                                                          (_) => AlertDialog(
+                                                                title: Text(str
+                                                                    .approveERELibraryAdminInfo),
+                                                                content: Column(
+                                                                  mainAxisSize:
+                                                                      MainAxisSize
+                                                                          .min,
+                                                                  children: [
+                                                                    Text(
+                                                                        '${str.lang == '한국어' ? '관리자 선정을 승인하면 즉시 관리자로서의 책임과 권한이 인계됩니다.\n지원자를 승인하시겠습니까?' : 'As you approve the candidate, the responsibility and the authority as the administrator are transferred to the candidate.\nWould you approve the candidate?'}\n\n'
+                                                                        '${str.name} : ${candidates[index]['name']}, ${str.studentID} : ${candidates[index]['sNum']}'),
+                                                                  ],
+                                                                ),
+                                                                actions: [
+                                                                  FlatButton(
+                                                                    child: Text(
+                                                                        str.approve),
+                                                                    onPressed:
+                                                                        () {
+                                                                      reference.child(
+                                                                          'library')
+                                                                        ..child('admin').set(candidates[index]
+                                                                            [
+                                                                            'id'])
+                                                                        ..child('adminCandidates')
+                                                                            .remove()
+                                                                        ..child('isAdminChanging')
+                                                                            .set(false);
+                                                                      EREToast(
+                                                                          str.lang == '한국어'
+                                                                              ? '새로운 관리자가 선정되었습니다.'
+                                                                              : 'Succeeded to nominate new administrator.',
+                                                                          context,
+                                                                          false);
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                      setState(
+                                                                          () async {
+                                                                        isAdminChanging =
+                                                                            false;
+                                                                        isAdmin =
+                                                                            userID ==
+                                                                                (await reference.child('library').child('admin').once()).value;
+                                                                      });
+                                                                    },
+                                                                  ),
+                                                                  FlatButton(
+                                                                    child: Text(
+                                                                        str.cancel),
+                                                                    onPressed:
+                                                                        () {
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                    },
+                                                                  )
+                                                                ],
+                                                              ));
                                                 },
-                                              )
-                                            ],
-                                          )
-                                        );
-                                      },
-                                      width: width,
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ) : Container(
-                            alignment: Alignment.center,
-                            padding: EdgeInsets.all(width * 0.015),
-                            height: tile_height,
-                            child: Text(
-                              str.noCandidate,
-                              style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
-                            ),
-                          ) : Container(),
+                                                width: width,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                  : Container(
+                                      alignment: Alignment.center,
+                                      padding: EdgeInsets.all(width * 0.015),
+                                      height: tile_height,
+                                      child: Text(
+                                        str.noCandidate,
+                                        style: TextStyle(
+                                            color: ERE_YELLOW,
+                                            fontSize: fontsize),
+                                      ),
+                                    )
+                              : Container(),
                           Container(
                             alignment: Alignment.centerLeft,
                             padding: EdgeInsets.all(width * 0.015),
@@ -588,66 +693,81 @@ class _LibraryActivityState extends State<LibraryAcitivity> {
                                   color: ERE_YELLOW, fontSize: fontsize),
                             ),
                           ),
-                          Row(
-                            children: [
-                              Checkbox(
-                                value: selectAll,
-                                onChanged: (_) {
-                                  setState(() {
-                                    selectAll = !selectAll;
-                                    for (var bookRequest in bookRequests)
-                                      bookRequest.isChecked = selectAll;
-                                  });
-                                },
-                                checkColor: ERE_YELLOW,
-                                activeColor: ERE_BLACK,
-                              ),
-                              Container(
-                                alignment: Alignment.center,
-                                // padding: EdgeInsets.all(width * 0.0075),
-                                width: width * 0.07,
-                                height: tile_height,
-                                child: Text(
-                                  str.number,
-                                  style: TextStyle(
-                                      color: ERE_YELLOW, fontSize: fontsize),
+                          bookRequests.length > 0
+                              ? Row(
+                                  children: [
+                                    Checkbox(
+                                      value: selectAll,
+                                      onChanged: (_) {
+                                        setState(() {
+                                          selectAll = !selectAll;
+                                          for (var bookRequest in bookRequests)
+                                            bookRequest.isChecked = selectAll;
+                                        });
+                                      },
+                                      checkColor: ERE_YELLOW,
+                                      activeColor: ERE_BLACK,
+                                    ),
+                                    Container(
+                                      alignment: Alignment.center,
+                                      // padding: EdgeInsets.all(width * 0.0075),
+                                      width: width * 0.07,
+                                      height: tile_height,
+                                      child: Text(
+                                        str.number,
+                                        style: TextStyle(
+                                            color: ERE_YELLOW,
+                                            fontSize: fontsize),
+                                      ),
+                                    ),
+                                    Container(
+                                      alignment: Alignment.center,
+                                      padding: EdgeInsets.all(width * 0.0075),
+                                      width: width * 0.3,
+                                      height: tile_height,
+                                      child: Text(
+                                        str.bookTitle,
+                                        style: TextStyle(
+                                            color: ERE_YELLOW,
+                                            fontSize: fontsize),
+                                      ),
+                                    ),
+                                    Container(
+                                      alignment: Alignment.center,
+                                      padding: EdgeInsets.all(width * 0.0075),
+                                      width: width * 0.3,
+                                      height: tile_height,
+                                      child: Text(
+                                        str.author,
+                                        style: TextStyle(
+                                            color: ERE_YELLOW,
+                                            fontSize: fontsize),
+                                      ),
+                                    ),
+                                    Container(
+                                      alignment: Alignment.center,
+                                      padding: EdgeInsets.all(width * 0.0075),
+                                      width: width * 0.2,
+                                      height: tile_height,
+                                      child: Text(
+                                        str.requester,
+                                        style: TextStyle(
+                                            color: ERE_YELLOW,
+                                            fontSize: fontsize),
+                                      ),
+                                    )
+                                  ],
+                                )
+                              : Container(
+                                  alignment: Alignment.center,
+                                  padding: EdgeInsets.all(width * 0.015),
+                                  height: tile_height,
+                                  child: Text(
+                                    str.noBookRequest,
+                                    style: TextStyle(
+                                        color: ERE_YELLOW, fontSize: fontsize),
+                                  ),
                                 ),
-                              ),
-                              Container(
-                                alignment: Alignment.center,
-                                padding: EdgeInsets.all(width * 0.0075),
-                                width: width * 0.3,
-                                height: tile_height,
-                                child: Text(
-                                  str.bookTitle,
-                                  style: TextStyle(
-                                      color: ERE_YELLOW, fontSize: fontsize),
-                                ),
-                              ),
-                              Container(
-                                alignment: Alignment.center,
-                                padding: EdgeInsets.all(width * 0.0075),
-                                width: width * 0.3,
-                                height: tile_height,
-                                child: Text(
-                                  str.author,
-                                  style: TextStyle(
-                                      color: ERE_YELLOW, fontSize: fontsize),
-                                ),
-                              ),
-                              Container(
-                                alignment: Alignment.center,
-                                padding: EdgeInsets.all(width * 0.0075),
-                                width: width * 0.2,
-                                height: tile_height,
-                                child: Text(
-                                  str.requester,
-                                  style: TextStyle(
-                                      color: ERE_YELLOW, fontSize: fontsize),
-                                ),
-                              )
-                            ],
-                          ),
                           bookRequests.length > 0
                               ? Expanded(
                                   child: ListView.builder(
@@ -664,16 +784,7 @@ class _LibraryActivityState extends State<LibraryAcitivity> {
                                     ),
                                   ),
                                 )
-                              : Container(
-                                  alignment: Alignment.center,
-                                  padding: EdgeInsets.all(width * 0.015),
-                                  height: tile_height,
-                                  child: Text(
-                                    str.noBookRequest,
-                                    style: TextStyle(
-                                        color: ERE_YELLOW, fontSize: fontsize),
-                                  ),
-                                ),
+                              : Container(),
                           bookRequests.length > 0
                               ? EREButton(
                                   text: str.text,
@@ -693,7 +804,7 @@ class _LibraryActivityState extends State<LibraryAcitivity> {
                                       EREToast(
                                           str.lang == '한국어'
                                               ? '선택된 신청 목록이 없습니다.'
-                                              : "you don't select any request in the list.",
+                                              : "You don't select any request in the list.",
                                           context,
                                           false);
                                     else {
@@ -786,76 +897,98 @@ class _LibraryActivityState extends State<LibraryAcitivity> {
                                   },
                                   width: width,
                                 )
-                              : Container()
-                          // Container(
-                          //   alignment: Alignment.centerLeft,
-                          //   padding: EdgeInsets.all(width * 0.015),
-                          //   height: tile_height,
-                          //   color: ERE_BLACK,
-                          //   child: Text(
-                          //     str.borrowerList,
-                          //     style: TextStyle(
-                          //         color: ERE_YELLOW, fontSize: fontsize),
-                          //   ),
-                          // ),
-                          // borrowers.length > 0
-                          //     ? Row(
-                          //         children: [
-                          //           Container(
-                          //             alignment: Alignment.center,
-                          //             padding: EdgeInsets.all(width * 0.0075),
-                          //             width: width * 0.4,
-                          //             height: tile_height,
-                          //             child: Text(
-                          //               str.bookTitle,
-                          //               style: TextStyle(
-                          //                   color: ERE_YELLOW,
-                          //                   fontSize: fontsize),
-                          //             ),
-                          //           ),
-                          //           Container(
-                          //             alignment: Alignment.center,
-                          //             padding: EdgeInsets.all(width * 0.0075),
-                          //             width: width * 0.2,
-                          //             height: tile_height,
-                          //             child: Text(
-                          //               str.borrower,
-                          //               style: TextStyle(
-                          //                   color: ERE_YELLOW,
-                          //                   fontSize: fontsize),
-                          //             ),
-                          //           ),
-                          //           Container(
-                          //             alignment: Alignment.center,
-                          //             padding: EdgeInsets.all(width * 0.0075),
-                          //             width: width * 0.3,
-                          //             height: tile_height,
-                          //             child: Text(
-                          //               str.dueDate,
-                          //               style: TextStyle(
-                          //                   color: ERE_YELLOW,
-                          //                   fontSize: fontsize),
-                          //             ),
-                          //           )
-                          //         ],
-                          //       )
-                          //     : Container(),
-                          // borrowers.length > 0
-                          //     ? Expanded(
-                          //         child: ListView(
-                          //             //todo: .builder 붙이고 시작
-                          //             ),
-                          //       )
-                          //     : Container(
-                          //         alignment: Alignment.center,
-                          //         padding: EdgeInsets.all(width * 0.015),
-                          //         height: tile_height,
-                          //         child: Text(
-                          //           str.noBorrower,
-                          //           style: TextStyle(
-                          //               color: ERE_YELLOW, fontSize: fontsize),
-                          //         ),
-                          //        ),
+                              : Container(),
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            padding: EdgeInsets.all(width * 0.015),
+                            height: tile_height,
+                            color: ERE_BLACK,
+                            child: Text(
+                              str.borrowerList,
+                              style: TextStyle(
+                                  color: ERE_YELLOW, fontSize: fontsize),
+                            ),
+                          ),
+                          borrowers.length > 0
+                              ? Row(
+                                  children: [
+                                    Container(
+                                      alignment: Alignment.center,
+                                      padding: EdgeInsets.all(width * 0.0075),
+                                      width: width * 0.1,
+                                      height: tile_height,
+                                      child: Text(
+                                        str.number,
+                                        style: TextStyle(
+                                            color: ERE_YELLOW,
+                                            fontSize: fontsize),
+                                      ),
+                                    ),
+                                    Container(
+                                      alignment: Alignment.center,
+                                      padding: EdgeInsets.all(width * 0.0075),
+                                      width: width * 0.3,
+                                      height: tile_height,
+                                      child: Text(
+                                        str.bookTitle,
+                                        style: TextStyle(
+                                            color: ERE_YELLOW,
+                                            fontSize: fontsize),
+                                      ),
+                                    ),
+                                    Container(
+                                      alignment: Alignment.center,
+                                      padding: EdgeInsets.all(width * 0.0075),
+                                      width: width * 0.2,
+                                      height: tile_height,
+                                      child: Text(
+                                        str.borrower,
+                                        style: TextStyle(
+                                            color: ERE_YELLOW,
+                                            fontSize: fontsize),
+                                      ),
+                                    ),
+                                    Container(
+                                      alignment: Alignment.center,
+                                      padding: EdgeInsets.all(width * 0.0075),
+                                      width: width * 0.3,
+                                      height: tile_height,
+                                      child: Text(
+                                        str.dueDate,
+                                        style: TextStyle(
+                                            color: ERE_YELLOW,
+                                            fontSize: fontsize),
+                                      ),
+                                    )
+                                  ],
+                                )
+                              : Container(),
+                          borrowers.length > 0
+                              ? Expanded(
+                                  child: ListView.builder(
+                                    itemCount: borrowers.length,
+                                    itemBuilder: (context, index) =>
+                                        BorrowerTile(
+                                      index: index + 1,
+                                      rental: borrowers[index],
+                                      width: width,
+                                      height: height,
+                                      refresh: () {
+                                        setState(() {});
+                                      },
+                                    ),
+                                  ),
+                                )
+                              : Container(
+                                  alignment: Alignment.center,
+                                  padding: EdgeInsets.all(width * 0.015),
+                                  height: tile_height,
+                                  child: Text(
+                                    str.noBorrower,
+                                    style: TextStyle(
+                                        color: ERE_YELLOW, fontSize: fontsize),
+                                  ),
+                                ),
                         ]),
                       ),
             tab == TabState.bookList
@@ -930,6 +1063,10 @@ class _LibraryActivityState extends State<LibraryAcitivity> {
                                                 .child('BookRequest')
                                                 .push()
                                                 .key;
+                                            
+                                            final num = ((await reference.child('Student').child(userID).child('bookRequestIDs').once()).value as List<dynamic> ?? []).length;
+                                            reference.child('Student').child(userID).child('bookRequestIDs').child('$num').set(id);
+                                            
                                             final bookRequestTransaction =
                                                 await reference
                                                     .child('library')
@@ -946,27 +1083,8 @@ class _LibraryActivityState extends State<LibraryAcitivity> {
                                               });
                                               return mutableData;
                                             });
-                                            final personalBookRequestTransaction =
-                                                await reference
-                                                    .child('Student')
-                                                    .child(userID)
-                                                    .child('bookRequests')
-                                                    .child(id)
-                                                    .runTransaction(
-                                                        (mutableData) async {
-                                              mutableData.value = jsonEncode({
-                                                'id': id,
-                                                'title': requestTitle,
-                                                'author': requestAuthor,
-                                                'requesterID': userID,
-                                                'requesterName': userName
-                                              });
-                                              return mutableData;
-                                            });
 
                                             if (bookRequestTransaction
-                                                    .committed &&
-                                                personalBookRequestTransaction
                                                     .committed)
                                               EREToast(
                                                   str.lang == '한국어'
@@ -1028,6 +1146,7 @@ class _LibraryActivityState extends State<LibraryAcitivity> {
     personalRentalList.clear();
     if (bookRequestList != null) bookRequestList.clear();
     if (candidateList != null) candidateList.clear();
+    if (borrowerList != null) borrowerList.clear();
   }
 
   _registerBook(BuildContext context, double width, double height) {
@@ -1175,7 +1294,6 @@ class _LibraryActivityState extends State<LibraryAcitivity> {
                                 : 'Succeeded to add the book.',
                             context,
                             false);
-                      //todo: if문 안에 setState() 필요?
                     }
                   },
                 ),

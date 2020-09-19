@@ -88,17 +88,9 @@ class _LectureBookRequestTileForReceiverState
                 child: EREButton(
                   text: str.accepted,
                   onPressed: () async {
-                    final lectureBookStr = (await reference
-                            .child('lecturebook')
-                            .child('LectureBook')
-                            .child(widget.lectureBookRequest.lecturebookID)
-                            .once())
-                        .value;
-                    final lectureBook =
-                        LectureBook.fromJson(jsonDecode(lectureBookStr));
                     final pNum = (await reference
                             .child('Student')
-                            .child(lectureBook.ownerID)
+                            .child(widget.lectureBookRequest.ownerID)
                             .child('pNum')
                             .once())
                         .value;
@@ -146,14 +138,15 @@ class _LectureBookRequestTileForReceiverState
                     child: EREButton(
                       text: str.cancel,
                       onPressed: () {
-                        reference
-                            .child('lecturebook')
-                            .child('LectureBookRequest')
-                            .child(widget.lectureBookRequest.id)
-                            .remove()
-                            .whenComplete(() {
-                          widget.refresh();
-                        });
+                        reference.child('Student')
+                          ..child(widget.lectureBookRequest.receiverID)
+                              .child('LectureBookRequest')
+                              .child(widget.lectureBookRequest.id)
+                              .remove()
+                          ..child(widget.lectureBookRequest.ownerID)
+                              .child('LectureBookRequest')
+                              .child(widget.lectureBookRequest.id)
+                              .remove(); //todo: 문제 있으면 여기에 refresh() 실행
                       },
                       width: widget.width,
                     ),
@@ -174,11 +167,19 @@ class _LectureBookRequestTileForReceiverState
                                       child: Text(str.ok),
                                       onPressed: () {
                                         Navigator.pop(context);
-                                        reference
-                                            .child('lecturebook')
-                                            .child('LectureBookRequest')
-                                            .child(widget.lectureBookRequest.id)
-                                            .remove();
+                                        reference.child('Student')
+                                          ..child(widget.lectureBookRequest
+                                                  .receiverID)
+                                              .child('LectureBookRequest')
+                                              .child(
+                                                  widget.lectureBookRequest.id)
+                                              .remove()
+                                          ..child(widget
+                                                  .lectureBookRequest.ownerID)
+                                              .child('LectureBookRequest')
+                                              .child(
+                                                  widget.lectureBookRequest.id)
+                                              .remove();
                                       },
                                     )
                                   ],

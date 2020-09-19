@@ -116,7 +116,7 @@ class Str {
       'agreementCheck': '상기 내용을 확인했으며 개인정보 제공에 동의합니다.',
       'continue': '계속',
       'ERELibrary': '에자공 도서관',
-      'loginEmail': '로그인 Email',
+      'loginEmail': '로그인 이메일',
       'bookList': '도서 목록',
       'admin': '관리자',
       'bookTitle': '도서명',
@@ -266,7 +266,7 @@ class Str {
           'I verified the above statements and agree to provide personal information.',
       'continue': 'Continue',
       'ERELibrary': 'ERE Library',
-      'loginEmail': 'login Email',
+      'loginEmail': 'Login Email',
       'bookList': 'Book list',
       'admin': 'Administrator',
       'bookTitle': 'Title',
@@ -476,8 +476,7 @@ class Str {
 
   String get register => values[lang]['register'];
 
-  String get blankError =>
-      values[lang]['blankError'];
+  String get blankError => values[lang]['blankError'];
 
   String get lectureBookRegisterSuccess =>
       values[lang]['lectureBookRegisterSuccess'];
@@ -551,7 +550,7 @@ class Str {
   String get addBook => values[lang]['addBook'];
 
   String get text => values[lang]['text'];
-  
+
   String get removeBook => values[lang]['removeBook'];
 
   String get borrow => values[lang]['borrow'];
@@ -578,7 +577,8 @@ class Str {
 
   String get cancelRecruitAdmin => values[lang]['cancelRecruitAdmin'];
 
-  String get approveERELibraryAdminInfo => values[lang]['approveERELibraryAdminInfo'];
+  String get approveERELibraryAdminInfo =>
+      values[lang]['approveERELibraryAdminInfo'];
 
   String translate(String text) {
     if (lang != '한국어')

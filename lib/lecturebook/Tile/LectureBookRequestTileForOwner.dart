@@ -29,7 +29,7 @@ class LectureBookRequestTileForOwner extends StatefulWidget {
 
 class _LectureBookRequestTileForOwnerState
     extends State<LectureBookRequestTileForOwner> {
-  final reference = FirebaseDatabase.instance.reference().child('lecturebook');
+  final reference = FirebaseDatabase.instance.reference();
 
   @override
   Widget build(BuildContext context) {
@@ -119,6 +119,7 @@ class _LectureBookRequestTileForOwnerState
 
                                         final deactiveTransaction =
                                             await reference
+                                                .child('lecturebook')
                                                 .child('LectureBook')
                                                 .child(widget.lectureBookRequest
                                                     .lecturebookID)
@@ -134,7 +135,8 @@ class _LectureBookRequestTileForOwnerState
                                         });
 
                                         if (deactiveTransaction.committed) {
-                                          final equivList = [];
+                                          final List<LectureBookRequest>
+                                              equivList = [];
 
                                           for (var request
                                               in widget.requestListForOwner) {
@@ -151,12 +153,23 @@ class _LectureBookRequestTileForOwnerState
                                           }
 
                                           try {
-                                            for (var request in equivList)
+                                            for (var request in equivList) {
                                               await reference
+                                                  .child('Student')
+                                                  .child(request.ownerID)
                                                   .child('LectureBookRequest')
                                                   .child(request.id)
                                                   .set(jsonEncode(
                                                       request.toJson()));
+
+                                              await reference
+                                                  .child('Student')
+                                                  .child(request.receiverID)
+                                                  .child('LectureBookRequest')
+                                                  .child(request.id)
+                                                  .set(jsonEncode(
+                                                      request.toJson()));
+                                            }
                                             EREToast(str.acceptSuccess, context,
                                                 false);
                                           } catch (e) {

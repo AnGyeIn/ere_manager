@@ -85,7 +85,10 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
         });
 
     requestList = FirebaseList(
-        query: reference.child('lecturebook').child('LectureBookRequest'),
+        query: reference
+            .child('Student')
+            .child(userID)
+            .child('LectureBookRequest'),
         onChildAdded: (idx, snapshot) {
           rawRequests.insert(idx, snapshot.value);
         },
@@ -116,15 +119,10 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
     final firebaseMessaging = FirebaseMessaging();
     firebaseMessaging.configure(
         onMessage: (Map<String, dynamic> message) async {
-      EREToast(str.lectureBookRequestChange, context, true);
-    }, onLaunch: (Map<String, dynamic> message) async {
-      setState(() {
-        isLectureBookList = false;
-      });
-    }, onResume: (Map<String, dynamic> message) async {
-      setState(() {
-        isLectureBookList = false;
-      });
+      EREToast(
+          '${message['notification']['title']}: ${message['notification']['body']}',
+          context,
+          true);
     });
     firebaseMessaging.requestNotificationPermissions(
         const IosNotificationSettings(
@@ -265,13 +263,14 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
             isLectureBookList
                 ? (isWaiting
                     ? Expanded(
-              child: Align(
-                alignment: Alignment.center,
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(ERE_YELLOW),
-                ),
-              ),
-            )
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: CircularProgressIndicator(
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(ERE_YELLOW),
+                          ),
+                        ),
+                      )
                     : Expanded(
                         child: ListView.builder(
                           itemCount: lecturebooks.length,
@@ -650,7 +649,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                           .root()
                           .child('Student')
                           .child(user.uid)
-                          .child('lecturebooks')
+                          .child('lecturebookIDs')
                           .once()
                           .then((snapshot) {
                         final num =
@@ -659,7 +658,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                             .root()
                             .child('Student')
                             .child(user.uid)
-                            .child('lecturebooks')
+                            .child('lecturebookIDs')
                             .child('$num')
                             .set(id);
                       });
@@ -682,11 +681,9 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                         return mutableData;
                       });
 
-                      if (registerTransaction.committed) {
+                      if (registerTransaction.committed)
                         EREToast(
                             str.lectureBookRegisterSuccess, context, false);
-                        setState(() {});
-                      }
                     }
                   },
                 ),

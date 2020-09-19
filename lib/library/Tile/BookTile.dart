@@ -151,7 +151,11 @@ class _BookTileState extends State<BookTile> {
                                     .push()
                                     .key;
                                 DateTime dueDate = DateTime.now();
-                                dueDate.add(Duration(days: 14));
+                                dueDate = dueDate.add(Duration(days: 14));
+
+                                final num = ((await reference.child('Student').child(widget.userID).child('rentalIDs').once()).value as List<dynamic> ?? []).length;
+                                reference.child('Student').child(widget.userID).child('rentalIDs').child('$num').set(id);
+
                                 final addRentalTransaction = await reference
                                     .child('library')
                                     .child('Rental')
