@@ -202,7 +202,7 @@ class Str {
       'saveFail': 'Failed to save the data.',
       'info': 'Info',
       'infoDetail':
-          "This app is made by a student so each item may not be correct. Please check correct regulations by 'Search Regulations' at My SNU > Academic Affairs > Graduation > Graduation Assessment(Self-diagnosis) Processing Major Details and Graduation Rqmt Simulation or inquiring the ERE department office.\n"
+          "This app is made by a student so each item may not be correct. Please check correct regulations by 'Search Regulations' at My SNU > Academic Affairs > Graduation > Graduation Assessment(Self-diagnosis) Processing Major Details and Graduation Rqmt Simulation or inquiring ERE department office.\n"
               "ERE department office: 02-880-7219",
       'ereLink': 'ERE homepage',
       'studentIDHint': "ex) Type in '16' for '2016'",
