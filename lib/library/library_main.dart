@@ -103,7 +103,7 @@ class _LibraryActivityState extends State<LibraryActivity> {
           });
         });
     personalRentalList = FirebaseList(
-        query: reference.child('Student').child(userID).child('rentals'),
+        query: reference.child('Student').child(userID).child('Rental'),
         onChildAdded: (idx, snapshot) {
           rawPersonalRentals.insert(idx, snapshot.value);
         },
@@ -187,6 +187,16 @@ class _LibraryActivityState extends State<LibraryActivity> {
               });
             });
       }
+    });
+
+    reference
+        .child('Student')
+        .child(userID)
+        .child('lang')
+        .once()
+        .then((snapshot) {
+      if (snapshot.value == null || snapshot.value != str.lang)
+        reference.child('Student').child(userID).child('lang').set(str.lang);
     });
 
     final firebaseMessaging = FirebaseMessaging();
@@ -1063,10 +1073,23 @@ class _LibraryActivityState extends State<LibraryActivity> {
                                                 .child('BookRequest')
                                                 .push()
                                                 .key;
-                                            
-                                            final num = ((await reference.child('Student').child(userID).child('bookRequestIDs').once()).value as List<dynamic> ?? []).length;
-                                            reference.child('Student').child(userID).child('bookRequestIDs').child('$num').set(id);
-                                            
+
+                                            final num = ((await reference
+                                                            .child('Student')
+                                                            .child(userID)
+                                                            .child(
+                                                                'bookRequestIDs')
+                                                            .once())
+                                                        .value as List<dynamic> ??
+                                                    [])
+                                                .length;
+                                            reference
+                                                .child('Student')
+                                                .child(userID)
+                                                .child('bookRequestIDs')
+                                                .child('$num')
+                                                .set(id);
+
                                             final bookRequestTransaction =
                                                 await reference
                                                     .child('library')
@@ -1085,7 +1108,7 @@ class _LibraryActivityState extends State<LibraryActivity> {
                                             });
 
                                             if (bookRequestTransaction
-                                                    .committed)
+                                                .committed)
                                               EREToast(
                                                   str.lang == '한국어'
                                                       ? '도서 구비 신청이 접수되었습니다.'

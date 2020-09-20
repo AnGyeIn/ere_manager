@@ -153,8 +153,20 @@ class _BookTileState extends State<BookTile> {
                                 DateTime dueDate = DateTime.now();
                                 dueDate = dueDate.add(Duration(days: 14));
 
-                                final num = ((await reference.child('Student').child(widget.userID).child('rentalIDs').once()).value as List<dynamic> ?? []).length;
-                                reference.child('Student').child(widget.userID).child('rentalIDs').child('$num').set(id);
+                                final personalNum = ((await reference
+                                                .child('Student')
+                                                .child(widget.userID)
+                                                .child('rentalIDs')
+                                                .once())
+                                            .value as List<dynamic> ??
+                                        [])
+                                    .length;
+                                reference
+                                    .child('Student')
+                                    .child(widget.userID)
+                                    .child('rentalIDs')
+                                    .child('$personalNum')
+                                    .set(id);
 
                                 final addRentalTransaction = await reference
                                     .child('library')
@@ -171,11 +183,12 @@ class _BookTileState extends State<BookTile> {
                                   });
                                   return mutableData;
                                 });
+
                                 final addPersonalRentalTransaction =
                                     await reference
                                         .child('Student')
                                         .child(widget.userID)
-                                        .child('rentals')
+                                        .child('Rental')
                                         .child(id)
                                         .runTransaction((mutableData) async {
                                   mutableData.value = jsonEncode({
@@ -188,6 +201,19 @@ class _BookTileState extends State<BookTile> {
                                   });
                                   return mutableData;
                                 });
+
+                                final num = ((await reference
+                                                .child('library')
+                                                .child('rentalIDs')
+                                                .once())
+                                            .value as List<dynamic> ??
+                                        [])
+                                    .length;
+                                reference
+                                    .child('library')
+                                    .child('rentalIDs')
+                                    .child('$num')
+                                    .set(id);
 
                                 if (borrowTransaction.committed &&
                                     addRentalTransaction.committed &&

@@ -408,7 +408,7 @@ class _MainActivityState extends State<MainActivity> {
                             final notReturnedBook = (await reference
                                         .child('Student')
                                         .child(user.uid)
-                                        .child('rentals')
+                                        .child('Rental')
                                         .once())
                                     .value !=
                                 null;

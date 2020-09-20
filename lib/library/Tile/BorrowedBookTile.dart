@@ -99,7 +99,7 @@ class _BorrowedBookTileState extends State<BorrowedBookTile> {
               await reference
                   .child('Student')
                   .child(widget.rental.borrowerID)
-                  .child('rentals')
+                  .child('Rental')
                   .child(widget.rental.id)
                   .remove();
 

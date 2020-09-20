@@ -116,6 +116,11 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
           });
         });
 
+    reference.child('Student').child(userID).child('lang').once().then((snapshot) {
+      if (snapshot.value == null || snapshot.value != str.lang)
+        reference.child('Student').child(userID).child('lang').set(str.lang);
+    });
+
     final firebaseMessaging = FirebaseMessaging();
     firebaseMessaging.configure(
         onMessage: (Map<String, dynamic> message) async {
