@@ -15,20 +15,12 @@ class LectureBookRequestTileForOwner extends StatefulWidget {
   double height;
   Function refresh;
 
-  LectureBookRequestTileForOwner(
-      {this.index,
-      this.lectureBookRequest,
-      this.requestListForOwner,
-      this.width,
-      this.height,
-      this.refresh});
+  LectureBookRequestTileForOwner({this.index, this.lectureBookRequest, this.requestListForOwner, this.width, this.height, this.refresh});
 
-  _LectureBookRequestTileForOwnerState createState() =>
-      _LectureBookRequestTileForOwnerState();
+  _LectureBookRequestTileForOwnerState createState() => _LectureBookRequestTileForOwnerState();
 }
 
-class _LectureBookRequestTileForOwnerState
-    extends State<LectureBookRequestTileForOwner> {
+class _LectureBookRequestTileForOwnerState extends State<LectureBookRequestTileForOwner> {
   final reference = FirebaseDatabase.instance.reference();
 
   @override
@@ -75,9 +67,7 @@ class _LectureBookRequestTileForOwnerState
           height: tile_height,
           child: Text(
             '${str.translate(widget.lectureBookRequest.option)}',
-            style: TextStyle(
-                color: ERE_YELLOW,
-                fontSize: fontsize * (str.lang == '한국어' ? 1 : 0.7)),
+            style: TextStyle(color: ERE_YELLOW, fontSize: fontsize * (str.lang == '한국어' ? 1 : 0.7)),
           ),
         ),
         widget.lectureBookRequest.isAccepted
@@ -105,11 +95,8 @@ class _LectureBookRequestTileForOwnerState
                             builder: (_) => AlertDialog(
                                   content: Column(
                                     mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(str.lectureBookRequestAcceptDetail)
-                                    ],
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [Text(str.lectureBookRequestAcceptDetail)],
                                   ),
                                   actions: [
                                     FlatButton(
@@ -117,36 +104,25 @@ class _LectureBookRequestTileForOwnerState
                                       onPressed: () async {
                                         Navigator.pop(context);
 
-                                        final deactiveTransaction =
-                                            await reference
-                                                .child('lecturebook')
-                                                .child('LectureBook')
-                                                .child(widget.lectureBookRequest
-                                                    .lecturebookID)
-                                                .runTransaction(
-                                                    (mutableData) async {
-                                          final lectureBook =
-                                              LectureBook.fromJson(jsonDecode(
-                                                  mutableData.value));
+                                        final deactiveTransaction = await reference
+                                            .child('lecturebook')
+                                            .child('LectureBook')
+                                            .child(widget.lectureBookRequest.lecturebookID)
+                                            .runTransaction((mutableData) async {
+                                          final lectureBook = LectureBook.fromJson(jsonDecode(mutableData.value));
                                           lectureBook.isAvailable = false;
-                                          mutableData.value =
-                                              jsonEncode(lectureBook.toJson());
+                                          mutableData.value = jsonEncode(lectureBook.toJson());
                                           return mutableData;
                                         });
 
                                         if (deactiveTransaction.committed) {
-                                          final List<LectureBookRequest>
-                                              equivList = [];
+                                          final List<LectureBookRequest> equivList = [];
 
-                                          for (var request
-                                              in widget.requestListForOwner) {
-                                            if (request.id ==
-                                                widget.lectureBookRequest.id) {
+                                          for (var request in widget.requestListForOwner) {
+                                            if (request.id == widget.lectureBookRequest.id) {
                                               request.isAccepted = true;
                                               equivList.add(request);
-                                            } else if (request.lecturebookID ==
-                                                widget.lectureBookRequest
-                                                    .lecturebookID) {
+                                            } else if (request.lecturebookID == widget.lectureBookRequest.lecturebookID) {
                                               request.isRejected = true;
                                               equivList.add(request);
                                             }
@@ -159,19 +135,16 @@ class _LectureBookRequestTileForOwnerState
                                                   .child(request.ownerID)
                                                   .child('LectureBookRequest')
                                                   .child(request.id)
-                                                  .set(jsonEncode(
-                                                      request.toJson()));
+                                                  .set(jsonEncode(request.toJson()));
 
                                               await reference
                                                   .child('Student')
                                                   .child(request.receiverID)
                                                   .child('LectureBookRequest')
                                                   .child(request.id)
-                                                  .set(jsonEncode(
-                                                      request.toJson()));
+                                                  .set(jsonEncode(request.toJson()));
                                             }
-                                            EREToast(str.acceptSuccess, context,
-                                                false);
+                                            EREToast(str.acceptSuccess, context, false);
                                           } catch (e) {
                                             print(e);
                                           }

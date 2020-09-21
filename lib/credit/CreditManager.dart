@@ -12,13 +12,7 @@ class CreditManager {
   CreditManager upperManager;
   int num;
 
-  CreditManager(
-      [this.code,
-      this.name,
-      this.minCredits,
-      this.credit,
-      this.upperManager,
-      this.num]);
+  CreditManager([this.code, this.name, this.minCredits, this.credit, this.upperManager, this.num]);
 
   void addUnderManager(CreditManager creditManager) {
     underManagers.add(creditManager);
@@ -51,8 +45,7 @@ class CreditManager {
       case LECTURE_FIELD:
         credits = 0;
         for (var underManager in underManagers) {
-          if (underManager.code == LECTURE_GROUP ||
-              underManager.code == LECTURE_WORLD) underManager.sumCredits();
+          if (underManager.code == LECTURE_GROUP || underManager.code == LECTURE_WORLD) underManager.sumCredits();
           credits += underManager.credits;
         }
         break;

@@ -38,24 +38,18 @@ class _MainActivityState extends State<MainActivity> {
 
   _move(StatefulWidget activity) async {
     if (loginCheck) {
-      return Navigator.push(
-          context, MaterialPageRoute(builder: (context) => activity));
+      return Navigator.push(context, MaterialPageRoute(builder: (context) => activity));
     } else {
       final prefs = await SharedPreferences.getInstance();
       if (prefs.getBool('doesAgree') != true)
-        Navigator.push<bool>(
-            context,
-            MaterialPageRoute<bool>(
-                builder: (context) => AgreementActivity())).then((result) {
+        Navigator.push<bool>(context, MaterialPageRoute<bool>(builder: (context) => AgreementActivity())).then((result) {
           setState(() {
             loginCheck = result ?? false;
             user = FirebaseAuth.instance.currentUser;
           });
         });
       else
-        Navigator.push<bool>(context,
-                MaterialPageRoute<bool>(builder: (context) => LoginActivity()))
-            .then((result) {
+        Navigator.push<bool>(context, MaterialPageRoute<bool>(builder: (context) => LoginActivity())).then((result) {
           setState(() {
             loginCheck = result ?? false;
             user = FirebaseAuth.instance.currentUser;
@@ -120,11 +114,10 @@ class _MainActivityState extends State<MainActivity> {
                     });
                   },
                   items: ['한국어', 'English']
-                      .map<DropdownMenuItem<String>>(
-                          (value) => DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              ))
+                      .map<DropdownMenuItem<String>>((value) => DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          ))
                       .toList(),
                 ),
               ),
@@ -141,16 +134,11 @@ class _MainActivityState extends State<MainActivity> {
                     child: ButtonTheme(
                       minWidth: width * 0.8,
                       height: height * 0.05,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                       child: EREButton(
                         text: str.creditsChecklist,
                         onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => CreditMainActivity(
-                                      storage: CreditStorage())));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => CreditMainActivity(storage: CreditStorage())));
                         },
                         width: width,
                       ),
@@ -166,8 +154,7 @@ class _MainActivityState extends State<MainActivity> {
                     child: ButtonTheme(
                       minWidth: width * 0.8,
                       height: height * 0.05,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                       child: EREButton(
                         text: str.lectureBookLoan,
                         onPressed: () {
@@ -187,8 +174,7 @@ class _MainActivityState extends State<MainActivity> {
                     child: ButtonTheme(
                       minWidth: width * 0.8,
                       height: height * 0.05,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                       child: EREButton(
                         text: str.ERELibrary,
                         onPressed: () {
@@ -209,8 +195,7 @@ class _MainActivityState extends State<MainActivity> {
                         alignment: Alignment.center,
                         child: Text(
                           "${str.loginEmail} : ${user.email}",
-                          style: TextStyle(
-                              color: ERE_YELLOW, fontSize: width * 0.04),
+                          style: TextStyle(color: ERE_YELLOW, fontSize: width * 0.04),
                         ),
                       )
                     : Container(),
@@ -225,8 +210,7 @@ class _MainActivityState extends State<MainActivity> {
                         child: FlatButton(
                           child: Text(
                             str.logout,
-                            style: TextStyle(
-                                color: ERE_YELLOW, fontSize: width * 0.04),
+                            style: TextStyle(color: ERE_YELLOW, fontSize: width * 0.04),
                           ),
                           onPressed: () async {
                             await ui.FirebaseAuthUi.instance().logout();
@@ -244,23 +228,13 @@ class _MainActivityState extends State<MainActivity> {
                         child: FlatButton(
                           child: Text(
                             str.editPersonalData,
-                            style: TextStyle(
-                                color: ERE_YELLOW, fontSize: width * 0.04),
+                            style: TextStyle(color: ERE_YELLOW, fontSize: width * 0.04),
                           ),
                           onPressed: () async {
-                            final reference = FirebaseDatabase.instance
-                                .reference()
-                                .child('Student')
-                                .child(user.uid);
-                            String curName =
-                                (await reference.child('name').once()).value ??
-                                    '';
-                            String curSNum =
-                                (await reference.child('sNum').once()).value ??
-                                    '';
-                            String curPNum =
-                                (await reference.child('pNum').once()).value ??
-                                    '';
+                            final reference = FirebaseDatabase.instance.reference().child('Student').child(user.uid);
+                            String curName = (await reference.child('name').once()).value ?? '';
+                            String curSNum = (await reference.child('sNum').once()).value ?? '';
+                            String curPNum = (await reference.child('pNum').once()).value ?? '';
 
                             showDialog(
                                 context: context,
@@ -270,8 +244,7 @@ class _MainActivityState extends State<MainActivity> {
                                       ),
                                       content: Column(
                                         mainAxisSize: MainAxisSize.min,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Text(str.editPersonalDataDetail),
                                           Row(
@@ -282,8 +255,7 @@ class _MainActivityState extends State<MainActivity> {
                                                 height: height * 0.034,
                                                 child: Text(
                                                   str.name,
-                                                  style: TextStyle(
-                                                      fontSize: width * 0.04),
+                                                  style: TextStyle(fontSize: width * 0.04),
                                                 ),
                                               ),
                                               Container(
@@ -293,11 +265,8 @@ class _MainActivityState extends State<MainActivity> {
                                                   decoration: InputDecoration(
                                                     border: InputBorder.none,
                                                   ),
-                                                  controller:
-                                                      TextEditingController(
-                                                          text: curName),
-                                                  onChanged: (text) =>
-                                                      curName = text,
+                                                  controller: TextEditingController(text: curName),
+                                                  onChanged: (text) => curName = text,
                                                 ),
                                               )
                                             ],
@@ -310,24 +279,17 @@ class _MainActivityState extends State<MainActivity> {
                                                 height: height * 0.034,
                                                 child: Text(
                                                   str.studentID,
-                                                  style: TextStyle(
-                                                      fontSize: width * 0.04),
+                                                  style: TextStyle(fontSize: width * 0.04),
                                                 ),
                                               ),
                                               Container(
                                                 alignment: Alignment.center,
                                                 width: width * 0.4,
                                                 child: TextField(
-                                                  keyboardType: TextInputType
-                                                      .numberWithOptions(
-                                                          signed: true),
-                                                  decoration: InputDecoration(
-                                                      border: InputBorder.none),
-                                                  controller:
-                                                      TextEditingController(
-                                                          text: curSNum),
-                                                  onChanged: (text) =>
-                                                      curSNum = text,
+                                                  keyboardType: TextInputType.numberWithOptions(signed: true),
+                                                  decoration: InputDecoration(border: InputBorder.none),
+                                                  controller: TextEditingController(text: curSNum),
+                                                  onChanged: (text) => curSNum = text,
                                                 ),
                                               )
                                             ],
@@ -340,27 +302,17 @@ class _MainActivityState extends State<MainActivity> {
                                                 height: height * 0.034,
                                                 child: Text(
                                                   str.phoneNumber,
-                                                  style: TextStyle(
-                                                      fontSize: width *
-                                                          (str.lang == '한국어'
-                                                              ? 0.04
-                                                              : 0.03)),
+                                                  style: TextStyle(fontSize: width * (str.lang == '한국어' ? 0.04 : 0.03)),
                                                 ),
                                               ),
                                               Container(
                                                 alignment: Alignment.center,
                                                 width: width * 0.4,
                                                 child: TextField(
-                                                  keyboardType: TextInputType
-                                                      .numberWithOptions(
-                                                          signed: true),
-                                                  decoration: InputDecoration(
-                                                      border: InputBorder.none),
-                                                  controller:
-                                                      TextEditingController(
-                                                          text: curPNum),
-                                                  onChanged: (text) =>
-                                                      curPNum = text,
+                                                  keyboardType: TextInputType.numberWithOptions(signed: true),
+                                                  decoration: InputDecoration(border: InputBorder.none),
+                                                  controller: TextEditingController(text: curPNum),
+                                                  onChanged: (text) => curPNum = text,
                                                 ),
                                               )
                                             ],
@@ -371,12 +323,8 @@ class _MainActivityState extends State<MainActivity> {
                                         FlatButton(
                                           child: Text(str.edit),
                                           onPressed: () {
-                                            reference
-                                              ..child('name').set(curName)
-                                              ..child('sNum').set(curSNum)
-                                              ..child('pNum').set(curPNum);
-                                            EREToast(str.editSuccess, context,
-                                                false);
+                                            reference..child('name').set(curName)..child('sNum').set(curSNum)..child('pNum').set(curPNum);
+                                            EREToast(str.editSuccess, context, false);
                                             Navigator.pop(context);
                                           },
                                         ),
@@ -398,20 +346,11 @@ class _MainActivityState extends State<MainActivity> {
                         child: FlatButton(
                           child: Text(
                             str.signOut,
-                            style: TextStyle(
-                                color: Color(0xaaff2424),
-                                fontSize: width * 0.04),
+                            style: TextStyle(color: Color(0xaaff2424), fontSize: width * 0.04),
                           ),
                           onPressed: () async {
-                            final reference =
-                                FirebaseDatabase.instance.reference();
-                            final notReturnedBook = (await reference
-                                        .child('Student')
-                                        .child(user.uid)
-                                        .child('Rental')
-                                        .once())
-                                    .value !=
-                                null;
+                            final reference = FirebaseDatabase.instance.reference();
+                            final notReturnedBook = (await reference.child('Student').child(user.uid).child('Rental').once()).value != null;
 
                             if (notReturnedBook)
                               EREToast(
@@ -427,38 +366,23 @@ class _MainActivityState extends State<MainActivity> {
                                             title: Text(str.signOutInfo),
                                             content: Column(
                                               mainAxisSize: MainAxisSize.min,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Text(str.signOutDetail),
                                                 Row(
                                                   children: [
                                                     Container(
-                                                        alignment:
-                                                            Alignment.center,
+                                                        alignment: Alignment.center,
                                                         width: width * 0.2,
                                                         height: height * 0.034,
-                                                        child: Text(
-                                                            '${str.studentID} : ')),
+                                                        child: Text('${str.studentID} : ')),
                                                     Container(
-                                                        alignment:
-                                                            Alignment.center,
+                                                        alignment: Alignment.center,
                                                         width: width * 0.4,
                                                         child: TextField(
-                                                          keyboardType:
-                                                              TextInputType
-                                                                  .numberWithOptions(
-                                                                      signed:
-                                                                          true),
-                                                          decoration:
-                                                              InputDecoration(
-                                                                  border:
-                                                                      InputBorder
-                                                                          .none,
-                                                                  hintText:
-                                                                      'XXXX-XXXXX'),
-                                                          onChanged: (text) =>
-                                                              sNum = text,
+                                                          keyboardType: TextInputType.numberWithOptions(signed: true),
+                                                          decoration: InputDecoration(border: InputBorder.none, hintText: 'XXXX-XXXXX'),
+                                                          onChanged: (text) => sNum = text,
                                                         ))
                                                   ],
                                                 )
@@ -470,54 +394,24 @@ class _MainActivityState extends State<MainActivity> {
                                                 textColor: Color(0xffff2424),
                                                 onPressed: () async {
                                                   if (sNum != null) {
-                                                    final reference =
-                                                        FirebaseDatabase
-                                                            .instance
-                                                            .reference();
-                                                    if (sNum ==
-                                                        (await reference
-                                                                .child(
-                                                                    'Student')
-                                                                .child(user.uid)
-                                                                .child('sNum')
-                                                                .once())
-                                                            .value) {
-                                                      reference
-                                                          .child('Student')
-                                                          .child(user.uid)
-                                                          .remove();
+                                                    final reference = FirebaseDatabase.instance.reference();
+                                                    if (sNum == (await reference.child('Student').child(user.uid).child('sNum').once()).value) {
+                                                      reference.child('Student').child(user.uid).remove();
 
                                                       try {
-                                                        await ui.FirebaseAuthUi
-                                                                .instance()
-                                                            .launchAuth([
-                                                          AuthProvider.email()
-                                                        ]);
-                                                        user = FirebaseAuth
-                                                            .instance
-                                                            .currentUser;
+                                                        await ui.FirebaseAuthUi.instance().launchAuth([AuthProvider.email()]);
+                                                        user = FirebaseAuth.instance.currentUser;
                                                         await user.delete();
-                                                        EREToast(
-                                                            str.signOutSuccess,
-                                                            context,
-                                                            true);
-                                                        Navigator.pop(
-                                                            context, false);
+                                                        EREToast(str.signOutSuccess, context, true);
+                                                        Navigator.pop(context, false);
                                                       } catch (e) {
-                                                        EREToast(
-                                                            str.signOutFail,
-                                                            context,
-                                                            false);
+                                                        EREToast(str.signOutFail, context, false);
                                                         print(e);
                                                       }
                                                     } else
-                                                      EREToast(
-                                                          str.sNumMatchError,
-                                                          context,
-                                                          false);
+                                                      EREToast(str.sNumMatchError, context, false);
                                                   } else
-                                                    EREToast(str.sNumMissError,
-                                                        context, false);
+                                                    EREToast(str.sNumMissError, context, false);
                                                 },
                                               ),
                                               FlatButton(
@@ -545,9 +439,5 @@ class _MainActivityState extends State<MainActivity> {
 }
 
 void EREToast(String msg, BuildContext context, bool isLong) {
-  Toast.show(msg, context,
-      backgroundColor: ERE_BLACK,
-      textColor: ERE_YELLOW,
-      gravity: Toast.CENTER,
-      duration: isLong ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT);
+  Toast.show(msg, context, backgroundColor: ERE_BLACK, textColor: ERE_YELLOW, gravity: Toast.CENTER, duration: isLong ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT);
 }

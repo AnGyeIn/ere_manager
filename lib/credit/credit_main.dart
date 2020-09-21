@@ -53,8 +53,7 @@ class CreditStorage {
       major = instantiation(jsons['majTot'] as Map<String, dynamic>);
       normal = instantiation(jsons['norTot'] as Map<String, dynamic>);
 
-      forLectures = ForLectures.fromJson(
-          jsonDecode(jsons['forLectures']) as Map<String, dynamic>);
+      forLectures = ForLectures.fromJson(jsonDecode(jsons['forLectures']) as Map<String, dynamic>);
       progressingMajor = jsons['progressingMajor'];
       isLifeChecked = jsons['isLifeChecked'] as bool;
       studentNum = jsons['studentNum'] as int;
@@ -82,21 +81,14 @@ class _CreditMainActivityState extends State<CreditMainActivity> {
 
   _downloadData() {
     try {
-      FirebaseDatabase.instance
-          .reference()
-          .child('credit')
-          .child('CreditData')
-          .child(user.uid)
-          .once()
-          .then((snapshot) {
+      FirebaseDatabase.instance.reference().child('credit').child('CreditData').child(user.uid).once().then((snapshot) {
         final jsons = jsonDecode(snapshot.value) as Map<String, dynamic>;
         setState(() {
           culture = instantiation(jsons['culTot'] as Map<String, dynamic>);
           major = instantiation(jsons['majTot'] as Map<String, dynamic>);
           normal = instantiation(jsons['norTot'] as Map<String, dynamic>);
 
-          forLectures = ForLectures.fromJson(
-              jsons['forLectures'] as Map<String, dynamic>);
+          forLectures = ForLectures.fromJson(jsons['forLectures'] as Map<String, dynamic>);
           progressingMajor = jsons['progressingMajor'];
           isLifeChecked = jsons['isLifeChecked'] as bool;
           studentNum = jsons['studentNum'] as int;
@@ -116,12 +108,8 @@ class _CreditMainActivityState extends State<CreditMainActivity> {
 
   _uploadData(Map<String, dynamic> data) async {
     try {
-      final transactionResult = await FirebaseDatabase.instance
-          .reference()
-          .child('credit')
-          .child('CreditData')
-          .child(user.uid)
-          .runTransaction((mutableData) async {
+      final transactionResult =
+          await FirebaseDatabase.instance.reference().child('credit').child('CreditData').child(user.uid).runTransaction((mutableData) async {
         mutableData.value = jsonEncode(data);
         return mutableData;
       });
@@ -130,8 +118,7 @@ class _CreditMainActivityState extends State<CreditMainActivity> {
         EREToast(str.uploadSuccess, context, false);
       else {
         EREToast(str.uploadFail, context, false);
-        if (transactionResult.error != null)
-          print(transactionResult.error.message);
+        if (transactionResult.error != null) print(transactionResult.error.message);
       }
     } catch (e) {
       EREToast(str.uploadFail, context, false);
@@ -179,8 +166,7 @@ class _CreditMainActivityState extends State<CreditMainActivity> {
                       width: width * 0.21,
                       height: height * (str.lang == '한국어' ? 0.034 : 0.05),
                       child: EREButton(
-                        text:
-                            str.lang == '한국어' ? '$studentNum학번' : '$studentNum',
+                        text: str.lang == '한국어' ? '$studentNum학번' : '$studentNum',
                         onPressed: () async {
                           await _changeStudentNumClicked(context);
                           setState(() {});
@@ -212,8 +198,7 @@ class _CreditMainActivityState extends State<CreditMainActivity> {
                     padding: EdgeInsets.all(width * 0.0075),
                     child: Text(
                       '${str.totalCredits} : $totalCredits/$minTotalCredits',
-                      style:
-                          TextStyle(color: ERE_YELLOW, fontSize: width * 0.037),
+                      style: TextStyle(color: ERE_YELLOW, fontSize: width * 0.037),
                     ),
                   ),
                   Padding(
@@ -296,22 +281,18 @@ class _CreditMainActivityState extends State<CreditMainActivity> {
                                           child: Text(str.uploadBackup),
                                           onPressed: () {
                                             Navigator.pop(context);
-                                            EREToast(str.duringUpload, context,
-                                                true);
+                                            EREToast(str.duringUpload, context, true);
 
-                                            final culTot =
-                                                _totalization(culture);
+                                            final culTot = _totalization(culture);
                                             final majTot = _totalization(major);
-                                            final norTot =
-                                                _totalization(normal);
+                                            final norTot = _totalization(normal);
 
                                             final data = <String, dynamic>{
                                               'culTot': culTot,
                                               'majTot': majTot,
                                               'norTot': norTot,
                                               'forLectures': forLectures,
-                                              'progressingMajor':
-                                                  progressingMajor,
+                                              'progressingMajor': progressingMajor,
                                               'isLifeChecked': isLifeChecked,
                                               'studentNum': studentNum
                                             };
@@ -323,8 +304,7 @@ class _CreditMainActivityState extends State<CreditMainActivity> {
                                           child: Text(str.downloadBackup),
                                           onPressed: () {
                                             Navigator.pop(context);
-                                            EREToast(str.duringDownload,
-                                                context, true);
+                                            EREToast(str.duringDownload, context, true);
 
                                             _downloadData();
                                           },
@@ -334,16 +314,9 @@ class _CreditMainActivityState extends State<CreditMainActivity> {
                           } else {
                             final prefs = await SharedPreferences.getInstance();
                             if (prefs.getBool('doesAgree') != true)
-                              return Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          AgreementActivity()));
+                              return Navigator.push(context, MaterialPageRoute(builder: (context) => AgreementActivity()));
                             else
-                              return Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => LoginActivity()));
+                              return Navigator.push(context, MaterialPageRoute(builder: (context) => LoginActivity()));
                           }
                         },
                         width: width,
@@ -368,10 +341,7 @@ class _CreditMainActivityState extends State<CreditMainActivity> {
                         Expanded(
                           child: Text(
                             str.life,
-                            style: TextStyle(
-                                color: ERE_YELLOW,
-                                fontSize: width *
-                                    (str.lang == '한국어' ? 0.037 : 0.033)),
+                            style: TextStyle(color: ERE_YELLOW, fontSize: width * (str.lang == '한국어' ? 0.037 : 0.033)),
                           ),
                         )
                       ],
@@ -380,8 +350,7 @@ class _CreditMainActivityState extends State<CreditMainActivity> {
               Expanded(
                 child: ListView.builder(
                   itemCount: adapter.getSize(),
-                  itemBuilder: (context, index) =>
-                      adapter.getTile(index, setState, width, height),
+                  itemBuilder: (context, index) => adapter.getTile(index, setState, width, height),
                 ),
               ),
               Align(
@@ -414,33 +383,20 @@ List<dynamic> parseCreditPiece(dynamic piece) {
 }
 
 CreditManager instantiation(Map<String, dynamic> jsons) {
-  final names =
-      parseCreditPiece(jsons['names']).map((e) => e as String).toList();
-  final creditss =
-      parseCreditPiece(jsons['creditss']).map((e) => e as int).toList();
-  final minCredits = parseCreditPiece(jsons['minCredits'])
-      .map((e) => e as int ?? null)
-      .toList();
+  final names = parseCreditPiece(jsons['names']).map((e) => e as String).toList();
+  final creditss = parseCreditPiece(jsons['creditss']).map((e) => e as int).toList();
+  final minCredits = parseCreditPiece(jsons['minCredits']).map((e) => e as int ?? null).toList();
   final codes = parseCreditPiece(jsons['codes']).map((e) => e as int).toList();
-  final underManagers = parseCreditPiece(jsons['underManagers'])
-      .map((e) => parseCreditPiece(e).map((f) => f as int).toList())
-      .toList();
-  final credits =
-      parseCreditPiece(jsons['credits']).map((e) => e as int ?? null).toList();
-  final upperManagers = parseCreditPiece(jsons['upperManagers'])
-      .map((e) => e as int ?? null)
-      .toList();
-  final nums =
-      parseCreditPiece(jsons['nums']).map((e) => e as int ?? null).toList();
+  final underManagers = parseCreditPiece(jsons['underManagers']).map((e) => parseCreditPiece(e).map((f) => f as int).toList()).toList();
+  final credits = parseCreditPiece(jsons['credits']).map((e) => e as int ?? null).toList();
+  final upperManagers = parseCreditPiece(jsons['upperManagers']).map((e) => e as int ?? null).toList();
+  final nums = parseCreditPiece(jsons['nums']).map((e) => e as int ?? null).toList();
 
   final totNum = names.length;
   final tot = List<CreditManager>(totNum);
   for (int idx = 0; idx < totNum; idx++) {
-    if (names[idx] != null && names[idx].contains('n '))
-      names[idx] = names[idx].replaceFirst('n ', '\n ');
-    tot[idx] = CreditManager(
-        codes[idx], names[idx], minCredits[idx], credits[idx], null, nums[idx])
-      ..credits = creditss[idx];
+    if (names[idx] != null && names[idx].contains('n ')) names[idx] = names[idx].replaceFirst('n ', '\n ');
+    tot[idx] = CreditManager(codes[idx], names[idx], minCredits[idx], credits[idx], null, nums[idx])..credits = creditss[idx];
   }
 
   for (int idx = 0; idx < totNum; idx++) {
@@ -458,10 +414,7 @@ void _setting() {
   switch (progressingMajor) {
     case EREOnly:
     case EREnOther:
-      adapter
-        ..setCreditManager(culture)
-        ..setCreditManager(major)
-        ..setCreditManager(normal);
+      adapter..setCreditManager(culture)..setCreditManager(major)..setCreditManager(normal);
       minTotalCredits = 130;
       break;
     case OthernERE:
@@ -508,9 +461,7 @@ void _changeMajorProcess() {
       case EREOnly:
         break;
       case EREnOther:
-        major = CreditManager(LECTURE_TYPE, '전공', 42)
-          ..addUnderManagerAll(
-              [major_necessary, major_optOrNec, major_optNec, major_other]);
+        major = CreditManager(LECTURE_TYPE, '전공', 42)..addUnderManagerAll([major_necessary, major_optOrNec, major_optNec, major_other]);
 
         major_optOrNec.addUnderManager(majorOptOrNecFree);
 
@@ -520,8 +471,7 @@ void _changeMajorProcess() {
           normal.minCredits = 48;
         break;
       case OthernERE:
-        major = CreditManager(LECTURE_TYPE, '전공', 39)
-          ..addUnderManagerAll([major_necessary, major_optOrNec, major_optNec]);
+        major = CreditManager(LECTURE_TYPE, '전공', 39)..addUnderManagerAll([major_necessary, major_optOrNec, major_optNec]);
 
         major_optOrNec.addUnderManager(majorOptOrNecFree);
 
@@ -535,16 +485,14 @@ void _changeMajorProcess() {
       case EREOnly:
         break;
       case EREnOther:
-        major = CreditManager(LECTURE_TYPE, '전공', 42)
-          ..addUnderManagerAll([major_necessary, major_optional, major_other]);
+        major = CreditManager(LECTURE_TYPE, '전공', 42)..addUnderManagerAll([major_necessary, major_optional, major_other]);
 
         major_optional.minCredits = 20;
 
         normal.minCredits = 48;
         break;
       case OthernERE:
-        major = CreditManager(LECTURE_TYPE, '전공', 39)
-          ..addUnderManagerAll([major_necessary, major_optional]);
+        major = CreditManager(LECTURE_TYPE, '전공', 39)..addUnderManagerAll([major_necessary, major_optional]);
 
         major_optional.minCredits = 20;
 
@@ -552,12 +500,9 @@ void _changeMajorProcess() {
         normal = null;
         break;
       case OthernSubERE:
-        major_necessary = CreditManager(LECTURE_FIELD, '전공필수', 15)
-          ..addUnderManagerAll(
-              [eneEcoTecAdm, earPhyEng, resProEng, stoDynExp, oilGasEngExp]);
+        major_necessary = CreditManager(LECTURE_FIELD, '전공필수', 15)..addUnderManagerAll([eneEcoTecAdm, earPhyEng, resProEng, stoDynExp, oilGasEngExp]);
 
-        major = CreditManager(LECTURE_TYPE, '전공', 21)
-          ..addUnderManagerAll([major_necessary, major_optional]);
+        major = CreditManager(LECTURE_TYPE, '전공', 21)..addUnderManagerAll([major_necessary, major_optional]);
 
         major_optional.minCredits = 6;
 
@@ -580,20 +525,17 @@ void _clearAll() {
   culture_basic = CreditManager(LECTURE_FIELD, '학문의 기초', 34);
   keyCulture = CreditManager(LECTURE_FIELD, '핵심교양', 9);
   culture_world = CreditManager(LECTURE_FIELD, '학문의 세계(2개 영역 이상)', 6);
-  culture_world_sin20 =
-      CreditManager(LECTURE_FIELD, '학문의 세계(3개 영역 이상)', 12); //20학번 이후
+  culture_world_sin20 = CreditManager(LECTURE_FIELD, '학문의 세계(3개 영역 이상)', 12); //20학번 이후
   culture_engineering = CreditManager(LECTURE_FIELD, '공대 사회/창의성', 6);
   major_necessary = CreditManager(LECTURE_FIELD, '전공필수', 19);
   major_optNec = CreditManager(LECTURE_FIELD, '전공선택필수', 9);
   major_optional = CreditManager(LECTURE_FIELD, '전공선택', 40);
-  major_optOrNec =
-      CreditManager(LECTURE_FIELD, '전공선택, 전공선택필수', 3); //15학번 이전 복수/부전공을 위한 항목
+  major_optOrNec = CreditManager(LECTURE_FIELD, '전공선택, 전공선택필수', 3); //15학번 이전 복수/부전공을 위한 항목
   major_other = CreditManager(LECTURE_FIELD, '공대 타학과개론', 3);
 
 //LectureGroup
   thiExp = CreditManager(LECTURE_GROUP, '사고와 표현', 3);
-  foreign = CreditManager(
-      LECTURE_GROUP, '외국어 2개 교과목\n    (TEPS 900점 이하 영어 1과목 필수)', 4);
+  foreign = CreditManager(LECTURE_GROUP, '외국어 2개 교과목\n    (TEPS 900점 이하 영어 1과목 필수)', 4);
   numAnaInf = CreditManager(LECTURE_GROUP, '수량적 분석과 추론', 12);
   sciThiExp = CreditManager(LECTURE_GROUP, '과학적 사고와 실험', 12);
   comInfApp = CreditManager(LECTURE_GROUP, '컴퓨터와 정보 활용', 3);
@@ -680,8 +622,7 @@ void _clearAll() {
   optFree = CreditManager(FREE_LECTURE, null, null, 0, major_optional, 0);
   othFree = CreditManager(FREE_LECTURE, null, null, 0, major_other, 0);
   norFree = CreditManager(FREE_LECTURE, null, null, 0, normal, 0);
-  majorOptOrNecFree =
-      CreditManager(FREE_LECTURE, null, null, 0, major_optOrNec, 0);
+  majorOptOrNecFree = CreditManager(FREE_LECTURE, null, null, 0, major_optOrNec, 0);
 }
 
 void _initialization(int studentNum) {
@@ -750,23 +691,11 @@ void _initialization(int studentNum) {
 
     creativity.addUnderManager(creFree);
 
-    major.addUnderManagerAll(
-        [major_necessary, major_optNec, major_optional, major_other]);
+    major.addUnderManagerAll([major_necessary, major_optNec, major_optional, major_other]);
 
     major_necessary
       ..minCredits = 27
-      ..addUnderManagerAll([
-        eneResFut,
-        eneResDyn,
-        advResGeo,
-        eneEcoTecAdm,
-        earPhyEng,
-        stoDynExp,
-        oilGasEngExp,
-        resEngPra,
-        resProEng,
-        eneResFigAna
-      ]);
+      ..addUnderManagerAll([eneResFut, eneResDyn, advResGeo, eneEcoTecAdm, earPhyEng, stoDynExp, oilGasEngExp, resEngPra, resProEng, eneResFigAna]);
 
     major_optNec.addUnderManagerAll([driEng, newRenEne, advEarChe, eneEcoEng]);
 
@@ -781,11 +710,9 @@ void _initialization(int studentNum) {
       ..addUnderManager(norFree);
   } else if (studentNum <= 15) {
     //14, 15학번
-    culture.addUnderManagerAll(
-        [culture_basic, culture_world, culture_engineering]);
+    culture.addUnderManagerAll([culture_basic, culture_world, culture_engineering]);
 
-    culture_basic
-        .addUnderManagerAll([thiExp, foreign, numAnaInf, sciThiExp, comInfApp]);
+    culture_basic.addUnderManagerAll([thiExp, foreign, numAnaInf, sciThiExp, comInfApp]);
 
     thiExp.addUnderManager(sciEngWri);
 
@@ -793,22 +720,8 @@ void _initialization(int studentNum) {
 
     numAnaInf.addUnderManagerAll([math1, math2, engMat1, engMat2]);
 
-    sciThiExp.addUnderManagerAll([
-      physics1,
-      phyExp1,
-      physics2,
-      phyExp2,
-      physics,
-      phyExp,
-      chemistry1,
-      cheExp1,
-      chemistry2,
-      cheExp2,
-      chemistry,
-      cheExp,
-      earSysSci,
-      earSysSci
-    ]);
+    sciThiExp.addUnderManagerAll(
+        [physics1, phyExp1, physics2, phyExp2, physics, phyExp, chemistry1, cheExp1, chemistry2, cheExp2, chemistry, cheExp, earSysSci, earSysSci]);
 
     comInfApp.addUnderManager(computer);
 
@@ -830,23 +743,11 @@ void _initialization(int studentNum) {
 
     creativity.addUnderManager(creFree);
 
-    major.addUnderManagerAll(
-        [major_necessary, major_optNec, major_optional, major_other]);
+    major.addUnderManagerAll([major_necessary, major_optNec, major_optional, major_other]);
 
     major_necessary
       ..minCredits = 27
-      ..addUnderManagerAll([
-        eneResFut,
-        eneResDyn,
-        advResGeo,
-        eneEcoTecAdm,
-        earPhyEng,
-        stoDynExp,
-        oilGasEngExp,
-        resEngPra,
-        resProEng,
-        eneResFigAna
-      ]);
+      ..addUnderManagerAll([eneResFut, eneResDyn, advResGeo, eneEcoTecAdm, earPhyEng, stoDynExp, oilGasEngExp, resEngPra, resProEng, eneResFigAna]);
 
     major_optNec.addUnderManagerAll([driEng, newRenEne, advEarChe, eneEcoEng]);
 
@@ -859,11 +760,9 @@ void _initialization(int studentNum) {
     normal.addUnderManager(norFree);
   } else if (studentNum <= 17) {
     //16, 17학번
-    culture.addUnderManagerAll(
-        [culture_basic, culture_world, culture_engineering]);
+    culture.addUnderManagerAll([culture_basic, culture_world, culture_engineering]);
 
-    culture_basic
-        .addUnderManagerAll([thiExp, foreign, numAnaInf, sciThiExp, comInfApp]);
+    culture_basic.addUnderManagerAll([thiExp, foreign, numAnaInf, sciThiExp, comInfApp]);
 
     thiExp.addUnderManager(sciEngWri);
 
@@ -871,22 +770,8 @@ void _initialization(int studentNum) {
 
     numAnaInf.addUnderManagerAll([math1, math2, engMat1, engMat2]);
 
-    sciThiExp.addUnderManagerAll([
-      physics1,
-      phyExp1,
-      physics2,
-      phyExp2,
-      physics,
-      phyExp,
-      chemistry1,
-      cheExp1,
-      chemistry2,
-      cheExp2,
-      chemistry,
-      cheExp,
-      earSysSci,
-      earSysSciExp
-    ]);
+    sciThiExp.addUnderManagerAll(
+        [physics1, phyExp1, physics2, phyExp2, physics, phyExp, chemistry1, cheExp1, chemistry2, cheExp2, chemistry, cheExp, earSysSci, earSysSciExp]);
 
     comInfApp.addUnderManager(computer);
 
@@ -910,15 +795,7 @@ void _initialization(int studentNum) {
 
     major.addUnderManagerAll([major_necessary, major_optional, major_other]);
 
-    major_necessary.addUnderManagerAll([
-      eneResDyn,
-      eneEcoTecAdm,
-      earPhyEng,
-      stoDynExp,
-      oilGasEngExp,
-      resProEng,
-      resEngPra
-    ]);
+    major_necessary.addUnderManagerAll([eneResDyn, eneEcoTecAdm, earPhyEng, stoDynExp, oilGasEngExp, resProEng, resEngPra]);
 
     major_optional.addUnderManager(optFree);
 
@@ -927,11 +804,9 @@ void _initialization(int studentNum) {
     normal.addUnderManager(norFree);
   } else if (studentNum == 18) {
     //18학번
-    culture.addUnderManagerAll(
-        [culture_basic, culture_world, culture_engineering]);
+    culture.addUnderManagerAll([culture_basic, culture_world, culture_engineering]);
 
-    culture_basic
-        .addUnderManagerAll([thiExp, foreign, numAnaInf, sciThiExp, comInfApp]);
+    culture_basic.addUnderManagerAll([thiExp, foreign, numAnaInf, sciThiExp, comInfApp]);
 
     thiExp.addUnderManager(sciEngWri);
 
@@ -939,22 +814,8 @@ void _initialization(int studentNum) {
 
     numAnaInf.addUnderManagerAll([math1, math2, engMat1, engMat2]);
 
-    sciThiExp.addUnderManagerAll([
-      physics1,
-      phyExp1,
-      physics2,
-      phyExp2,
-      physics,
-      phyExp,
-      chemistry1,
-      cheExp1,
-      chemistry2,
-      cheExp2,
-      chemistry,
-      cheExp,
-      earSysSci,
-      earSysSciExp
-    ]);
+    sciThiExp.addUnderManagerAll(
+        [physics1, phyExp1, physics2, phyExp2, physics, phyExp, chemistry1, cheExp1, chemistry2, cheExp2, chemistry, cheExp, earSysSci, earSysSciExp]);
 
     comInfApp.addUnderManager(computer);
 
@@ -978,15 +839,7 @@ void _initialization(int studentNum) {
 
     major.addUnderManagerAll([major_necessary, major_optional, major_other]);
 
-    major_necessary.addUnderManagerAll([
-      eneResDyn,
-      eneEcoTecAdm,
-      earPhyEng,
-      stoDynExp,
-      oilGasEngExp,
-      resProEng,
-      resEngPra
-    ]);
+    major_necessary.addUnderManagerAll([eneResDyn, eneEcoTecAdm, earPhyEng, stoDynExp, oilGasEngExp, resProEng, resEngPra]);
 
     major_optional.addUnderManager(optFree);
 
@@ -1011,8 +864,7 @@ void _initialization(int studentNum) {
       ..name = '외국어 2개 교과목\n    (TEPS 900점(New TEPS 525점) 이하 영어 1과목 필수)'
       ..addUnderManager(foreignFree);
 
-    numAnaInf.addUnderManagerAll(
-        [math1, mathPra1, math2, mathPra2, engMat1, engMat2]);
+    numAnaInf.addUnderManagerAll([math1, mathPra1, math2, mathPra2, engMat1, engMat2]);
 
     math1
       ..name = '(고급)수학 1'
@@ -1021,22 +873,8 @@ void _initialization(int studentNum) {
       ..name = '(고급)수학 2'
       ..credit = 2;
 
-    sciThiExp.addUnderManagerAll([
-      physics1,
-      phyExp1,
-      physics2,
-      phyExp2,
-      physics,
-      phyExp,
-      chemistry1,
-      cheExp1,
-      chemistry2,
-      cheExp2,
-      chemistry,
-      cheExp,
-      earSysSci,
-      earSysSciExp
-    ]);
+    sciThiExp.addUnderManagerAll(
+        [physics1, phyExp1, physics2, phyExp2, physics, phyExp, chemistry1, cheExp1, chemistry2, cheExp2, chemistry, cheExp, earSysSci, earSysSciExp]);
 
     comInfApp.addUnderManager(computer);
 
@@ -1062,17 +900,7 @@ void _initialization(int studentNum) {
 
     major_necessary
       ..minCredits = 21
-      ..addUnderManagerAll([
-        eneUnd,
-        enePra,
-        eneResDyn,
-        eneEcoTecAdm,
-        earPhyEng,
-        stoDynExp,
-        oilGasEngExp,
-        resProEng,
-        resEngDes
-      ]);
+      ..addUnderManagerAll([eneUnd, enePra, eneResDyn, eneEcoTecAdm, earPhyEng, stoDynExp, oilGasEngExp, resProEng, resEngDes]);
 
     major_optional
       ..minCredits = 38
@@ -1099,8 +927,7 @@ void _initialization(int studentNum) {
       ..name = '외국어 2개 교과목\n    (TEPS 900점(New TEPS 525점) 이하 영어 1과목 필수)'
       ..addUnderManager(foreignFree);
 
-    numAnaInf.addUnderManagerAll(
-        [math1, mathPra1, math2, mathPra2, engMat1, engMat2]);
+    numAnaInf.addUnderManagerAll([math1, mathPra1, math2, mathPra2, engMat1, engMat2]);
 
     math1
       ..name = '(고급)수학 1'
@@ -1109,27 +936,12 @@ void _initialization(int studentNum) {
       ..name = '(고급)수학 2'
       ..credit = 2;
 
-    sciThiExp.addUnderManagerAll([
-      physics1,
-      phyExp1,
-      physics2,
-      phyExp2,
-      physics,
-      phyExp,
-      chemistry1,
-      cheExp1,
-      chemistry2,
-      cheExp2,
-      chemistry,
-      cheExp,
-      earSysSci,
-      earSysSciExp
-    ]);
+    sciThiExp.addUnderManagerAll(
+        [physics1, phyExp1, physics2, phyExp2, physics, phyExp, chemistry1, cheExp1, chemistry2, cheExp2, chemistry, cheExp, earSysSci, earSysSciExp]);
 
     comInfApp.addUnderManager(computer);
 
-    culture_world_sin20
-        .addUnderManagerAll([lenLit, culArt, hisPhi, polEco, humSoc]);
+    culture_world_sin20.addUnderManagerAll([lenLit, culArt, hisPhi, polEco, humSoc]);
 
     lenLit.addUnderManager(lenLitFree);
 
@@ -1145,20 +957,7 @@ void _initialization(int studentNum) {
 
     major_necessary
       ..minCredits = 30
-      ..addUnderManagerAll([
-        eneUnd,
-        enePra,
-        eneMat,
-        eneThe,
-        eneEcoTecAdm,
-        eneFlu,
-        eneEar,
-        stoDynExp,
-        oilGasEngExp,
-        elaExp,
-        resProEng,
-        resEngDes
-      ]);
+      ..addUnderManagerAll([eneUnd, enePra, eneMat, eneThe, eneEcoTecAdm, eneFlu, eneEar, stoDynExp, oilGasEngExp, elaExp, resProEng, resEngDes]);
 
     major_optional
       ..minCredits = 29
@@ -1196,8 +995,7 @@ _changeStudentNumClicked(BuildContext context) async {
           ));
 
   if (doChange == true) {
-    final sn = await Navigator.push(
-        context, MaterialPageRoute(builder: (context) => StudentNumActivity()));
+    final sn = await Navigator.push(context, MaterialPageRoute(builder: (context) => StudentNumActivity()));
 
     if (sn != null) {
       studentNum = sn;
@@ -1271,12 +1069,7 @@ _onMultiMajorButton(BuildContext context) async {
 
   if (progressingMajor != preMajor) {
     _changeMajorProcess();
-    EREToast(
-        str.lang == '한국어'
-            ? '$progressingMajor을 선택하셨습니다.'
-            : 'Selected ${str.translate(progressingMajor)}.',
-        context,
-        false);
+    EREToast(str.lang == '한국어' ? '$progressingMajor을 선택하셨습니다.' : 'Selected ${str.translate(progressingMajor)}.', context, false);
   }
 }
 
@@ -1308,8 +1101,7 @@ Map<String, dynamic> _totalization(CreditManager creditManager) {
   tot.add(creditManager);
   for (int idx = 0; idx < tot.length; idx++) {
     final curManager = tot[idx];
-    if (curManager.getSize() > 0)
-      tot.insertAll(idx + 1, curManager.underManagers);
+    if (curManager.getSize() > 0) tot.insertAll(idx + 1, curManager.underManagers);
   }
 
   List<String> names = [];
@@ -1327,13 +1119,9 @@ Map<String, dynamic> _totalization(CreditManager creditManager) {
     creditss.add(curManager.credits);
     minCredits.add(curManager.minCredits);
     codes.add(curManager.code);
-    underManagers.add(curManager.underManagers
-        .map<int>((underManager) => tot.indexOf(underManager))
-        .toList());
+    underManagers.add(curManager.underManagers.map<int>((underManager) => tot.indexOf(underManager)).toList());
     credits.add(curManager.credit);
-    upperManagers.add(curManager.upperManager != null
-        ? tot.indexOf(curManager.upperManager)
-        : null);
+    upperManagers.add(curManager.upperManager != null ? tot.indexOf(curManager.upperManager) : null);
     nums.add(curManager.num);
   }
 
@@ -1350,11 +1138,7 @@ Map<String, dynamic> _totalization(CreditManager creditManager) {
 }
 
 void _openForLecLayout(BuildContext context) async {
-  forLectures = await Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => ForLecActivity(forLectures: forLectures)))
-      as ForLectures;
+  forLectures = await Navigator.push(context, MaterialPageRoute(builder: (context) => ForLecActivity(forLectures: forLectures))) as ForLectures;
 }
 
 void _onAdviceButtonClicked(BuildContext context) {

@@ -72,12 +72,7 @@ class _LibraryActivityState extends State<LibraryActivity> {
       isAdminChanging = snapshot.value;
     });
 
-    reference
-        .child('Student')
-        .child(userID)
-        .child('name')
-        .once()
-        .then((snapshot) {
+    reference.child('Student').child(userID).child('name').once().then((snapshot) {
       userName = snapshot.value ?? user.displayName;
     });
 
@@ -95,9 +90,7 @@ class _LibraryActivityState extends State<LibraryActivity> {
         },
         onValue: (snapshot) {
           setState(() {
-            books = rawBooks
-                .map<Book>((str) => Book.fromJson(jsonDecode(str)))
-                .toList();
+            books = rawBooks.map<Book>((str) => Book.fromJson(jsonDecode(str))).toList();
             books.sort((a, b) => a.title.compareTo(b.title));
             isWaiting = false;
           });
@@ -116,9 +109,7 @@ class _LibraryActivityState extends State<LibraryActivity> {
         },
         onValue: (snapshot) {
           setState(() {
-            personalRentals = rawPersonalRentals
-                .map<Rental>((str) => Rental.fromJson(jsonDecode(str)))
-                .toList();
+            personalRentals = rawPersonalRentals.map<Rental>((str) => Rental.fromJson(jsonDecode(str))).toList();
             personalRentals.sort((a, b) => a.dueDate.compareTo(b.dueDate));
           });
         });
@@ -140,10 +131,7 @@ class _LibraryActivityState extends State<LibraryActivity> {
             },
             onValue: (snapshot) {
               setState(() {
-                bookRequests = rawBookRequests
-                    .map<BookRequest>(
-                        (str) => BookRequest.fromJson(jsonDecode(str)))
-                    .toList();
+                bookRequests = rawBookRequests.map<BookRequest>((str) => BookRequest.fromJson(jsonDecode(str))).toList();
                 bookRequests.sort((a, b) => a.title.compareTo(b.title));
               });
             });
@@ -161,9 +149,7 @@ class _LibraryActivityState extends State<LibraryActivity> {
             },
             onValue: (snapshot) {
               setState(() {
-                candidates = rawCandidates
-                    .map<Map<String, dynamic>>((str) => jsonDecode(str))
-                    .toList();
+                candidates = rawCandidates.map<Map<String, dynamic>>((str) => jsonDecode(str)).toList();
               });
             });
         borrowerList = FirebaseList(
@@ -180,43 +166,26 @@ class _LibraryActivityState extends State<LibraryActivity> {
             },
             onValue: (snapshot) {
               setState(() {
-                borrowers = rawBorrowers
-                    .map<Rental>((str) => Rental.fromJson(jsonDecode(str)))
-                    .toList();
+                borrowers = rawBorrowers.map<Rental>((str) => Rental.fromJson(jsonDecode(str))).toList();
                 borrowers.sort((a, b) => a.dueDate.compareTo(b.dueDate));
               });
             });
       }
     });
 
-    reference
-        .child('Student')
-        .child(userID)
-        .child('lang')
-        .once()
-        .then((snapshot) {
-      if (snapshot.value == null || snapshot.value != str.lang)
-        reference.child('Student').child(userID).child('lang').set(str.lang);
+    reference.child('Student').child(userID).child('lang').once().then((snapshot) {
+      if (snapshot.value == null || snapshot.value != str.lang) reference.child('Student').child(userID).child('lang').set(str.lang);
     });
 
     final firebaseMessaging = FirebaseMessaging();
-    firebaseMessaging.configure(
-        onMessage: (Map<String, dynamic> message) async {
-      EREToast(
-          '${message['notification']['title']}: ${message['notification']['body']}',
-          context,
-          true);
+    firebaseMessaging.configure(onMessage: (Map<String, dynamic> message) async {
+      EREToast('${message['notification']['title']}: ${message['notification']['body']}', context, true);
     });
-    firebaseMessaging.requestNotificationPermissions(
-        const IosNotificationSettings(
-            sound: true, badge: true, alert: true, provisional: true));
+    firebaseMessaging.requestNotificationPermissions(const IosNotificationSettings(sound: true, badge: true, alert: true, provisional: true));
     firebaseMessaging.getToken().then((token) async {
       assert(token != null);
 
-      if (token !=
-          (await reference.child('Student').child(userID).child('NT').once())
-              .value)
-        reference.child('Student').child(userID).child('NT').set(token);
+      if (token != (await reference.child('Student').child(userID).child('NT').once()).value) reference.child('Student').child(userID).child('NT').set(token);
     });
   }
 
@@ -273,8 +242,7 @@ class _LibraryActivityState extends State<LibraryActivity> {
                           color: ERE_BLACK,
                           child: Text(
                             str.admin,
-                            style: TextStyle(
-                                color: ERE_YELLOW, fontSize: fontsize),
+                            style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                           ),
                           onPressed: tab != TabState.admin
                               ? () {
@@ -298,8 +266,7 @@ class _LibraryActivityState extends State<LibraryActivity> {
                         height: tile_height,
                         child: Text(
                           str.number,
-                          style:
-                              TextStyle(color: ERE_YELLOW, fontSize: fontsize),
+                          style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                         ),
                       ),
                       Container(
@@ -309,8 +276,7 @@ class _LibraryActivityState extends State<LibraryActivity> {
                         height: tile_height,
                         child: Text(
                           str.bookTitle,
-                          style:
-                              TextStyle(color: ERE_YELLOW, fontSize: fontsize),
+                          style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                         ),
                       ),
                       Container(
@@ -320,8 +286,7 @@ class _LibraryActivityState extends State<LibraryActivity> {
                         height: tile_height,
                         child: Text(
                           str.author,
-                          style:
-                              TextStyle(color: ERE_YELLOW, fontSize: fontsize),
+                          style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                         ),
                       )
                     ],
@@ -333,8 +298,7 @@ class _LibraryActivityState extends State<LibraryActivity> {
                         child: Align(
                           alignment: Alignment.center,
                           child: CircularProgressIndicator(
-                            valueColor:
-                                AlwaysStoppedAnimation<Color>(ERE_YELLOW),
+                            valueColor: AlwaysStoppedAnimation<Color>(ERE_YELLOW),
                           ),
                         ),
                       )
@@ -366,8 +330,7 @@ class _LibraryActivityState extends State<LibraryActivity> {
                                       showDialog(
                                           context: context,
                                           builder: (_) => AlertDialog(
-                                                title: Text(
-                                                    str.candidacyAdminInfo),
+                                                title: Text(str.candidacyAdminInfo),
                                                 content: Text(str.lang == '한국어'
                                                     ? '관리자 선정은 에자공 학생회에 의해 이루어지며 본 과정은 앱에서의 권한 이전을 위한 형식적인 절차입니다. 관리자 지원 후 전임 관리자의 승인 시점부터 에자공 도서관 관리자로서의 책임과 권한이 부여됩니다.\n지원 신청을 위해 [신청] 버튼을 눌러주세요.'
                                                     : 'ERE student council nominates the administrator and this process is just formal step to transfer the authority on application system. As you apply as a candidate and the former administrator approve your application, you get the responsibility and authority as ERE library administrator.\nPress [Apply] for candidacy'),
@@ -376,46 +339,18 @@ class _LibraryActivityState extends State<LibraryActivity> {
                                                     child: Text(str.apply2),
                                                     onPressed: () async {
                                                       final alreadyApply =
-                                                          (await reference
-                                                                      .child(
-                                                                          'library')
-                                                                      .child(
-                                                                          'adminCandidates')
-                                                                      .child(
-                                                                          userID)
-                                                                      .once())
-                                                                  .value !=
-                                                              null;
+                                                          (await reference.child('library').child('adminCandidates').child(userID).once()).value != null;
                                                       if (alreadyApply) {
-                                                        EREToast(
-                                                            str.lang == '한국어'
-                                                                ? '이미 지원하셨습니다.'
-                                                                : 'You are already in the candidates.',
-                                                            context,
-                                                            false);
+                                                        EREToast(str.lang == '한국어' ? '이미 지원하셨습니다.' : 'You are already in the candidates.', context, false);
                                                         Navigator.pop(context);
                                                       } else {
-                                                        final sNum =
-                                                            (await reference
-                                                                    .child(
-                                                                        'Student')
-                                                                    .child(
-                                                                        userID)
-                                                                    .child(
-                                                                        'sNum')
-                                                                    .once())
-                                                                .value;
-                                                        final candidacyTransaction =
-                                                            await reference
-                                                                .child(
-                                                                    'library')
-                                                                .child(
-                                                                    'adminCandidates')
-                                                                .child(userID)
-                                                                .runTransaction(
-                                                                    (mutableData) async {
-                                                          mutableData.value =
-                                                              jsonEncode({
+                                                        final sNum = (await reference.child('Student').child(userID).child('sNum').once()).value;
+                                                        final candidacyTransaction = await reference
+                                                            .child('library')
+                                                            .child('adminCandidates')
+                                                            .child(userID)
+                                                            .runTransaction((mutableData) async {
+                                                          mutableData.value = jsonEncode({
                                                             'id': userID,
                                                             'name': userName,
                                                             'sNum': sNum,
@@ -423,16 +358,9 @@ class _LibraryActivityState extends State<LibraryActivity> {
                                                           return mutableData;
                                                         });
 
-                                                        if (candidacyTransaction
-                                                            .committed) {
-                                                          EREToast(
-                                                              str.lang == '한국어'
-                                                                  ? '지원이 접수되었습니다.'
-                                                                  : 'Succeeded to apply as a candidate.',
-                                                              context,
-                                                              false);
-                                                          Navigator.pop(
-                                                              context);
+                                                        if (candidacyTransaction.committed) {
+                                                          EREToast(str.lang == '한국어' ? '지원이 접수되었습니다.' : 'Succeeded to apply as a candidate.', context, false);
+                                                          Navigator.pop(context);
                                                         }
                                                       }
                                                     },
@@ -456,8 +384,7 @@ class _LibraryActivityState extends State<LibraryActivity> {
                               color: ERE_BLACK,
                               child: Text(
                                 str.borrowedBooks,
-                                style: TextStyle(
-                                    color: ERE_YELLOW, fontSize: fontsize),
+                                style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                               ),
                             ),
                             personalRentals.length > 0
@@ -470,9 +397,7 @@ class _LibraryActivityState extends State<LibraryActivity> {
                                         height: tile_height,
                                         child: Text(
                                           str.number,
-                                          style: TextStyle(
-                                              color: ERE_YELLOW,
-                                              fontSize: fontsize),
+                                          style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                                         ),
                                       ),
                                       Container(
@@ -482,9 +407,7 @@ class _LibraryActivityState extends State<LibraryActivity> {
                                         height: tile_height,
                                         child: Text(
                                           str.bookTitle,
-                                          style: TextStyle(
-                                              color: ERE_YELLOW,
-                                              fontSize: fontsize),
+                                          style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                                         ),
                                       ),
                                       Container(
@@ -493,9 +416,7 @@ class _LibraryActivityState extends State<LibraryActivity> {
                                         height: tile_height,
                                         child: Text(
                                           str.dueDate,
-                                          style: TextStyle(
-                                              color: ERE_YELLOW,
-                                              fontSize: fontsize),
+                                          style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                                         ),
                                       )
                                     ],
@@ -505,8 +426,7 @@ class _LibraryActivityState extends State<LibraryActivity> {
                                 ? Expanded(
                                     child: ListView.builder(
                                       itemCount: personalRentals.length,
-                                      itemBuilder: (context, index) =>
-                                          BorrowedBookTile(
+                                      itemBuilder: (context, index) => BorrowedBookTile(
                                         index: index + 1,
                                         rental: personalRentals[index],
                                         width: width,
@@ -523,9 +443,7 @@ class _LibraryActivityState extends State<LibraryActivity> {
                                     height: tile_height,
                                     child: Text(
                                       str.noBorrowedBook,
-                                      style: TextStyle(
-                                          color: ERE_YELLOW,
-                                          fontSize: fontsize),
+                                      style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                                     ),
                                   ),
                           ],
@@ -539,10 +457,7 @@ class _LibraryActivityState extends State<LibraryActivity> {
                                   text: str.recruitAdmin,
                                   onPressed: () async {
                                     isAdminChanging = true;
-                                    await reference
-                                        .child('library')
-                                        .child('isAdminChanging')
-                                        .set(true);
+                                    await reference.child('library').child('isAdminChanging').set(true);
                                     setState(() {});
                                   },
                                   width: width,
@@ -551,10 +466,7 @@ class _LibraryActivityState extends State<LibraryActivity> {
                                   text: str.cancelRecruitAdmin,
                                   onPressed: () async {
                                     isAdminChanging = false;
-                                    await reference
-                                        .child('library')
-                                        .child('isAdminChanging')
-                                        .set(false);
+                                    await reference.child('library').child('isAdminChanging').set(false);
                                     setState(() {});
                                   },
                                   width: width,
@@ -567,8 +479,7 @@ class _LibraryActivityState extends State<LibraryActivity> {
                                   color: ERE_BLACK,
                                   child: Text(
                                     str.candidate,
-                                    style: TextStyle(
-                                        color: ERE_YELLOW, fontSize: fontsize),
+                                    style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                                   ),
                                 )
                               : Container(),
@@ -581,28 +492,22 @@ class _LibraryActivityState extends State<LibraryActivity> {
                                           children: [
                                             Container(
                                               alignment: Alignment.center,
-                                              padding: EdgeInsets.all(
-                                                  width * 0.0075),
+                                              padding: EdgeInsets.all(width * 0.0075),
                                               width: width * 0.2,
                                               height: tile_height,
                                               child: Text(
                                                 candidates[index]['name'],
-                                                style: TextStyle(
-                                                    color: ERE_YELLOW,
-                                                    fontSize: fontsize),
+                                                style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                                               ),
                                             ),
                                             Container(
                                               alignment: Alignment.center,
-                                              padding: EdgeInsets.all(
-                                                  width * 0.0075),
+                                              padding: EdgeInsets.all(width * 0.0075),
                                               width: width * 0.3,
                                               height: tile_height,
                                               child: Text(
                                                 candidates[index]['sNum'],
-                                                style: TextStyle(
-                                                    color: ERE_YELLOW,
-                                                    fontSize: fontsize),
+                                                style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                                               ),
                                             ),
                                             Container(
@@ -614,64 +519,41 @@ class _LibraryActivityState extends State<LibraryActivity> {
                                                 onPressed: () {
                                                   showDialog(
                                                       context: context,
-                                                      builder:
-                                                          (_) => AlertDialog(
-                                                                title: Text(str
-                                                                    .approveERELibraryAdminInfo),
-                                                                content: Column(
-                                                                  mainAxisSize:
-                                                                      MainAxisSize
-                                                                          .min,
-                                                                  children: [
-                                                                    Text(
-                                                                        '${str.lang == '한국어' ? '관리자 선정을 승인하면 즉시 관리자로서의 책임과 권한이 인계됩니다.\n지원자를 승인하시겠습니까?' : 'As you approve the candidate, the responsibility and the authority as the administrator are transferred to the candidate.\nWould you approve the candidate?'}\n\n'
-                                                                        '${str.name} : ${candidates[index]['name']}, ${str.studentID} : ${candidates[index]['sNum']}'),
-                                                                  ],
-                                                                ),
-                                                                actions: [
-                                                                  FlatButton(
-                                                                    child: Text(
-                                                                        str.approve),
-                                                                    onPressed:
-                                                                        () {
-                                                                      reference.child(
-                                                                          'library')
-                                                                        ..child('admin').set(candidates[index]
-                                                                            [
-                                                                            'id'])
-                                                                        ..child('adminCandidates')
-                                                                            .remove()
-                                                                        ..child('isAdminChanging')
-                                                                            .set(false);
-                                                                      EREToast(
-                                                                          str.lang == '한국어'
-                                                                              ? '새로운 관리자가 선정되었습니다.'
-                                                                              : 'Succeeded to nominate new administrator.',
-                                                                          context,
-                                                                          false);
-                                                                      Navigator.pop(
-                                                                          context);
-                                                                      setState(
-                                                                          () async {
-                                                                        isAdminChanging =
-                                                                            false;
-                                                                        isAdmin =
-                                                                            userID ==
-                                                                                (await reference.child('library').child('admin').once()).value;
-                                                                      });
-                                                                    },
-                                                                  ),
-                                                                  FlatButton(
-                                                                    child: Text(
-                                                                        str.cancel),
-                                                                    onPressed:
-                                                                        () {
-                                                                      Navigator.pop(
-                                                                          context);
-                                                                    },
-                                                                  )
-                                                                ],
-                                                              ));
+                                                      builder: (_) => AlertDialog(
+                                                            title: Text(str.approveERELibraryAdminInfo),
+                                                            content: Column(
+                                                              mainAxisSize: MainAxisSize.min,
+                                                              children: [
+                                                                Text(
+                                                                    '${str.lang == '한국어' ? '관리자 선정을 승인하면 즉시 관리자로서의 책임과 권한이 인계됩니다.\n지원자를 승인하시겠습니까?' : 'As you approve the candidate, the responsibility and the authority as the administrator are transferred to the candidate.\nWould you approve the candidate?'}\n\n'
+                                                                    '${str.name} : ${candidates[index]['name']}, ${str.studentID} : ${candidates[index]['sNum']}'),
+                                                              ],
+                                                            ),
+                                                            actions: [
+                                                              FlatButton(
+                                                                child: Text(str.approve),
+                                                                onPressed: () {
+                                                                  reference.child('library')
+                                                                    ..child('admin').set(candidates[index]['id'])
+                                                                    ..child('adminCandidates').remove()
+                                                                    ..child('isAdminChanging').set(false);
+                                                                  EREToast(str.lang == '한국어' ? '새로운 관리자가 선정되었습니다.' : 'Succeeded to nominate new administrator.',
+                                                                      context, false);
+                                                                  Navigator.pop(context);
+                                                                  setState(() async {
+                                                                    isAdminChanging = false;
+                                                                    isAdmin = userID == (await reference.child('library').child('admin').once()).value;
+                                                                  });
+                                                                },
+                                                              ),
+                                                              FlatButton(
+                                                                child: Text(str.cancel),
+                                                                onPressed: () {
+                                                                  Navigator.pop(context);
+                                                                },
+                                                              )
+                                                            ],
+                                                          ));
                                                 },
                                                 width: width,
                                               ),
@@ -686,9 +568,7 @@ class _LibraryActivityState extends State<LibraryActivity> {
                                       height: tile_height,
                                       child: Text(
                                         str.noCandidate,
-                                        style: TextStyle(
-                                            color: ERE_YELLOW,
-                                            fontSize: fontsize),
+                                        style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                                       ),
                                     )
                               : Container(),
@@ -699,8 +579,7 @@ class _LibraryActivityState extends State<LibraryActivity> {
                             color: ERE_BLACK,
                             child: Text(
                               str.bookRequestList,
-                              style: TextStyle(
-                                  color: ERE_YELLOW, fontSize: fontsize),
+                              style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                             ),
                           ),
                           bookRequests.length > 0
@@ -711,8 +590,7 @@ class _LibraryActivityState extends State<LibraryActivity> {
                                       onChanged: (_) {
                                         setState(() {
                                           selectAll = !selectAll;
-                                          for (var bookRequest in bookRequests)
-                                            bookRequest.isChecked = selectAll;
+                                          for (var bookRequest in bookRequests) bookRequest.isChecked = selectAll;
                                         });
                                       },
                                       checkColor: ERE_YELLOW,
@@ -725,9 +603,7 @@ class _LibraryActivityState extends State<LibraryActivity> {
                                       height: tile_height,
                                       child: Text(
                                         str.number,
-                                        style: TextStyle(
-                                            color: ERE_YELLOW,
-                                            fontSize: fontsize),
+                                        style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                                       ),
                                     ),
                                     Container(
@@ -737,9 +613,7 @@ class _LibraryActivityState extends State<LibraryActivity> {
                                       height: tile_height,
                                       child: Text(
                                         str.bookTitle,
-                                        style: TextStyle(
-                                            color: ERE_YELLOW,
-                                            fontSize: fontsize),
+                                        style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                                       ),
                                     ),
                                     Container(
@@ -749,9 +623,7 @@ class _LibraryActivityState extends State<LibraryActivity> {
                                       height: tile_height,
                                       child: Text(
                                         str.author,
-                                        style: TextStyle(
-                                            color: ERE_YELLOW,
-                                            fontSize: fontsize),
+                                        style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                                       ),
                                     ),
                                     Container(
@@ -761,9 +633,7 @@ class _LibraryActivityState extends State<LibraryActivity> {
                                       height: tile_height,
                                       child: Text(
                                         str.requester,
-                                        style: TextStyle(
-                                            color: ERE_YELLOW,
-                                            fontSize: fontsize),
+                                        style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                                       ),
                                     )
                                   ],
@@ -774,16 +644,14 @@ class _LibraryActivityState extends State<LibraryActivity> {
                                   height: tile_height,
                                   child: Text(
                                     str.noBookRequest,
-                                    style: TextStyle(
-                                        color: ERE_YELLOW, fontSize: fontsize),
+                                    style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                                   ),
                                 ),
                           bookRequests.length > 0
                               ? Expanded(
                                   child: ListView.builder(
                                     itemCount: bookRequests.length,
-                                    itemBuilder: (context, index) =>
-                                        BookRequestTile(
+                                    itemBuilder: (context, index) => BookRequestTile(
                                       index: index + 1,
                                       bookRequest: bookRequests[index],
                                       width: width,
@@ -804,26 +672,18 @@ class _LibraryActivityState extends State<LibraryActivity> {
                                     int i = 1;
                                     for (var bookRequest in bookRequests)
                                       if (bookRequest.isChecked) {
-                                        selectedRequests +=
-                                            '${i}/${bookRequest.title}/${bookRequest.author}/${bookRequest.requesterName}\n';
-                                        selectedRequestsForEmail +=
-                                            '${i++}\t${bookRequest.title}\t${bookRequest.author}\t${bookRequest.requesterName}\n';
+                                        selectedRequests += '${i}/${bookRequest.title}/${bookRequest.author}/${bookRequest.requesterName}\n';
+                                        selectedRequestsForEmail += '${i++}\t${bookRequest.title}\t${bookRequest.author}\t${bookRequest.requesterName}\n';
                                       }
 
                                     if (i < 2)
-                                      EREToast(
-                                          str.lang == '한국어'
-                                              ? '선택된 신청 목록이 없습니다.'
-                                              : "You don't select any request in the list.",
-                                          context,
-                                          false);
+                                      EREToast(str.lang == '한국어' ? '선택된 신청 목록이 없습니다.' : "You don't select any request in the list.", context, false);
                                     else {
                                       showDialog(
                                           context: context,
                                           builder: (_) => AlertDialog(
                                                 content: Column(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
+                                                  mainAxisSize: MainAxisSize.min,
                                                   children: [
                                                     Text((str.lang == '한국어'
                                                             ? '다음 신청 목록을 이메일로 전송할 수 있습니다.\n\n'
@@ -837,60 +697,45 @@ class _LibraryActivityState extends State<LibraryActivity> {
                                                   FlatButton(
                                                     child: Text(str.email),
                                                     onPressed: () async {
-                                                      final uri = Uri(
-                                                          scheme: 'mailto',
-                                                          path: user.email,
-                                                          queryParameters: {
-                                                            'subject': str
-                                                                        .lang ==
-                                                                    '한국어'
-                                                                ? '에자공_도서관_도서_구비_신청_목록'
-                                                                : 'ERE library requests to furnish books',
-                                                            'body':
-                                                                selectedRequestsForEmail
-                                                          });
-                                                      if (await canLaunch(
-                                                          uri.toString())) {
-                                                        await launch(
-                                                            uri.toString());
+                                                      final uri = Uri(scheme: 'mailto', path: user.email, queryParameters: {
+                                                        'subject': str.lang == '한국어' ? '에자공_도서관_도서_구비_신청_목록' : 'ERE library requests to furnish books',
+                                                        'body': selectedRequestsForEmail
+                                                      });
+                                                      if (await canLaunch(uri.toString())) {
+                                                        await launch(uri.toString());
                                                         Navigator.pop(context);
 
                                                         showDialog(
                                                             context: context,
-                                                            builder:
-                                                                (_) =>
-                                                                    AlertDialog(
-                                                                      content: Text(str.lang ==
-                                                                              '한국어'
-                                                                          ? '이메일로 전송한 목록들을 서버에서 삭제하고 신청자들에게 푸시 알림을 보낼 수 있습니다. 목록을 삭제하시겠습니까?'
-                                                                          : 'You can remove the requests you sent by email from the server and notify the requesters by push notification. Would you remove the requests?'),
-                                                                      actions: [
-                                                                        FlatButton(
-                                                                          child:
-                                                                              Text(
-                                                                            str.remove,
-                                                                            style:
-                                                                                TextStyle(color: Color(0xffff4242)),
-                                                                          ),
-                                                                          onPressed:
-                                                                              () async {
-                                                                            Navigator.pop(context);
-                                                                            for (var bookRequest
-                                                                                in bookRequests)
-                                                                              if (bookRequest.isChecked)
-                                                                                await reference.child('library').child('BookRequest').child(bookRequest.id).remove();
-                                                                          },
-                                                                        ),
-                                                                        FlatButton(
-                                                                          child:
-                                                                              Text(str.cancel),
-                                                                          onPressed:
-                                                                              () {
-                                                                            Navigator.pop(context);
-                                                                          },
-                                                                        )
-                                                                      ],
-                                                                    ));
+                                                            builder: (_) => AlertDialog(
+                                                                  content: Text(str.lang == '한국어'
+                                                                      ? '이메일로 전송한 목록들을 서버에서 삭제하고 신청자들에게 푸시 알림을 보낼 수 있습니다. 목록을 삭제하시겠습니까?'
+                                                                      : 'You can remove the requests you sent by email from the server and notify the requesters by push notification. Would you remove the requests?'),
+                                                                  actions: [
+                                                                    FlatButton(
+                                                                      child: Text(
+                                                                        str.remove,
+                                                                        style: TextStyle(color: Color(0xffff4242)),
+                                                                      ),
+                                                                      onPressed: () async {
+                                                                        Navigator.pop(context);
+                                                                        for (var bookRequest in bookRequests)
+                                                                          if (bookRequest.isChecked)
+                                                                            await reference
+                                                                                .child('library')
+                                                                                .child('BookRequest')
+                                                                                .child(bookRequest.id)
+                                                                                .remove();
+                                                                      },
+                                                                    ),
+                                                                    FlatButton(
+                                                                      child: Text(str.cancel),
+                                                                      onPressed: () {
+                                                                        Navigator.pop(context);
+                                                                      },
+                                                                    )
+                                                                  ],
+                                                                ));
                                                       } else
                                                         throw 'Could not launch ${uri.toString()}';
                                                     },
@@ -915,8 +760,7 @@ class _LibraryActivityState extends State<LibraryActivity> {
                             color: ERE_BLACK,
                             child: Text(
                               str.borrowerList,
-                              style: TextStyle(
-                                  color: ERE_YELLOW, fontSize: fontsize),
+                              style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                             ),
                           ),
                           borrowers.length > 0
@@ -929,9 +773,7 @@ class _LibraryActivityState extends State<LibraryActivity> {
                                       height: tile_height,
                                       child: Text(
                                         str.number,
-                                        style: TextStyle(
-                                            color: ERE_YELLOW,
-                                            fontSize: fontsize),
+                                        style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                                       ),
                                     ),
                                     Container(
@@ -941,9 +783,7 @@ class _LibraryActivityState extends State<LibraryActivity> {
                                       height: tile_height,
                                       child: Text(
                                         str.bookTitle,
-                                        style: TextStyle(
-                                            color: ERE_YELLOW,
-                                            fontSize: fontsize),
+                                        style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                                       ),
                                     ),
                                     Container(
@@ -953,9 +793,7 @@ class _LibraryActivityState extends State<LibraryActivity> {
                                       height: tile_height,
                                       child: Text(
                                         str.borrower,
-                                        style: TextStyle(
-                                            color: ERE_YELLOW,
-                                            fontSize: fontsize),
+                                        style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                                       ),
                                     ),
                                     Container(
@@ -965,9 +803,7 @@ class _LibraryActivityState extends State<LibraryActivity> {
                                       height: tile_height,
                                       child: Text(
                                         str.dueDate,
-                                        style: TextStyle(
-                                            color: ERE_YELLOW,
-                                            fontSize: fontsize),
+                                        style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                                       ),
                                     )
                                   ],
@@ -977,8 +813,7 @@ class _LibraryActivityState extends State<LibraryActivity> {
                               ? Expanded(
                                   child: ListView.builder(
                                     itemCount: borrowers.length,
-                                    itemBuilder: (context, index) =>
-                                        BorrowerTile(
+                                    itemBuilder: (context, index) => BorrowerTile(
                                       index: index + 1,
                                       rental: borrowers[index],
                                       width: width,
@@ -995,8 +830,7 @@ class _LibraryActivityState extends State<LibraryActivity> {
                                   height: tile_height,
                                   child: Text(
                                     str.noBorrower,
-                                    style: TextStyle(
-                                        color: ERE_YELLOW, fontSize: fontsize),
+                                    style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                                   ),
                                 ),
                         ]),
@@ -1020,17 +854,12 @@ class _LibraryActivityState extends State<LibraryActivity> {
                                             : 'Type in the title and the author of the book and press [Request], then your request to furnish the book is received. The requests are delivered to the office of ERE by the administrator. When your request is delivered, we notice you by push notification.'),
                                         Row(
                                           children: [
-                                            Container(
-                                                alignment: Alignment.center,
-                                                width: width * 0.2,
-                                                height: height * 0.034,
-                                                child: Text(str.bookTitle)),
+                                            Container(alignment: Alignment.center, width: width * 0.2, height: height * 0.034, child: Text(str.bookTitle)),
                                             Container(
                                               alignment: Alignment.center,
                                               width: width * 0.4,
                                               child: TextField(
-                                                onChanged: (text) =>
-                                                    requestTitle = text,
+                                                onChanged: (text) => requestTitle = text,
                                               ),
                                             )
                                           ],
@@ -1047,8 +876,7 @@ class _LibraryActivityState extends State<LibraryActivity> {
                                               alignment: Alignment.center,
                                               width: width * 0.4,
                                               child: TextField(
-                                                onChanged: (text) =>
-                                                    requestAuthor = text,
+                                                onChanged: (text) => requestAuthor = text,
                                               ),
                                             )
                                           ],
@@ -1059,69 +887,28 @@ class _LibraryActivityState extends State<LibraryActivity> {
                                       FlatButton(
                                         child: Text(str.request),
                                         onPressed: () async {
-                                          if (requestTitle.isEmpty ||
-                                              requestAuthor.isEmpty)
-                                            EREToast(
-                                                str.lang == '한국어'
-                                                    ? '도서명과 저자를 입력해주세요.'
-                                                    : 'Please type in the title and the author of the book.',
-                                                context,
+                                          if (requestTitle.isEmpty || requestAuthor.isEmpty)
+                                            EREToast(str.lang == '한국어' ? '도서명과 저자를 입력해주세요.' : 'Please type in the title and the author of the book.', context,
                                                 false);
                                           else {
-                                            final id = reference
-                                                .child('library')
-                                                .child('BookRequest')
-                                                .push()
-                                                .key;
+                                            final id = reference.child('library').child('BookRequest').push().key;
 
-                                            final num = ((await reference
-                                                            .child('Student')
-                                                            .child(userID)
-                                                            .child(
-                                                                'bookRequestIDs')
-                                                            .once())
-                                                        .value as List<dynamic> ??
-                                                    [])
-                                                .length;
-                                            reference
-                                                .child('Student')
-                                                .child(userID)
-                                                .child('bookRequestIDs')
-                                                .child('$num')
-                                                .set(id);
+                                            final num =
+                                                ((await reference.child('Student').child(userID).child('bookRequestIDs').once()).value as List<dynamic> ?? [])
+                                                    .length;
+                                            reference.child('Student').child(userID).child('bookRequestIDs').child('$num').set(id);
 
                                             final bookRequestTransaction =
-                                                await reference
-                                                    .child('library')
-                                                    .child('BookRequest')
-                                                    .child(id)
-                                                    .runTransaction(
-                                                        (mutableData) async {
-                                              mutableData.value = jsonEncode({
-                                                'id': id,
-                                                'title': requestTitle,
-                                                'author': requestAuthor,
-                                                'requesterID': userID,
-                                                'requesterName': userName
-                                              });
+                                                await reference.child('library').child('BookRequest').child(id).runTransaction((mutableData) async {
+                                              mutableData.value = jsonEncode(
+                                                  {'id': id, 'title': requestTitle, 'author': requestAuthor, 'requesterID': userID, 'requesterName': userName});
                                               return mutableData;
                                             });
 
-                                            if (bookRequestTransaction
-                                                .committed)
-                                              EREToast(
-                                                  str.lang == '한국어'
-                                                      ? '도서 구비 신청이 접수되었습니다.'
-                                                      : 'Succeeded to request to furnish the book.',
-                                                  context,
-                                                  false);
+                                            if (bookRequestTransaction.committed)
+                                              EREToast(str.lang == '한국어' ? '도서 구비 신청이 접수되었습니다.' : 'Succeeded to request to furnish the book.', context, false);
                                             else
-                                              EREToast(
-                                                  str.lang == '한국어'
-                                                      ? '도서 구비 신청이 실패했습니다.'
-                                                      : 'Failed to request to furnish the book.',
-                                                  context,
-                                                  false);
+                                              EREToast(str.lang == '한국어' ? '도서 구비 신청이 실패했습니다.' : 'Failed to request to furnish the book.', context, false);
                                             Navigator.pop(context);
                                           }
                                         },
@@ -1137,9 +924,7 @@ class _LibraryActivityState extends State<LibraryActivity> {
                         },
                         width: width,
                       ),
-                      isAdmin
-                          ? Padding(padding: EdgeInsets.all(width * 0.01))
-                          : Container(),
+                      isAdmin ? Padding(padding: EdgeInsets.all(width * 0.01)) : Container(),
                       isAdmin
                           ? EREButton(
                               text: str.addBook,
@@ -1233,9 +1018,7 @@ class _LibraryActivityState extends State<LibraryActivity> {
                       )
                     ],
                   ),
-                  Text(str.lang == '한국어'
-                      ? '도서명, 저자, ISBN 정보를 확인 후 [추가]를 눌러주세요.'
-                      : 'Check the title, the author, and the ISBN of the book and press [Add]')
+                  Text(str.lang == '한국어' ? '도서명, 저자, ISBN 정보를 확인 후 [추가]를 눌러주세요.' : 'Check the title, the author, and the ISBN of the book and press [Add]')
                 ],
               ),
               actions: [
@@ -1244,8 +1027,7 @@ class _LibraryActivityState extends State<LibraryActivity> {
                   onPressed: () async {
                     Navigator.pop(context);
 
-                    newISBN = await FlutterBarcodeScanner.scanBarcode(
-                        '#ffe4b92a', str.cancel, true, ScanMode.BARCODE);
+                    newISBN = await FlutterBarcodeScanner.scanBarcode('#ffe4b92a', str.cancel, true, ScanMode.BARCODE);
 
                     if (newISBN == '-1') {
                       _registerBook(context, width, height);
@@ -1267,8 +1049,7 @@ class _LibraryActivityState extends State<LibraryActivity> {
                       if (newAuthor.contains(':')) {
                         final colonIdx = newAuthor.indexOf(':');
                         final semicolonIdx = newAuthor.indexOf(';');
-                        newAuthor =
-                            newAuthor.substring(colonIdx + 2, semicolonIdx - 1);
+                        newAuthor = newAuthor.substring(colonIdx + 2, semicolonIdx - 1);
                       } else if (newAuthor.contains(';')) {
                         final semicolonIdx2 = newAuthor.indexOf(';');
                         newAuthor = newAuthor.substring(22, semicolonIdx2 - 1);
@@ -1286,37 +1067,18 @@ class _LibraryActivityState extends State<LibraryActivity> {
                 FlatButton(
                   child: Text(str.add),
                   onPressed: () async {
-                    if (newTitle.isEmpty ||
-                        newAuthor.isEmpty ||
-                        newISBN.isEmpty)
+                    if (newTitle.isEmpty || newAuthor.isEmpty || newISBN.isEmpty)
                       EREToast(str.blankError, context, false);
                     else {
                       Navigator.pop(context);
 
-                      final id =
-                          reference.child('library').child('Book').push().key;
-                      final addBookTransaction = await reference
-                          .child('library')
-                          .child('Book')
-                          .child(id)
-                          .runTransaction((mutableData) async {
-                        mutableData.value = jsonEncode({
-                          'id': id,
-                          'title': newTitle,
-                          'author': newAuthor,
-                          'isbn': newISBN,
-                          'isAvailable': true
-                        });
+                      final id = reference.child('library').child('Book').push().key;
+                      final addBookTransaction = await reference.child('library').child('Book').child(id).runTransaction((mutableData) async {
+                        mutableData.value = jsonEncode({'id': id, 'title': newTitle, 'author': newAuthor, 'isbn': newISBN, 'isAvailable': true});
                         return mutableData;
                       });
 
-                      if (addBookTransaction.committed)
-                        EREToast(
-                            str.lang == '한국어'
-                                ? '도서가 추가되었습니다.'
-                                : 'Succeeded to add the book.',
-                            context,
-                            false);
+                      if (addBookTransaction.committed) EREToast(str.lang == '한국어' ? '도서가 추가되었습니다.' : 'Succeeded to add the book.', context, false);
                     }
                   },
                 ),

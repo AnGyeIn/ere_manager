@@ -14,8 +14,7 @@ class BorrowedBookTile extends StatefulWidget {
   double height;
   Function refresh;
 
-  BorrowedBookTile(
-      {this.index, this.rental, this.width, this.height, this.refresh});
+  BorrowedBookTile({this.index, this.rental, this.width, this.height, this.refresh});
 
   _BorrowedBookTileState createState() => _BorrowedBookTileState();
 }
@@ -70,38 +69,15 @@ class _BorrowedBookTileState extends State<BorrowedBookTile> {
           child: EREButton(
             text: str.returnStr,
             onPressed: () async {
-              EREToast(
-                  str.lang == '한국어'
-                      ? '반납 처리 중'
-                      : 'Processing to return the book',
-                  context,
-                  false);
-              var book = Book.fromJson(jsonDecode((await reference
-                      .child('library')
-                      .child('Book')
-                      .child(widget.rental.bookID)
-                      .once())
-                  .value));
+              EREToast(str.lang == '한국어' ? '반납 처리 중' : 'Processing to return the book', context, false);
+              var book = Book.fromJson(jsonDecode((await reference.child('library').child('Book').child(widget.rental.bookID).once()).value));
               book.isAvailable = true;
-              final activateBookTransaction = await reference
-                  .child('library')
-                  .child('Book')
-                  .child(book.id)
-                  .runTransaction((mutableData) async {
+              final activateBookTransaction = await reference.child('library').child('Book').child(book.id).runTransaction((mutableData) async {
                 mutableData.value = jsonEncode(book.toJson());
                 return mutableData;
               });
-              await reference
-                  .child('library')
-                  .child('Rental')
-                  .child(widget.rental.id)
-                  .remove();
-              await reference
-                  .child('Student')
-                  .child(widget.rental.borrowerID)
-                  .child('Rental')
-                  .child(widget.rental.id)
-                  .remove();
+              await reference.child('library').child('Rental').child(widget.rental.id).remove();
+              await reference.child('Student').child(widget.rental.borrowerID).child('Rental').child(widget.rental.id).remove();
 
               if (activateBookTransaction.committed) {
                 widget.refresh();

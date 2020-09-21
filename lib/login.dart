@@ -49,8 +49,7 @@ class _LoginActivityState extends State<LoginActivity> {
                   height: height * 0.034,
                   child: Text(
                     str.studentID,
-                    style:
-                        TextStyle(color: ERE_YELLOW, fontSize: width * (str.lang == '한국어' ? 0.043 : 0.03)),
+                    style: TextStyle(color: ERE_YELLOW, fontSize: width * (str.lang == '한국어' ? 0.043 : 0.03)),
                   ),
                 ),
                 Container(
@@ -59,12 +58,8 @@ class _LoginActivityState extends State<LoginActivity> {
                   child: TextField(
                     cursorColor: ERE_YELLOW,
                     keyboardType: TextInputType.numberWithOptions(signed: true),
-                    decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'XXXX-XXXXX',
-                        hintStyle: TextStyle(color: Color(0x88e4b92a))),
-                    style:
-                        TextStyle(color: ERE_YELLOW, fontSize: width * 0.043),
+                    decoration: InputDecoration(border: InputBorder.none, hintText: 'XXXX-XXXXX', hintStyle: TextStyle(color: Color(0x88e4b92a))),
+                    style: TextStyle(color: ERE_YELLOW, fontSize: width * 0.043),
                     controller: TextEditingController(text: sNum),
                     onChanged: (text) => sNum = text,
                   ),
@@ -80,8 +75,7 @@ class _LoginActivityState extends State<LoginActivity> {
                   height: height * 0.034,
                   child: Text(
                     str.phoneNumber,
-                    style:
-                        TextStyle(color: ERE_YELLOW, fontSize: width * (str.lang == '한국어' ? 0.043 : 0.03)),
+                    style: TextStyle(color: ERE_YELLOW, fontSize: width * (str.lang == '한국어' ? 0.043 : 0.03)),
                   ),
                 ),
                 Container(
@@ -90,12 +84,8 @@ class _LoginActivityState extends State<LoginActivity> {
                   child: TextField(
                     cursorColor: ERE_YELLOW,
                     keyboardType: TextInputType.numberWithOptions(signed: true),
-                    decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'XXX-XXXX-XXXX',
-                        hintStyle: TextStyle(color: Color(0x88e4b92a))),
-                    style:
-                        TextStyle(color: ERE_YELLOW, fontSize: width * 0.043),
+                    decoration: InputDecoration(border: InputBorder.none, hintText: 'XXX-XXXX-XXXX', hintStyle: TextStyle(color: Color(0x88e4b92a))),
+                    style: TextStyle(color: ERE_YELLOW, fontSize: width * 0.043),
                     controller: TextEditingController(text: pNum),
                     onChanged: (text) => pNum = text,
                   ),
@@ -108,19 +98,12 @@ class _LoginActivityState extends State<LoginActivity> {
             EREButton(
               text: str.login,
               onPressed: () {
-                ui.FirebaseAuthUi.instance()
-                    .launchAuth([AuthProvider.email()]).then((_) async {
+                ui.FirebaseAuthUi.instance().launchAuth([AuthProvider.email()]).then((_) async {
                   final user = FirebaseAuth.instance.currentUser;
 
                   try {
-                    final reference = FirebaseDatabase.instance
-                        .reference()
-                        .child('Student')
-                        .child(user.uid);
-                    reference
-                      ..child('sNum').set(sNum)
-                      ..child('pNum').set(pNum)
-                      ..child('name').set(user.displayName);
+                    final reference = FirebaseDatabase.instance.reference().child('Student').child(user.uid);
+                    reference..child('sNum').set(sNum)..child('pNum').set(pNum)..child('name').set(user.displayName);
 
                     prefs..setString('sNum', sNum)..setString('pNum', pNum);
                     EREToast(str.loginSuccess, context, false);

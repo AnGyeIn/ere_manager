@@ -16,15 +16,7 @@ class LectureBookTile extends StatefulWidget {
   List<LectureBookRequest> requestListForReceiver;
   Function refresh;
 
-  LectureBookTile(
-      {this.lectureBook,
-      this.width,
-      this.height,
-      this.index,
-      this.userID,
-      this.userName,
-      this.requestListForReceiver,
-      this.refresh});
+  LectureBookTile({this.lectureBook, this.width, this.height, this.index, this.userID, this.userName, this.requestListForReceiver, this.refresh});
 
   _LectureBookTileState createState() => _LectureBookTileState();
 }
@@ -102,8 +94,7 @@ class _LectureBookTileState extends State<LectureBookTile> {
             height: tile_height,
             child: Text(
               '${str.translate(widget.lectureBook.option)}',
-              style:
-                  TextStyle(fontSize: fontsize * (str.lang == '한국어' ? 1 : 0.7)),
+              style: TextStyle(fontSize: fontsize * (str.lang == '한국어' ? 1 : 0.7)),
             ),
           )
         ],
@@ -111,11 +102,8 @@ class _LectureBookTileState extends State<LectureBookTile> {
       onPressed: isOwner
           ? () async {
               widget.lectureBook.isAvailable = !widget.lectureBook.isAvailable;
-              final activeTransaction = await reference
-                  .child('lecturebook')
-                  .child('LectureBook')
-                  .child('${widget.lectureBook.id}')
-                  .runTransaction((mutableData) async {
+              final activeTransaction =
+                  await reference.child('lecturebook').child('LectureBook').child('${widget.lectureBook.id}').runTransaction((mutableData) async {
                 mutableData.value = jsonEncode(widget.lectureBook.toJson());
                 return mutableData;
               });
@@ -131,28 +119,23 @@ class _LectureBookTileState extends State<LectureBookTile> {
                               mainAxisSize: MainAxisSize.min,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                    '${str.lectureBookTitle} : ${widget.lectureBook.title}'),
+                                Text('${str.lectureBookTitle} : ${widget.lectureBook.title}'),
                                 Padding(
                                   padding: EdgeInsets.all(tile_padding),
                                 ),
-                                Text(
-                                    '${str.author} : ${widget.lectureBook.author}'),
+                                Text('${str.author} : ${widget.lectureBook.author}'),
                                 Padding(
                                   padding: EdgeInsets.all(tile_padding),
                                 ),
-                                Text(
-                                    '${str.lecture} : ${widget.lectureBook.lecture}'),
+                                Text('${str.lecture} : ${widget.lectureBook.lecture}'),
                                 Padding(
                                   padding: EdgeInsets.all(tile_padding),
                                 ),
-                                Text(
-                                    '${str.owner} : ${widget.lectureBook.ownerName}'),
+                                Text('${str.owner} : ${widget.lectureBook.ownerName}'),
                                 Padding(
                                   padding: EdgeInsets.all(tile_padding),
                                 ),
-                                Text(
-                                    '${str.option} : ${widget.lectureBook.option}'),
+                                Text('${str.option} : ${widget.lectureBook.option}'),
                                 Padding(
                                   padding: EdgeInsets.all(tile_padding),
                                 )
@@ -164,26 +147,15 @@ class _LectureBookTileState extends State<LectureBookTile> {
                                 onPressed: () async {
                                   Navigator.pop(context);
 
-                                  for (var request
-                                      in widget.requestListForReceiver)
-                                    if (request.lecturebookID ==
-                                            widget.lectureBook.id &&
-                                        !request.isAccepted &&
-                                        !request.isRejected) {
-                                      EREToast(str.duplicateRequestError,
-                                          context, false);
+                                  for (var request in widget.requestListForReceiver)
+                                    if (request.lecturebookID == widget.lectureBook.id && !request.isAccepted && !request.isRejected) {
+                                      EREToast(str.duplicateRequestError, context, false);
                                       return;
                                     }
 
-                                  final openTime = DateTime.parse(
-                                      (await reference
-                                              .child('lecturebook')
-                                              .child('openTime')
-                                              .once())
-                                          .value);
+                                  final openTime = DateTime.parse((await reference.child('lecturebook').child('openTime').once()).value);
                                   final now = DateTime.now();
-                                  if (widget.lectureBook.ownerName == '학생회' &&
-                                      now.compareTo(openTime) < 0) {
+                                  if (widget.lectureBook.ownerName == '학생회' && now.compareTo(openTime) < 0) {
                                     EREToast(
                                         str.lang == '한국어'
                                             ? '학생회 소유 교재는 개시 시각 이후에 신청해주세요.\n'
@@ -195,28 +167,11 @@ class _LectureBookTileState extends State<LectureBookTile> {
                                     return;
                                   }
 
-                                  final id = reference
-                                      .child('Student')
-                                      .child(widget.userID)
-                                      .child('LectureBookRequest')
-                                      .push()
-                                      .key;
+                                  final id = reference.child('Student').child(widget.userID).child('LectureBookRequest').push().key;
 
-                                  reference
-                                      .child('Student')
-                                      .child(widget.userID)
-                                      .child('lecturebookRequestIDs')
-                                      .once()
-                                      .then((snapshot) {
-                                    final num =
-                                        (snapshot.value as List<dynamic> ?? [])
-                                            .length;
-                                    reference
-                                        .child('Student')
-                                        .child(widget.userID)
-                                        .child('lecturebookRequestIDs')
-                                        .child('$num')
-                                        .set(id);
+                                  reference.child('Student').child(widget.userID).child('lecturebookRequestIDs').once().then((snapshot) {
+                                    final num = (snapshot.value as List<dynamic> ?? []).length;
+                                    reference.child('Student').child(widget.userID).child('lecturebookRequestIDs').child('$num').set(id);
                                   });
 
                                   reference
@@ -224,16 +179,8 @@ class _LectureBookTileState extends State<LectureBookTile> {
                                       .child(widget.lectureBook.ownerID)
                                       .child('lecturebookRequestIDs')
                                       .runTransaction((mutableData) async {
-                                    final num =
-                                        (mutableData.value as List<dynamic> ??
-                                                [])
-                                            .length;
-                                    reference
-                                        .child('Student')
-                                        .child(widget.lectureBook.ownerID)
-                                        .child('lecturebookRequestIDs')
-                                        .child('$num')
-                                        .set(id);
+                                    final num = (mutableData.value as List<dynamic> ?? []).length;
+                                    reference.child('Student').child(widget.lectureBook.ownerID).child('lecturebookRequestIDs').child('$num').set(id);
 
                                     return mutableData;
                                   });
@@ -242,8 +189,7 @@ class _LectureBookTileState extends State<LectureBookTile> {
                                     'requestTime': now.toString(),
                                     'id': id,
                                     'lecturebookID': widget.lectureBook.id,
-                                    'lecturebookTitle':
-                                        widget.lectureBook.title,
+                                    'lecturebookTitle': widget.lectureBook.title,
                                     'ownerID': widget.lectureBook.ownerID,
                                     'ownerName': widget.lectureBook.ownerName,
                                     'receiverID': widget.userID,
@@ -253,13 +199,12 @@ class _LectureBookTileState extends State<LectureBookTile> {
                                     'isRejected': false
                                   };
 
-                                  final addToReceiverTransaction =
-                                      await reference
-                                          .child('Student')
-                                          .child(widget.userID)
-                                          .child('LectureBookRequest')
-                                          .child(id)
-                                          .runTransaction((mutableData) async {
+                                  final addToReceiverTransaction = await reference
+                                      .child('Student')
+                                      .child(widget.userID)
+                                      .child('LectureBookRequest')
+                                      .child(id)
+                                      .runTransaction((mutableData) async {
                                     mutableData.value = jsonEncode(newRequest);
                                     return mutableData;
                                   });
@@ -274,8 +219,7 @@ class _LectureBookTileState extends State<LectureBookTile> {
                                     return mutableData;
                                   });
 
-                                  if (addToReceiverTransaction.committed &&
-                                      addToOwnerTransaction.committed) {
+                                  if (addToReceiverTransaction.committed && addToOwnerTransaction.committed) {
                                     EREToast(
                                         str.lang == '한국어'
                                             ? '${widget.lectureBook.option} 신청이 접수되었습니다.'
@@ -284,8 +228,7 @@ class _LectureBookTileState extends State<LectureBookTile> {
                                         false);
                                     widget.refresh();
                                   } else
-                                    EREToast(str.lectureBookDeactiveError,
-                                        context, false);
+                                    EREToast(str.lectureBookDeactiveError, context, false);
                                 },
                               ),
                               FlatButton(

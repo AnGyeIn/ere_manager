@@ -15,19 +15,12 @@ class LectureBookRequestTileForReceiver extends StatefulWidget {
   double height;
   Function refresh;
 
-  LectureBookRequestTileForReceiver(
-      {this.index,
-      this.lectureBookRequest,
-      this.width,
-      this.height,
-      this.refresh});
+  LectureBookRequestTileForReceiver({this.index, this.lectureBookRequest, this.width, this.height, this.refresh});
 
-  _LectureBookRequestTileForReceiverState createState() =>
-      _LectureBookRequestTileForReceiverState();
+  _LectureBookRequestTileForReceiverState createState() => _LectureBookRequestTileForReceiverState();
 }
 
-class _LectureBookRequestTileForReceiverState
-    extends State<LectureBookRequestTileForReceiver> {
+class _LectureBookRequestTileForReceiverState extends State<LectureBookRequestTileForReceiver> {
   final reference = FirebaseDatabase.instance.reference();
 
   @override
@@ -75,9 +68,7 @@ class _LectureBookRequestTileForReceiverState
           height: tile_height,
           child: Text(
             '${str.translate(widget.lectureBookRequest.option)}',
-            style: TextStyle(
-                color: ERE_YELLOW,
-                fontSize: fontsize * (str.lang == '한국어' ? 1 : 0.7)),
+            style: TextStyle(color: ERE_YELLOW, fontSize: fontsize * (str.lang == '한국어' ? 1 : 0.7)),
           ),
         ),
         widget.lectureBookRequest.isAccepted
@@ -88,12 +79,7 @@ class _LectureBookRequestTileForReceiverState
                 child: EREButton(
                   text: str.accepted,
                   onPressed: () async {
-                    final pNum = (await reference
-                            .child('Student')
-                            .child(widget.lectureBookRequest.ownerID)
-                            .child('pNum')
-                            .once())
-                        .value;
+                    final pNum = (await reference.child('Student').child(widget.lectureBookRequest.ownerID).child('pNum').once()).value;
 
                     showDialog(
                         context: context,
@@ -102,8 +88,7 @@ class _LectureBookRequestTileForReceiverState
                                 mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                      '${str.owner} : ${widget.lectureBookRequest.ownerName}\n'
+                                  Text('${str.owner} : ${widget.lectureBookRequest.ownerName}\n'
                                       '${str.phoneNumber} : $pNum')
                                 ],
                               ),
@@ -139,14 +124,8 @@ class _LectureBookRequestTileForReceiverState
                       text: str.cancel,
                       onPressed: () {
                         reference.child('Student')
-                          ..child(widget.lectureBookRequest.receiverID)
-                              .child('LectureBookRequest')
-                              .child(widget.lectureBookRequest.id)
-                              .remove()
-                          ..child(widget.lectureBookRequest.ownerID)
-                              .child('LectureBookRequest')
-                              .child(widget.lectureBookRequest.id)
-                              .remove();
+                          ..child(widget.lectureBookRequest.receiverID).child('LectureBookRequest').child(widget.lectureBookRequest.id).remove()
+                          ..child(widget.lectureBookRequest.ownerID).child('LectureBookRequest').child(widget.lectureBookRequest.id).remove();
                       },
                       width: widget.width,
                     ),
@@ -168,18 +147,8 @@ class _LectureBookRequestTileForReceiverState
                                       onPressed: () {
                                         Navigator.pop(context);
                                         reference.child('Student')
-                                          ..child(widget.lectureBookRequest
-                                                  .receiverID)
-                                              .child('LectureBookRequest')
-                                              .child(
-                                                  widget.lectureBookRequest.id)
-                                              .remove()
-                                          ..child(widget
-                                                  .lectureBookRequest.ownerID)
-                                              .child('LectureBookRequest')
-                                              .child(
-                                                  widget.lectureBookRequest.id)
-                                              .remove();
+                                          ..child(widget.lectureBookRequest.receiverID).child('LectureBookRequest').child(widget.lectureBookRequest.id).remove()
+                                          ..child(widget.lectureBookRequest.ownerID).child('LectureBookRequest').child(widget.lectureBookRequest.id).remove();
                                       },
                                     )
                                   ],

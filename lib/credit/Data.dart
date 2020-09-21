@@ -27,20 +27,17 @@ var normal = CreditManager(LECTURE_TYPE, '그 외', 28);
 var culture_basic = CreditManager(LECTURE_FIELD, '학문의 기초', 34);
 var keyCulture = CreditManager(LECTURE_FIELD, '핵심교양', 9);
 var culture_world = CreditManager(LECTURE_FIELD, '학문의 세계(2개 영역 이상)', 6);
-var culture_world_sin20 =
-    CreditManager(LECTURE_FIELD, '학문의 세계(3개 영역 이상)', 12); //20학번 이후
+var culture_world_sin20 = CreditManager(LECTURE_FIELD, '학문의 세계(3개 영역 이상)', 12); //20학번 이후
 var culture_engineering = CreditManager(LECTURE_FIELD, '공대 사회/창의성', 6);
 var major_necessary = CreditManager(LECTURE_FIELD, '전공필수', 19);
 var major_optNec = CreditManager(LECTURE_FIELD, '전공선택필수', 9);
 var major_optional = CreditManager(LECTURE_FIELD, '전공선택', 40);
-var major_optOrNec =
-    CreditManager(LECTURE_FIELD, '전공선택, 전공선택필수', 3); //15학번 이전 복수/부전공을 위한 항목
+var major_optOrNec = CreditManager(LECTURE_FIELD, '전공선택, 전공선택필수', 3); //15학번 이전 복수/부전공을 위한 항목
 var major_other = CreditManager(LECTURE_FIELD, '공대 타학과개론', 3);
 
 //LectureGroup
 var thiExp = CreditManager(LECTURE_GROUP, '사고와 표현', 3);
-var foreign =
-    CreditManager(LECTURE_GROUP, '외국어 2개 교과목\n    (TEPS 900점 이하 영어 1과목 필수)', 4);
+var foreign = CreditManager(LECTURE_GROUP, '외국어 2개 교과목\n    (TEPS 900점 이하 영어 1과목 필수)', 4);
 var numAnaInf = CreditManager(LECTURE_GROUP, '수량적 분석과 추론', 12);
 var sciThiExp = CreditManager(LECTURE_GROUP, '과학적 사고와 실험', 12);
 var comInfApp = CreditManager(LECTURE_GROUP, '컴퓨터와 정보 활용', 3);
@@ -127,5 +124,4 @@ var creFree = CreditManager(FREE_LECTURE, null, null, 0, creativity, 0);
 var optFree = CreditManager(FREE_LECTURE, null, null, 0, major_optional, 0);
 var othFree = CreditManager(FREE_LECTURE, null, null, 0, major_other, 0);
 var norFree = CreditManager(FREE_LECTURE, null, null, 0, normal, 0);
-var majorOptOrNecFree =
-    CreditManager(FREE_LECTURE, null, null, 0, major_optOrNec, 0);
+var majorOptOrNecFree = CreditManager(FREE_LECTURE, null, null, 0, major_optOrNec, 0);

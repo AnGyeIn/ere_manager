@@ -110,8 +110,7 @@ class MainAdapter {
   void _tileFunc(int idx) {
     if (creditManagers[idx].viewSwitch)
       while (true) {
-        if (idx + 1 < getSize() &&
-            creditManagers[idx].code < creditManagers[idx + 1].code)
+        if (idx + 1 < getSize() && creditManagers[idx].code < creditManagers[idx + 1].code)
           _removeCreditManager(idx + 1);
         else {
           creditManagers[idx].viewSwitch = OFF;
@@ -119,8 +118,7 @@ class MainAdapter {
         }
       }
     else {
-      for (int k = 0, l = idx; k < creditManagers[idx].getSize(); k++, l++)
-        creditManagers.insert(l + 1, creditManagers[idx].underManagers[k]);
+      for (int k = 0, l = idx; k < creditManagers[idx].getSize(); k++, l++) creditManagers.insert(l + 1, creditManagers[idx].underManagers[k]);
       creditManagers[idx].viewSwitch = ON;
     }
   }

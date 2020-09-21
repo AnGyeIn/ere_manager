@@ -13,12 +13,7 @@ class FreeLectureTile extends StatefulWidget {
   final MainAdapter adapter;
   final double width;
 
-  FreeLectureTile(
-      {this.freeLecture,
-      this.adapter,
-      this.addFunc,
-      this.onPressed,
-      this.width});
+  FreeLectureTile({this.freeLecture, this.adapter, this.addFunc, this.onPressed, this.width});
 
   _FreeLectureTileState createState() => _FreeLectureTileState();
 }
@@ -38,10 +33,7 @@ class _FreeLectureTileState extends State<FreeLectureTile> {
           width: widget.width * 0.3,
           child: TextField(
             cursorColor: ERE_YELLOW,
-            decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: str.freeLectureNameHint,
-                hintStyle: TextStyle(color: Color(0x88e4b92a))),
+            decoration: InputDecoration(border: InputBorder.none, hintText: str.freeLectureNameHint, hintStyle: TextStyle(color: Color(0x88e4b92a))),
             style: TextStyle(color: ERE_YELLOW, fontSize: widget.width * 0.04),
             onChanged: (text) => addLecName = text,
           ),
@@ -51,10 +43,7 @@ class _FreeLectureTileState extends State<FreeLectureTile> {
           child: TextField(
             cursorColor: ERE_YELLOW,
             keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: str.freeLectureCreditsHint,
-                hintStyle: TextStyle(color: Color(0x88e4b92a))),
+            decoration: InputDecoration(border: InputBorder.none, hintText: str.freeLectureCreditsHint, hintStyle: TextStyle(color: Color(0x88e4b92a))),
             style: TextStyle(color: ERE_YELLOW, fontSize: widget.width * 0.04),
             onChanged: (text) => addLecCredit = int.parse(text),
           ),
@@ -67,10 +56,8 @@ class _FreeLectureTileState extends State<FreeLectureTile> {
               text: str.add,
               onPressed: () {
                 if (addLecCredit != null) {
-                  final addLecture = CreditManager(ADDED_LECTURE, addLecName,
-                      null, addLecCredit, widget.freeLecture.upperManager);
-                  widget.freeLecture.upperManager
-                      .insertUnderManager(widget.freeLecture.num, addLecture);
+                  final addLecture = CreditManager(ADDED_LECTURE, addLecName, null, addLecCredit, widget.freeLecture.upperManager);
+                  widget.freeLecture.upperManager.insertUnderManager(widget.freeLecture.num, addLecture);
                   widget.freeLecture.incNum();
                   EREToast(str.addAddedLectureSuccess, context, false);
                   widget.addFunc(addLecture);

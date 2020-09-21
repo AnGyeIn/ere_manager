@@ -11,8 +11,7 @@ class BorrowerTile extends StatefulWidget {
   double height;
   Function refresh;
 
-  BorrowerTile(
-      {this.index, this.rental, this.width, this.height, this.refresh});
+  BorrowerTile({this.index, this.rental, this.width, this.height, this.refresh});
 
   _BorrowerTileState createState() => _BorrowerTileState();
 }
@@ -84,22 +83,16 @@ class _BorrowerTileState extends State<BorrowerTile> {
             ),
             onPressed: isOverdue
                 ? () async {
-                    final pNum = (await reference
-                            .child('Student')
-                            .child(widget.rental.borrowerID)
-                            .child('pNum')
-                            .once())
-                        .value;
+                    final pNum = (await reference.child('Student').child(widget.rental.borrowerID).child('pNum').once()).value;
 
                     showDialog(
                         context: context,
                         builder: (_) => AlertDialog(
-                              content: Text(
-                                  '${str.borrower} : ${widget.rental.borrowerName}\n'
-                                          '${str.phoneNumber} : $pNum\n\n' +
-                                      (str.lang == '한국어'
-                                          ? '반납기한이 되면 기본적으로 대출자에게 푸시알림이 전달됩니다. 반납기한을 지나치게 초과한 경우 관리자 재량으로 문자로 안내를 보낼 수 있습니다.'
-                                          : 'Basically, the borrowers are notified by push notification at the due date. The administrator can send a message to the borrower whose rental is too overdue by discretion.')),
+                              content: Text('${str.borrower} : ${widget.rental.borrowerName}\n'
+                                      '${str.phoneNumber} : $pNum\n\n' +
+                                  (str.lang == '한국어'
+                                      ? '반납기한이 되면 기본적으로 대출자에게 푸시알림이 전달됩니다. 반납기한을 지나치게 초과한 경우 관리자 재량으로 문자로 안내를 보낼 수 있습니다.'
+                                      : 'Basically, the borrowers are notified by push notification at the due date. The administrator can send a message to the borrower whose rental is too overdue by discretion.')),
                               actions: [
                                 FlatButton(
                                   child: Text(str.message),

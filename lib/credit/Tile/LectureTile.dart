@@ -31,8 +31,7 @@ class _LectureTileState extends State<LectureTile> {
             value: widget.lecture.credits != 0,
             onChanged: (value) {
               setState(() {
-                widget.lecture.credits =
-                    widget.lecture.credit - widget.lecture.credits;
+                widget.lecture.credits = widget.lecture.credit - widget.lecture.credits;
               });
             },
             checkColor: ERE_YELLOW,

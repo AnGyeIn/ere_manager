@@ -14,12 +14,6 @@ class Rental {
         borrowerName = json['borrowerName'],
         dueDate = DateTime.parse(json['dueDate']);
 
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'bookID': bookID,
-        'bookTitle': bookTitle,
-        'borrowerID': borrowerID,
-        'borrowerName': borrowerName,
-        'dueDate': dueDate.toString()
-      };
+  Map<String, dynamic> toJson() =>
+      {'id': id, 'bookID': bookID, 'bookTitle': bookTitle, 'borrowerID': borrowerID, 'borrowerName': borrowerName, 'dueDate': dueDate.toString()};
 }

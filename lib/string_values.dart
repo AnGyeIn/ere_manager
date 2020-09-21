@@ -22,8 +22,7 @@ class Str {
       'cancel': '취소',
       'signOut': '회원탈퇴',
       'signOutInfo': '회원탈퇴 안내',
-      'signOutDetail':
-          '탈퇴할 경우 회원가입 시 제공해주신 개인정보와 함께 학점 체크리스트 백업 데이터, 등록한 교재 정보, 교재 대여 신청 내역 등이 삭제됩니다. 탈퇴는 에자공 도서관 미납 도서가 없는 경우에만 가능합니다. 탈퇴를 진행하시겠습니까?',
+      'signOutDetail': '탈퇴할 경우 회원가입 시 제공해주신 개인정보와 함께 학점 체크리스트 백업 데이터, 등록한 교재 정보, 교재 대여 신청 내역 등이 삭제됩니다. 탈퇴는 에자공 도서관 미납 도서가 없는 경우에만 가능합니다. 탈퇴를 진행하시겠습니까?',
       'signOutSuccess': '탈퇴처리가 완료되었습니다.',
       'signOutFail': '회원탈퇴 실패',
       'sNumMatchError': '학번을 형식에 맞게 정확히 입력해주세요.',
@@ -47,12 +46,10 @@ class Str {
       'duringDownload': '백업 데이터 내려받는 중',
       'life': '생명존중(자살예방)교육 이수 (16학번 이후 필수)',
       'changeSNumInfo': '학번 수정 안내',
-      'changeSNumDetail':
-          '학번 설정을 수정할 경우 과목들을 체크 및 추가해 놓은 데이터가 초기화됩니다.\n그래도 괜찮으시면 [확인] 버튼을 눌러주세요.',
+      'changeSNumDetail': '학번 설정을 수정할 경우 과목들을 체크 및 추가해 놓은 데이터가 초기화됩니다.\n그래도 괜찮으시면 [확인] 버튼을 눌러주세요.',
       'ok': '확인',
       'changeMajorInfo': '전공과정 변경 안내',
-      'changeMajorDetail':
-          '전공과정 변경 시 과목들을 체크 및 추가해 놓은 데이터가 초기화됩니다.\n전공과정 변경 후 다시 설정해 주세요.',
+      'changeMajorDetail': '전공과정 변경 시 과목들을 체크 및 추가해 놓은 데이터가 초기화됩니다.\n전공과정 변경 후 다시 설정해 주세요.',
       'saveSuccess': '저장되었습니다.',
       'saveFail': '저장 실패',
       'info': '도움말',
@@ -99,14 +96,12 @@ class Str {
       'lectureBookRegisterSuccess': '교재가 등록되었습니다.',
       'accepted': '승인 완료',
       'accept': '승인',
-      'lectureBookRequestAcceptDetail':
-          '승인하면 신청자에게 연락처가 전달되며, 동일 교재에 대한 다른 신청들은 반려 처리됩니다. 계속하시겠습니까?',
+      'lectureBookRequestAcceptDetail': '승인하면 신청자에게 연락처가 전달되며, 동일 교재에 대한 다른 신청들은 반려 처리됩니다. 계속하시겠습니까?',
       'acceptSuccess': '승인되었습니다.',
       'rejected': '반려',
       'message': '문자 보내기',
       'rejected2': '반려 대기',
-      'rejectedDetail':
-          '동일 교재에 대해 다른 신청자가 승인되어 반려된 신청입니다. [확인]을 누르면 목록에서 삭제됩니다.',
+      'rejectedDetail': '동일 교재에 대해 다른 신청자가 승인되어 반려된 신청입니다. [확인]을 누르면 목록에서 삭제됩니다.',
       'request': '신청',
       'duplicateRequestError': '이미 신청한 교재입니다.',
       'lectureBookDeactiveError': '신청이 비활성화된 교재입니다.',
@@ -189,11 +184,9 @@ class Str {
       'duringUpload': 'Uploading backup',
       'downloadBackup': 'Download backup',
       'duringDownload': 'Downloading backup',
-      'life':
-          'Respect for life(suicide prevention) education\n(mandatory for students who entered since then 2016.',
+      'life': 'Respect for life(suicide prevention) education\n(mandatory for students who entered since then 2016.',
       'changeSNumInfo': 'Change student ID Info',
-      'changeSNumDetail':
-          'If you change your student ID, all the data of credits checklist you have made will be reset.\nIf it is OK, press [OK].',
+      'changeSNumDetail': 'If you change your student ID, all the data of credits checklist you have made will be reset.\nIf it is OK, press [OK].',
       'ok': 'OK',
       'changeMajorInfo': 'Change major course Info',
       'changeMajorDetail':
@@ -208,8 +201,7 @@ class Str {
       'studentIDHint': "ex) Type in '16' for '2016'",
       'studentIDError': 'Please type in a integer with 2 digits.',
       'major': 'Major',
-      'foreignLectureRegulation':
-          'More than 3 courses with foreign language including at least 1 major course(except College English)',
+      'foreignLectureRegulation': 'More than 3 courses with foreign language including at least 1 major course(except College English)',
       'culture': 'General',
       'forLecNameHint': 'Name of course',
       'add': 'Add',
@@ -223,8 +215,7 @@ class Str {
       'creditsMissError': 'Please type in the credits of the course.',
       'edit2': 'Edit',
       'credits': 'credits',
-      'lectureBookRequestChange':
-          'Your textbook loan request has been modified.',
+      'lectureBookRequestChange': 'Your textbook loan request has been modified.',
       'lectureBookList': 'Textbook list',
       'myPage': 'My page',
       'number': 'No.',
@@ -237,12 +228,10 @@ class Str {
       'receiver': 'Receiver',
       'noLectureBookRequestToMe': 'There is no textbook loan request to you.',
       'lectureBookRequestFromMe': 'Textbook loan requests from you',
-      'noLectureBookRequestFromMe':
-          'There is no textbook loan request from you.',
+      'noLectureBookRequestFromMe': 'There is no textbook loan request from you.',
       'lectureBookRegister': 'Register textbook',
       'lectureBookOptionHint': "'Rental' or 'Transfer'",
-      'barcodeScanError':
-          'This textbook has not registered in National Library of Korea. Please fill the form by yourself.',
+      'barcodeScanError': 'This textbook has not registered in National Library of Korea. Please fill the form by yourself.',
       'register': 'Register',
       'blankError': 'Please fill in all the blanks.',
       'lectureBookRegisterSuccess': 'Succeeded to register the textbook.',
@@ -262,8 +251,7 @@ class Str {
       'login': 'Log in/Sign in',
       'loginFail': 'Failed to log in: Please try again.',
       'agreementInfo': 'Consent to personal information collection',
-      'agreementCheck':
-          'I verified the above statements and agree to provide personal information.',
+      'agreementCheck': 'I verified the above statements and agree to provide personal information.',
       'continue': 'Continue',
       'ERELibrary': 'ERE Library',
       'loginEmail': 'Login Email',
@@ -406,8 +394,7 @@ class Str {
 
   String get major => values[lang]['major'];
 
-  String get foreignLectureRegulation =>
-      values[lang]['foreignLectureRegulation'];
+  String get foreignLectureRegulation => values[lang]['foreignLectureRegulation'];
 
   String get culture => values[lang]['culture'];
 
@@ -421,8 +408,7 @@ class Str {
 
   String get addForLecFail => values[lang]['addForLecFail'];
 
-  String get deleteAddedLectureSuccess =>
-      values[lang]['deleteAddedLectureSuccess'];
+  String get deleteAddedLectureSuccess => values[lang]['deleteAddedLectureSuccess'];
 
   String get freeLectureNameHint => values[lang]['freeLectureNameHint'];
 
@@ -436,8 +422,7 @@ class Str {
 
   String get credits => values[lang]['credits'];
 
-  String get lectureBookRequestChange =>
-      values[lang]['lectureBookRequestChange'];
+  String get lectureBookRequestChange => values[lang]['lectureBookRequestChange'];
 
   String get lectureBookList => values[lang]['lectureBookList'];
 
@@ -459,14 +444,11 @@ class Str {
 
   String get receiver => values[lang]['receiver'];
 
-  String get noLectureBookRequestToMe =>
-      values[lang]['noLectureBookRequestToMe'];
+  String get noLectureBookRequestToMe => values[lang]['noLectureBookRequestToMe'];
 
-  String get lectureBookRequestFromMe =>
-      values[lang]['lectureBookRequestFromMe'];
+  String get lectureBookRequestFromMe => values[lang]['lectureBookRequestFromMe'];
 
-  String get noLectureBookRequestFromMe =>
-      values[lang]['noLectureBookRequestFromMe'];
+  String get noLectureBookRequestFromMe => values[lang]['noLectureBookRequestFromMe'];
 
   String get lectureBookRegister => values[lang]['lectureBookRegister'];
 
@@ -478,15 +460,13 @@ class Str {
 
   String get blankError => values[lang]['blankError'];
 
-  String get lectureBookRegisterSuccess =>
-      values[lang]['lectureBookRegisterSuccess'];
+  String get lectureBookRegisterSuccess => values[lang]['lectureBookRegisterSuccess'];
 
   String get accepted => values[lang]['accepted'];
 
   String get accept => values[lang]['accept'];
 
-  String get lectureBookRequestAcceptDetail =>
-      values[lang]['lectureBookRequestAcceptDetail'];
+  String get lectureBookRequestAcceptDetail => values[lang]['lectureBookRequestAcceptDetail'];
 
   String get acceptSuccess => values[lang]['acceptSuccess'];
 
@@ -502,8 +482,7 @@ class Str {
 
   String get duplicateRequestError => values[lang]['duplicateRequestError'];
 
-  String get lectureBookDeactiveError =>
-      values[lang]['lectureBookDeactiveError'];
+  String get lectureBookDeactiveError => values[lang]['lectureBookDeactiveError'];
 
   String get login => values[lang]['login'];
 
@@ -577,8 +556,7 @@ class Str {
 
   String get cancelRecruitAdmin => values[lang]['cancelRecruitAdmin'];
 
-  String get approveERELibraryAdminInfo =>
-      values[lang]['approveERELibraryAdminInfo'];
+  String get approveERELibraryAdminInfo => values[lang]['approveERELibraryAdminInfo'];
 
   String translate(String text) {
     if (lang != '한국어')

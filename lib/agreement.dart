@@ -68,8 +68,7 @@ class _AgreementActivityState extends State<AgreementActivity> {
                 Expanded(
                   child: Text(
                     str.agreementCheck,
-                    style:
-                        TextStyle(color: ERE_YELLOW, fontSize: width * 0.037),
+                    style: TextStyle(color: ERE_YELLOW, fontSize: width * 0.037),
                   ),
                 )
               ],
@@ -83,11 +82,7 @@ class _AgreementActivityState extends State<AgreementActivity> {
                       ? () async {
                           final prefs = await SharedPreferences.getInstance();
                           prefs.setBool('doesAgree', doesAgree);
-                          Navigator.push<bool>(
-                                  context,
-                                  MaterialPageRoute<bool>(
-                                      builder: (context) => LoginActivity()))
-                              .then((result) {
+                          Navigator.push<bool>(context, MaterialPageRoute<bool>(builder: (context) => LoginActivity())).then((result) {
                             Navigator.pop(context, result);
                           });
                         }

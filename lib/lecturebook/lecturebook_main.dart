@@ -52,12 +52,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
     user = FirebaseAuth.instance.currentUser;
     userID = user.uid;
 
-    reference
-        .child('Student')
-        .child(userID)
-        .child('name')
-        .once()
-        .then((snapshot) {
+    reference.child('Student').child(userID).child('name').once().then((snapshot) {
       userName = snapshot.value ?? user.displayName;
     });
 
@@ -75,20 +70,14 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
         },
         onValue: (snapshot) {
           setState(() {
-            lecturebooks = rawLecturebooks
-                .map<LectureBook>(
-                    (str) => LectureBook.fromJson(jsonDecode(str)))
-                .toList();
+            lecturebooks = rawLecturebooks.map<LectureBook>((str) => LectureBook.fromJson(jsonDecode(str))).toList();
             lecturebooks.sort((a, b) => a.title.compareTo(b.title));
             isWaiting = false;
           });
         });
 
     requestList = FirebaseList(
-        query: reference
-            .child('Student')
-            .child(userID)
-            .child('LectureBookRequest'),
+        query: reference.child('Student').child(userID).child('LectureBookRequest'),
         onChildAdded: (idx, snapshot) {
           rawRequests.insert(idx, snapshot.value);
         },
@@ -103,42 +92,28 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
           setState(() {
             requestListForOwner.clear();
             requestListForReceiver.clear();
-            requests = rawRequests
-                .map<LectureBookRequest>(
-                    (str) => LectureBookRequest.fromJson(jsonDecode(str)))
-                .toList();
+            requests = rawRequests.map<LectureBookRequest>((str) => LectureBookRequest.fromJson(jsonDecode(str))).toList();
             requests.sort((a, b) => a.requestTime.compareTo(b.requestTime));
             for (var request in requests) {
               if (request.ownerID == userID) requestListForOwner.add(request);
-              if (request.receiverID == userID)
-                requestListForReceiver.add(request);
+              if (request.receiverID == userID) requestListForReceiver.add(request);
             }
           });
         });
 
     reference.child('Student').child(userID).child('lang').once().then((snapshot) {
-      if (snapshot.value == null || snapshot.value != str.lang)
-        reference.child('Student').child(userID).child('lang').set(str.lang);
+      if (snapshot.value == null || snapshot.value != str.lang) reference.child('Student').child(userID).child('lang').set(str.lang);
     });
 
     final firebaseMessaging = FirebaseMessaging();
-    firebaseMessaging.configure(
-        onMessage: (Map<String, dynamic> message) async {
-      EREToast(
-          '${message['notification']['title']}: ${message['notification']['body']}',
-          context,
-          true);
+    firebaseMessaging.configure(onMessage: (Map<String, dynamic> message) async {
+      EREToast('${message['notification']['title']}: ${message['notification']['body']}', context, true);
     });
-    firebaseMessaging.requestNotificationPermissions(
-        const IosNotificationSettings(
-            sound: true, badge: true, alert: true, provisional: true));
+    firebaseMessaging.requestNotificationPermissions(const IosNotificationSettings(sound: true, badge: true, alert: true, provisional: true));
     firebaseMessaging.getToken().then((token) async {
       assert(token != null);
 
-      if (token !=
-          (await reference.child('Student').child(userID).child('NT').once())
-              .value)
-        reference.child('Student').child(userID).child('NT').set(token);
+      if (token != (await reference.child('Student').child(userID).child('NT').once()).value) reference.child('Student').child(userID).child('NT').set(token);
     });
   }
 
@@ -201,8 +176,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                         height: tile_height,
                         child: Text(
                           str.number,
-                          style:
-                              TextStyle(color: ERE_YELLOW, fontSize: fontsize),
+                          style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                         ),
                       ),
                       Container(
@@ -212,8 +186,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                         height: tile_height,
                         child: Text(
                           str.lectureBookTitle,
-                          style:
-                              TextStyle(color: ERE_YELLOW, fontSize: fontsize),
+                          style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                         ),
                       ),
                       Container(
@@ -223,8 +196,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                         height: tile_height,
                         child: Text(
                           str.author,
-                          style:
-                              TextStyle(color: ERE_YELLOW, fontSize: fontsize),
+                          style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                         ),
                       ),
                       Container(
@@ -234,8 +206,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                         height: tile_height,
                         child: Text(
                           str.lecture,
-                          style:
-                              TextStyle(color: ERE_YELLOW, fontSize: fontsize),
+                          style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                         ),
                       ),
                       Container(
@@ -245,8 +216,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                         height: tile_height,
                         child: Text(
                           str.owner,
-                          style:
-                              TextStyle(color: ERE_YELLOW, fontSize: fontsize),
+                          style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -256,10 +226,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                         height: tile_height,
                         child: Text(
                           str.option,
-                          style: TextStyle(
-                              color: ERE_YELLOW,
-                              fontSize:
-                                  fontsize * (str.lang == '한국어' ? 1 : 0.9)),
+                          style: TextStyle(color: ERE_YELLOW, fontSize: fontsize * (str.lang == '한국어' ? 1 : 0.9)),
                         ),
                       )
                     ],
@@ -271,8 +238,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                         child: Align(
                           alignment: Alignment.center,
                           child: CircularProgressIndicator(
-                            valueColor:
-                                AlwaysStoppedAnimation<Color>(ERE_YELLOW),
+                            valueColor: AlwaysStoppedAnimation<Color>(ERE_YELLOW),
                           ),
                         ),
                       )
@@ -303,8 +269,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                           color: ERE_BLACK,
                           child: Text(
                             str.lectureBookRequestToMe,
-                            style: TextStyle(
-                                color: ERE_YELLOW, fontSize: fontsize),
+                            style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                           ),
                         ),
                         requestListForOwner.length > 0
@@ -317,9 +282,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                                     height: tile_height,
                                     child: Text(
                                       str.number,
-                                      style: TextStyle(
-                                          color: ERE_YELLOW,
-                                          fontSize: fontsize),
+                                      style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                                     ),
                                   ),
                                   Container(
@@ -329,9 +292,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                                     height: tile_height,
                                     child: Text(
                                       str.lectureBookTitle,
-                                      style: TextStyle(
-                                          color: ERE_YELLOW,
-                                          fontSize: fontsize),
+                                      style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                                     ),
                                   ),
                                   Container(
@@ -340,9 +301,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                                     height: tile_height,
                                     child: Text(
                                       str.receiver,
-                                      style: TextStyle(
-                                          color: ERE_YELLOW,
-                                          fontSize: fontsize),
+                                      style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                                     ),
                                   ),
                                   Container(
@@ -351,9 +310,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                                     height: tile_height,
                                     child: Text(
                                       str.option,
-                                      style: TextStyle(
-                                          color: ERE_YELLOW,
-                                          fontSize: fontsize),
+                                      style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                                     ),
                                   )
                                 ],
@@ -363,11 +320,9 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                             ? Expanded(
                                 child: ListView.builder(
                                   itemCount: requestListForOwner.length,
-                                  itemBuilder: (context, index) =>
-                                      LectureBookRequestTileForOwner(
+                                  itemBuilder: (context, index) => LectureBookRequestTileForOwner(
                                     index: index + 1,
-                                    lectureBookRequest:
-                                        requestListForOwner[index],
+                                    lectureBookRequest: requestListForOwner[index],
                                     requestListForOwner: requestListForOwner,
                                     width: width,
                                     height: height,
@@ -383,8 +338,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                                 height: tile_height,
                                 child: Text(
                                   str.noLectureBookRequestToMe,
-                                  style: TextStyle(
-                                      color: ERE_YELLOW, fontSize: fontsize),
+                                  style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                                 ),
                               ),
                         Container(
@@ -394,8 +348,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                           color: ERE_BLACK,
                           child: Text(
                             str.lectureBookRequestFromMe,
-                            style: TextStyle(
-                                color: ERE_YELLOW, fontSize: fontsize),
+                            style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                           ),
                         ),
                         requestListForReceiver.length > 0
@@ -408,9 +361,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                                     height: tile_height,
                                     child: Text(
                                       str.number,
-                                      style: TextStyle(
-                                          color: ERE_YELLOW,
-                                          fontSize: fontsize),
+                                      style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                                     ),
                                   ),
                                   Container(
@@ -420,9 +371,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                                     height: tile_height,
                                     child: Text(
                                       str.lectureBookTitle,
-                                      style: TextStyle(
-                                          color: ERE_YELLOW,
-                                          fontSize: fontsize),
+                                      style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                                     ),
                                   ),
                                   Container(
@@ -432,9 +381,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                                     height: tile_height,
                                     child: Text(
                                       str.owner,
-                                      style: TextStyle(
-                                          color: ERE_YELLOW,
-                                          fontSize: fontsize),
+                                      style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                                     ),
                                   ),
                                   Container(
@@ -443,9 +390,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                                     height: tile_height,
                                     child: Text(
                                       str.option,
-                                      style: TextStyle(
-                                          color: ERE_YELLOW,
-                                          fontSize: fontsize),
+                                      style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                                     ),
                                   )
                                 ],
@@ -455,11 +400,9 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                             ? Expanded(
                                 child: ListView.builder(
                                   itemCount: requestListForReceiver.length,
-                                  itemBuilder: (context, index) =>
-                                      LectureBookRequestTileForReceiver(
+                                  itemBuilder: (context, index) => LectureBookRequestTileForReceiver(
                                     index: index + 1,
-                                    lectureBookRequest:
-                                        requestListForReceiver[index],
+                                    lectureBookRequest: requestListForReceiver[index],
                                     width: width,
                                     height: height,
                                     refresh: () {
@@ -474,8 +417,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                                 height: tile_height,
                                 child: Text(
                                   str.noLectureBookRequestFromMe,
-                                  style: TextStyle(
-                                      color: ERE_YELLOW, fontSize: fontsize),
+                                  style: TextStyle(color: ERE_YELLOW, fontSize: fontsize),
                                 ),
                               )
                       ],
@@ -579,8 +521,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                         alignment: Alignment.center,
                         width: width * 0.49,
                         child: TextField(
-                          decoration: InputDecoration(
-                              hintText: str.lectureBookOptionHint),
+                          decoration: InputDecoration(hintText: str.lectureBookOptionHint),
                           onChanged: (text) => newOption = text,
                         ),
                       )
@@ -594,8 +535,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                   onPressed: () async {
                     Navigator.pop(context);
 
-                    final isbn = await FlutterBarcodeScanner.scanBarcode(
-                        '#ffe4b92a', str.cancel, true, ScanMode.BARCODE);
+                    final isbn = await FlutterBarcodeScanner.scanBarcode('#ffe4b92a', str.cancel, true, ScanMode.BARCODE);
 
                     if (isbn == '-1') {
                       _registerLectureBook(context, width, height);
@@ -617,8 +557,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                       if (newAuthor.contains(':')) {
                         final colonIdx = newAuthor.indexOf(':');
                         final semicolonIdx = newAuthor.indexOf(';');
-                        newAuthor =
-                            newAuthor.substring(colonIdx + 2, semicolonIdx - 1);
+                        newAuthor = newAuthor.substring(colonIdx + 2, semicolonIdx - 1);
                       } else if (newAuthor.contains(';')) {
                         final semicolonIdx2 = newAuthor.indexOf(';');
                         newAuthor = newAuthor.substring(22, semicolonIdx2 - 1);
@@ -636,43 +575,19 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                 FlatButton(
                   child: Text(str.register),
                   onPressed: () async {
-                    if (newTitle.isEmpty ||
-                        newAuthor.isEmpty ||
-                        newLecture.isEmpty ||
-                        newOption.isEmpty)
+                    if (newTitle.isEmpty || newAuthor.isEmpty || newLecture.isEmpty || newOption.isEmpty)
                       EREToast(str.blankError, context, false);
                     else {
                       Navigator.pop(context);
 
-                      final id = reference
-                          .child('lecturebook')
-                          .child('LectureBook')
-                          .push()
-                          .key;
+                      final id = reference.child('lecturebook').child('LectureBook').push().key;
 
-                      reference
-                          .root()
-                          .child('Student')
-                          .child(user.uid)
-                          .child('lecturebookIDs')
-                          .once()
-                          .then((snapshot) {
-                        final num =
-                            (snapshot.value as List<dynamic> ?? []).length;
-                        reference
-                            .root()
-                            .child('Student')
-                            .child(user.uid)
-                            .child('lecturebookIDs')
-                            .child('$num')
-                            .set(id);
+                      reference.root().child('Student').child(user.uid).child('lecturebookIDs').once().then((snapshot) {
+                        final num = (snapshot.value as List<dynamic> ?? []).length;
+                        reference.root().child('Student').child(user.uid).child('lecturebookIDs').child('$num').set(id);
                       });
 
-                      final registerTransaction = await reference
-                          .child('lecturebook')
-                          .child('LectureBook')
-                          .child(id)
-                          .runTransaction((mutableData) async {
+                      final registerTransaction = await reference.child('lecturebook').child('LectureBook').child(id).runTransaction((mutableData) async {
                         mutableData.value = jsonEncode({
                           'id': id,
                           'title': newTitle,
@@ -686,9 +601,7 @@ class _LectureBookActivityState extends State<LectureBookActivity> {
                         return mutableData;
                       });
 
-                      if (registerTransaction.committed)
-                        EREToast(
-                            str.lectureBookRegisterSuccess, context, false);
+                      if (registerTransaction.committed) EREToast(str.lectureBookRegisterSuccess, context, false);
                     }
                   },
                 ),

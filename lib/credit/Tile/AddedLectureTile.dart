@@ -11,8 +11,7 @@ class AddedLectureTile extends StatefulWidget {
   final double width;
   final double height;
 
-  AddedLectureTile(
-      {this.addedLecture, this.adapter, this.delFunc, this.width, this.height});
+  AddedLectureTile({this.addedLecture, this.adapter, this.delFunc, this.width, this.height});
 
   _AddedLectureTileState createState() => _AddedLectureTileState();
 }
@@ -29,16 +28,14 @@ class _AddedLectureTileState extends State<AddedLectureTile> {
             alignment: Alignment.centerLeft,
             child: Text(
               '          ${str.translate(widget.addedLecture.name)}(${widget.addedLecture.credit}${str.lang == '한국어' ? '학점' : ''})',
-              style:
-                  TextStyle(color: ERE_YELLOW, fontSize: widget.width * 0.04),
+              style: TextStyle(color: ERE_YELLOW, fontSize: widget.width * 0.04),
             ),
           ),
           Checkbox(
             value: widget.addedLecture.credits != 0,
             onChanged: (value) {
               setState(() {
-                widget.addedLecture.credits =
-                    widget.addedLecture.credit - widget.addedLecture.credits;
+                widget.addedLecture.credits = widget.addedLecture.credit - widget.addedLecture.credits;
               });
             },
             checkColor: ERE_YELLOW,

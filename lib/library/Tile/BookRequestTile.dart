@@ -9,12 +9,7 @@ class BookRequestTile extends StatefulWidget {
   double height;
   Function refresh;
 
-  BookRequestTile(
-      {this.index,
-      this.bookRequest,
-      this.width,
-      this.height,
-      this.refresh});
+  BookRequestTile({this.index, this.bookRequest, this.width, this.height, this.refresh});
 
   _BookRequestTileState createState() => _BookRequestTileState();
 }

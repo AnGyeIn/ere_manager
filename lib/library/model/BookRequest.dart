@@ -14,11 +14,5 @@ class BookRequest {
         requesterName = json['requesterName'],
         isChecked = false;
 
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'title': title,
-        'author': author,
-        'requesterID': requesterID,
-        'requesterName': requesterName
-      };
+  Map<String, dynamic> toJson() => {'id': id, 'title': title, 'author': author, 'requesterID': requesterID, 'requesterName': requesterName};
 }

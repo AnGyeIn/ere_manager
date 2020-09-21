@@ -27,9 +27,7 @@ class _StudentNumActivityState extends State<StudentNumActivity> {
                   child: Center(
                     child: Text(
                       '${str.studentID} : ',
-                      style: TextStyle(
-                          color: ERE_YELLOW,
-                          fontSize: width * (str.lang == '한국어' ? 0.043 : 0.04)),
+                      style: TextStyle(color: ERE_YELLOW, fontSize: width * (str.lang == '한국어' ? 0.043 : 0.04)),
                     ),
                   ),
                 ),
@@ -45,8 +43,7 @@ class _StudentNumActivityState extends State<StudentNumActivity> {
                           color: Color(0x88e4b92a),
                           fontSize: width * (str.lang == '한국어' ? 0.043 : 0.04),
                         )),
-                    style:
-                        TextStyle(color: ERE_YELLOW, fontSize: width * 0.043),
+                    style: TextStyle(color: ERE_YELLOW, fontSize: width * 0.043),
                     onChanged: (text) => snStr = text,
                   ),
                 ),

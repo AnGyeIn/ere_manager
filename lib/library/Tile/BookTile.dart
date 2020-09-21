@@ -16,15 +16,7 @@ class BookTile extends StatefulWidget {
   Function refresh;
   bool isAdmin;
 
-  BookTile(
-      {this.book,
-      this.width,
-      this.height,
-      this.index,
-      this.userID,
-      this.userName,
-      this.refresh,
-      this.isAdmin});
+  BookTile({this.book, this.width, this.height, this.index, this.userID, this.userName, this.refresh, this.isAdmin});
 
   _BookTileState createState() => _BookTileState();
 }
@@ -91,9 +83,7 @@ class _BookTileState extends State<BookTile> {
                             Padding(padding: EdgeInsets.all(tile_padding)),
                             Text('${str.author} : ${widget.book.author}'),
                             Padding(padding: EdgeInsets.all(tile_padding)),
-                            Text(str.lang == '한국어'
-                                ? '[대출] 버튼을 누르고 도서의 바코드를 스캔해주세요.'
-                                : 'Press [Borrow] and scan the barcode of the book.')
+                            Text(str.lang == '한국어' ? '[대출] 버튼을 누르고 도서의 바코드를 스캔해주세요.' : 'Press [Borrow] and scan the barcode of the book.')
                           ],
                         ),
                         actions: [
@@ -106,73 +96,36 @@ class _BookTileState extends State<BookTile> {
                                   onPressed: () {
                                     if (widget.book.isAvailable) {
                                       Navigator.pop(context);
-                                      reference
-                                          .child('library')
-                                          .child('Book')
-                                          .child(widget.book.id)
-                                          .remove()
-                                          .whenComplete(() {
+                                      reference.child('library').child('Book').child(widget.book.id).remove().whenComplete(() {
                                         widget.refresh();
                                       });
                                     } else
-                                      EREToast(
-                                          str.lang == '한국어'
-                                              ? '도서가 반납된 상태일 때만 삭제할 수 있습니다.'
-                                              : 'You can remove a book only when the book is returned.',
-                                          context,
-                                          true);
+                                      EREToast(str.lang == '한국어' ? '도서가 반납된 상태일 때만 삭제할 수 있습니다.' : 'You can remove a book only when the book is returned.',
+                                          context, true);
                                   },
                                 )
                               : Container(),
                           FlatButton(
                             child: Text(str.borrow),
                             onPressed: () async {
-                              final readIsbn =
-                                  await FlutterBarcodeScanner.scanBarcode(
-                                      '#ffe4b92a',
-                                      str.cancel,
-                                      true,
-                                      ScanMode.BARCODE);
+                              final readIsbn = await FlutterBarcodeScanner.scanBarcode('#ffe4b92a', str.cancel, true, ScanMode.BARCODE);
                               if (readIsbn == widget.book.isbn) {
                                 Navigator.pop(context);
                                 widget.book.isAvailable = false;
-                                final borrowTransaction = await reference
-                                    .child('library')
-                                    .child('Book')
-                                    .child(widget.book.id)
-                                    .runTransaction((mutableData) async {
-                                  mutableData.value =
-                                      jsonEncode(widget.book.toJson());
+                                final borrowTransaction =
+                                    await reference.child('library').child('Book').child(widget.book.id).runTransaction((mutableData) async {
+                                  mutableData.value = jsonEncode(widget.book.toJson());
                                   return mutableData;
                                 });
-                                final id = reference
-                                    .child('library')
-                                    .child('Rental')
-                                    .push()
-                                    .key;
+                                final id = reference.child('library').child('Rental').push().key;
                                 DateTime dueDate = DateTime.now();
                                 dueDate = dueDate.add(Duration(days: 14));
 
-                                final personalNum = ((await reference
-                                                .child('Student')
-                                                .child(widget.userID)
-                                                .child('rentalIDs')
-                                                .once())
-                                            .value as List<dynamic> ??
-                                        [])
-                                    .length;
-                                reference
-                                    .child('Student')
-                                    .child(widget.userID)
-                                    .child('rentalIDs')
-                                    .child('$personalNum')
-                                    .set(id);
+                                final personalNum =
+                                    ((await reference.child('Student').child(widget.userID).child('rentalIDs').once()).value as List<dynamic> ?? []).length;
+                                reference.child('Student').child(widget.userID).child('rentalIDs').child('$personalNum').set(id);
 
-                                final addRentalTransaction = await reference
-                                    .child('library')
-                                    .child('Rental')
-                                    .child(id)
-                                    .runTransaction((mutableData) async {
+                                final addRentalTransaction = await reference.child('library').child('Rental').child(id).runTransaction((mutableData) async {
                                   mutableData.value = jsonEncode({
                                     'id': id,
                                     'bookID': widget.book.id,
@@ -185,12 +138,7 @@ class _BookTileState extends State<BookTile> {
                                 });
 
                                 final addPersonalRentalTransaction =
-                                    await reference
-                                        .child('Student')
-                                        .child(widget.userID)
-                                        .child('Rental')
-                                        .child(id)
-                                        .runTransaction((mutableData) async {
+                                    await reference.child('Student').child(widget.userID).child('Rental').child(id).runTransaction((mutableData) async {
                                   mutableData.value = jsonEncode({
                                     'id': id,
                                     'bookID': widget.book.id,
@@ -202,37 +150,15 @@ class _BookTileState extends State<BookTile> {
                                   return mutableData;
                                 });
 
-                                final num = ((await reference
-                                                .child('library')
-                                                .child('rentalIDs')
-                                                .once())
-                                            .value as List<dynamic> ??
-                                        [])
-                                    .length;
-                                reference
-                                    .child('library')
-                                    .child('rentalIDs')
-                                    .child('$num')
-                                    .set(id);
+                                final num = ((await reference.child('library').child('rentalIDs').once()).value as List<dynamic> ?? []).length;
+                                reference.child('library').child('rentalIDs').child('$num').set(id);
 
-                                if (borrowTransaction.committed &&
-                                    addRentalTransaction.committed &&
-                                    addPersonalRentalTransaction.committed) {
-                                  EREToast(
-                                      str.lang == '한국어'
-                                          ? '대출 처리가 완료되었습니다.'
-                                          : 'Succeeded to borrow the book.',
-                                      context,
-                                      false);
+                                if (borrowTransaction.committed && addRentalTransaction.committed && addPersonalRentalTransaction.committed) {
+                                  EREToast(str.lang == '한국어' ? '대출 처리가 완료되었습니다.' : 'Succeeded to borrow the book.', context, false);
                                   widget.refresh();
                                 }
                               } else
-                                EREToast(
-                                    str.lang == '한국어'
-                                        ? '해당 도서가 맞는지 확인한 후 다시 시도해 주세요.'
-                                        : 'Please check the book is right and try again.',
-                                    context,
-                                    true);
+                                EREToast(str.lang == '한국어' ? '해당 도서가 맞는지 확인한 후 다시 시도해 주세요.' : 'Please check the book is right and try again.', context, true);
                             },
                           ),
                           FlatButton(

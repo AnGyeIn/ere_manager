@@ -44,8 +44,7 @@ class _ForLecActivityState extends State<ForLecActivity> {
                     alignment: Alignment(1, 0),
                     child: DropdownButton<String>(
                       value: forLectureType,
-                      style:
-                          TextStyle(color: ERE_YELLOW, fontSize: width * 0.043),
+                      style: TextStyle(color: ERE_YELLOW, fontSize: width * 0.043),
                       dropdownColor: ERE_BLACK,
                       underline: Container(
                         color: ERE_BLACK,
@@ -56,11 +55,10 @@ class _ForLecActivityState extends State<ForLecActivity> {
                         });
                       },
                       items: [str.major, str.culture]
-                          .map<DropdownMenuItem<String>>(
-                              (value) => DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  ))
+                          .map<DropdownMenuItem<String>>((value) => DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              ))
                           .toList(),
                     ),
                   ),
@@ -70,10 +68,7 @@ class _ForLecActivityState extends State<ForLecActivity> {
                   child: TextField(
                     cursorColor: ERE_YELLOW,
                     decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: str.forLecNameHint,
-                        hintStyle: TextStyle(
-                            color: Color(0x88e4b92a), fontSize: width * 0.043)),
+                        border: InputBorder.none, hintText: str.forLecNameHint, hintStyle: TextStyle(color: Color(0x88e4b92a), fontSize: width * 0.043)),
                     style: TextStyle(color: ERE_YELLOW),
                     onChanged: (text) => forLectureName = text,
                   ),
@@ -104,8 +99,7 @@ class _ForLecActivityState extends State<ForLecActivity> {
                   children: [
                     Text(
                       '[${str.translate(widget.forLectures.types[index])}]${widget.forLectures.names[index]}',
-                      style:
-                          TextStyle(color: ERE_YELLOW, fontSize: width * 0.043),
+                      style: TextStyle(color: ERE_YELLOW, fontSize: width * 0.043),
                     ),
                     Container(
                       width: width * (str.lang == '한국어' ? 0.16 : 0.21),
