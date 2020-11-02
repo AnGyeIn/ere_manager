@@ -262,9 +262,6 @@ class _MainActivityState extends State<MainActivity> {
                                                 alignment: Alignment.center,
                                                 width: width * 0.4,
                                                 child: TextField(
-                                                  decoration: InputDecoration(
-                                                    border: InputBorder.none,
-                                                  ),
                                                   controller: TextEditingController(text: curName),
                                                   onChanged: (text) => curName = text,
                                                 ),
@@ -287,7 +284,6 @@ class _MainActivityState extends State<MainActivity> {
                                                 width: width * 0.4,
                                                 child: TextField(
                                                   keyboardType: TextInputType.numberWithOptions(signed: true),
-                                                  decoration: InputDecoration(border: InputBorder.none),
                                                   controller: TextEditingController(text: curSNum),
                                                   onChanged: (text) => curSNum = text,
                                                 ),
@@ -302,7 +298,7 @@ class _MainActivityState extends State<MainActivity> {
                                                 height: height * 0.034,
                                                 child: Text(
                                                   str.phoneNumber,
-                                                  style: TextStyle(fontSize: width * (str.lang == '한국어' ? 0.04 : 0.03)),
+                                                  style: TextStyle(fontSize: width * 0.03),
                                                 ),
                                               ),
                                               Container(
@@ -310,7 +306,6 @@ class _MainActivityState extends State<MainActivity> {
                                                 width: width * 0.4,
                                                 child: TextField(
                                                   keyboardType: TextInputType.numberWithOptions(signed: true),
-                                                  decoration: InputDecoration(border: InputBorder.none),
                                                   controller: TextEditingController(text: curPNum),
                                                   onChanged: (text) => curPNum = text,
                                                 ),

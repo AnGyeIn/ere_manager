@@ -33,6 +33,7 @@ class _LibraryActivityState extends State<LibraryActivity> {
   FirebaseList bookRequestList;
   FirebaseList candidateList;
   FirebaseList borrowerList;
+  FirebaseList adminList;
 
   String userID;
   String userName;
@@ -46,6 +47,7 @@ class _LibraryActivityState extends State<LibraryActivity> {
   List<Map<String, dynamic>> candidates = [];
   List<String> rawBorrowers = [];
   List<Rental> borrowers = [];
+  List<String> admins = [];
 
   TabState tab = TabState.bookList;
   bool isAdmin = false;
@@ -114,8 +116,8 @@ class _LibraryActivityState extends State<LibraryActivity> {
           });
         });
 
-    reference.child('library').child('admin').once().then((snapshot) {
-      isAdmin = userID == snapshot.value;
+    reference.child('Student').child(userID).child('isLibraryAdmin').once().then((snapshot) {
+      isAdmin = snapshot.value ?? false;
       if (isAdmin) {
         bookRequestList = FirebaseList(
             query: reference.child('library').child('BookRequest'),
@@ -170,6 +172,19 @@ class _LibraryActivityState extends State<LibraryActivity> {
                 borrowers.sort((a, b) => a.dueDate.compareTo(b.dueDate));
               });
             });
+        adminList = FirebaseList(
+          query: reference.child('library').child('adminList'),
+          onChildAdded: (idx, snapshot) {
+            admins.insert(idx, snapshot.value);
+          },
+          onChildRemoved: (idx, snapshot) {
+            admins.removeAt(idx);
+          },
+          onChildChanged: (idx, snapshot) {
+            admins.removeAt(idx);
+            admins.insert(idx, snapshot.value);
+          },
+        );
       }
     });
 
@@ -452,25 +467,108 @@ class _LibraryActivityState extends State<LibraryActivity> {
                     : Expanded(
                         //tab == TabState.admin
                         child: Column(children: [
-                          !isAdminChanging
-                              ? EREButton(
-                                  text: str.recruitAdmin,
-                                  onPressed: () async {
-                                    isAdminChanging = true;
-                                    await reference.child('library').child('isAdminChanging').set(true);
-                                    setState(() {});
-                                  },
-                                  width: width,
-                                )
-                              : EREButton(
-                                  text: str.cancelRecruitAdmin,
-                                  onPressed: () async {
-                                    isAdminChanging = false;
-                                    await reference.child('library').child('isAdminChanging').set(false);
-                                    setState(() {});
-                                  },
-                                  width: width,
-                                ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              EREButton(
+                                text: str.adminList,
+                                onPressed: () async {
+                                  String adminListStr = '';
+                                  for (var name in admins) adminListStr += name + '\n';
+                                  showDialog(
+                                      context: context,
+                                      builder: (_) => AlertDialog(
+                                            title: Text(str.adminList),
+                                            content: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [Text(adminListStr)],
+                                            ),
+                                            actions: [
+                                              FlatButton(
+                                                child: Text(str.close),
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                              )
+                                            ],
+                                          ));
+                                },
+                                width: width * 0.8,
+                              ),
+                              Padding(
+                                padding: EdgeInsets.all(width * 0.03),
+                              ),
+                              !isAdminChanging
+                                  ? EREButton(
+                                      text: str.recruitAdmin,
+                                      onPressed: () async {
+                                        isAdminChanging = true;
+                                        await reference.child('library').child('isAdminChanging').set(true);
+                                        setState(() {});
+                                      },
+                                      width: width * 0.8,
+                                    )
+                                  : EREButton(
+                                      text: str.cancelRecruitAdmin,
+                                      onPressed: () async {
+                                        isAdminChanging = false;
+                                        reference.child('library')
+                                          ..child('isAdminChanging').set(false)
+                                          ..child('adminCandidates').remove();
+                                        setState(() {});
+                                      },
+                                      width: width * 0.8,
+                                    ),
+                              isAdminChanging ? Padding(padding: EdgeInsets.all(width * 0.03)) : Container(),
+                              isAdminChanging
+                                  ? EREButton(
+                                      text: str.resignAdmin,
+                                      onPressed: () {
+                                        showDialog(
+                                            context: context,
+                                            builder: (_) => AlertDialog(
+                                                  title: Text(str.resignAdmin),
+                                                  content: Column(
+                                                    mainAxisSize: MainAxisSize.min,
+                                                    children: [
+                                                      Text(str.lang == '한국어'
+                                                          ? '에자공 도서관 관리자로서 모든 권한과 책임을 포기하고 사퇴합니다. 진행하시겠습니까?'
+                                                          : 'You give up all the responsibility and authority of the administrator of ERE library. Would you proceed?')
+                                                    ],
+                                                  ),
+                                                  actions: [
+                                                    FlatButton(
+                                                      child: Text(
+                                                        str.resign,
+                                                        style: TextStyle(color: Colors.red),
+                                                      ),
+                                                      onPressed: () {
+                                                        reference
+                                                          ..child('Student').child(userID).child('isLibraryAdmin').remove()
+                                                          ..child('library').child('adminList').child(userID).remove();
+                                                        EREToast(
+                                                            str.lang == '한국어' ? '관리자 사퇴가 완료되었습니다.' : 'Succeeded to resign as administrator.', context, false);
+                                                        Navigator.pop(context);
+                                                        setState(() {
+                                                          isAdmin = false;
+                                                          tab = TabState.myPage;
+                                                        });
+                                                      },
+                                                    ),
+                                                    FlatButton(
+                                                      child: Text(str.cancel),
+                                                      onPressed: () {
+                                                        Navigator.pop(context);
+                                                      },
+                                                    )
+                                                  ],
+                                                ));
+                                      },
+                                      width: width * 0.8,
+                                    )
+                                  : Container()
+                            ],
+                          ),
                           isAdminChanging
                               ? Container(
                                   alignment: Alignment.centerLeft,
@@ -525,7 +623,7 @@ class _LibraryActivityState extends State<LibraryActivity> {
                                                               mainAxisSize: MainAxisSize.min,
                                                               children: [
                                                                 Text(
-                                                                    '${str.lang == '한국어' ? '관리자 선정을 승인하면 즉시 관리자로서의 책임과 권한이 인계됩니다.\n지원자를 승인하시겠습니까?' : 'As you approve the candidate, the responsibility and the authority as the administrator are transferred to the candidate.\nWould you approve the candidate?'}\n\n'
+                                                                    '${str.lang == '한국어' ? '관리자 선정을 승인하면 즉시 관리자로서의 책임과 권한이 부여됩니다.\n지원자를 승인하시겠습니까?' : 'As you approve the candidate, the responsibility and the authority as the administrator are given to the candidate.\nWould you approve the candidate?'}\n\n'
                                                                     '${str.name} : ${candidates[index]['name']}, ${str.studentID} : ${candidates[index]['sNum']}'),
                                                               ],
                                                             ),
@@ -533,17 +631,14 @@ class _LibraryActivityState extends State<LibraryActivity> {
                                                               FlatButton(
                                                                 child: Text(str.approve),
                                                                 onPressed: () {
+                                                                  reference.child('Student').child(candidates[index]['id']).child('isLibraryAdmin').set(true);
                                                                   reference.child('library')
-                                                                    ..child('admin').set(candidates[index]['id'])
-                                                                    ..child('adminCandidates').remove()
-                                                                    ..child('isAdminChanging').set(false);
+                                                                    ..child('adminCandidates').child(candidates[index]['id']).remove()
+                                                                    ..child('adminList').child(userID).set(userName);
                                                                   EREToast(str.lang == '한국어' ? '새로운 관리자가 선정되었습니다.' : 'Succeeded to nominate new administrator.',
                                                                       context, false);
                                                                   Navigator.pop(context);
-                                                                  setState(() async {
-                                                                    isAdminChanging = false;
-                                                                    isAdmin = userID == (await reference.child('library').child('admin').once()).value;
-                                                                  });
+                                                                  setState(() {});
                                                                 },
                                                               ),
                                                               FlatButton(
@@ -955,6 +1050,7 @@ class _LibraryActivityState extends State<LibraryActivity> {
     if (bookRequestList != null) bookRequestList.clear();
     if (candidateList != null) candidateList.clear();
     if (borrowerList != null) borrowerList.clear();
+    if (adminList != null) adminList.clear();
   }
 
   _registerBook(BuildContext context, double width, double height) {

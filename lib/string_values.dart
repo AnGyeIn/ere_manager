@@ -142,6 +142,12 @@ class Str {
       'approve': '승인',
       'cancelRecruitAdmin': '관리자 모집 취소',
       'approveERELibraryAdminInfo': '에자공 도서관 관리자 선정',
+      'typeName': '이름을 입력해주세요',
+      'typeStudentID': '학번을 입력해주세요',
+      'typePhoneNumber': '연락처를 입력해주세요',
+      'resignAdmin': '관리자 사퇴',
+      'resign': '사퇴',
+      'adminList': '관리자 목록',
     },
     'English': {
       'duringAutoLogin': 'Logging in automatically...',
@@ -280,11 +286,17 @@ class Str {
       'apply2': 'Apply',
       'email': 'Send email',
       'candidate': 'Candidates for the administrator',
-      'recruitAdmin': 'Recruit the administrator',
+      'recruitAdmin': 'Recruit\nthe administrator',
       'noCandidate': 'There is no candidate.',
       'approve': 'Approve',
-      'cancelRecruitAdmin': 'Cancel recruiting administrator',
+      'cancelRecruitAdmin': 'Cancel recruiting\nadministrator',
       'approveERELibraryAdminInfo': 'Approve the administrator of ERE library',
+      'typeName': 'Type in your name',
+      'typeStudentID': 'Type in your student ID',
+      'typePhoneNumber': 'Type in your phone number',
+      'resignAdmin': 'Resign as\nadministrator',
+      'resign': 'Resign',
+      'adminList': 'Admin. list',
     }
   };
 
@@ -557,6 +569,18 @@ class Str {
   String get cancelRecruitAdmin => values[lang]['cancelRecruitAdmin'];
 
   String get approveERELibraryAdminInfo => values[lang]['approveERELibraryAdminInfo'];
+
+  String get typeName => values[lang]['typeName'];
+
+  String get typeStudentID => values[lang]['typeStudentID'];
+
+  String get typePhoneNumber => values[lang]['typePhoneNumber'];
+
+  String get resignAdmin => values[lang]['resignAdmin'];
+
+  String get resign => values[lang]['resign'];
+
+  String get adminList => values[lang]['adminList'];
 
   String translate(String text) {
     if (lang != '한국어')

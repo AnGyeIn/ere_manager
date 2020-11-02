@@ -4,35 +4,35 @@ PODS:
     - AppAuth/ExternalUserAgent (= 1.4.0)
   - AppAuth/Core (1.4.0)
   - AppAuth/ExternalUserAgent (1.4.0)
-  - FBSDKCoreKit (5.15.1):
-    - FBSDKCoreKit/Basics (= 5.15.1)
-    - FBSDKCoreKit/Core (= 5.15.1)
-  - FBSDKCoreKit/Basics (5.15.1)
-  - FBSDKCoreKit/Core (5.15.1):
+  - FBSDKCoreKit (7.1.1):
+    - FBSDKCoreKit/Basics (= 7.1.1)
+    - FBSDKCoreKit/Core (= 7.1.1)
+  - FBSDKCoreKit/Basics (7.1.1)
+  - FBSDKCoreKit/Core (7.1.1):
     - FBSDKCoreKit/Basics
-  - FBSDKLoginKit (5.15.1):
-    - FBSDKLoginKit/Login (= 5.15.1)
-  - FBSDKLoginKit/Login (5.15.1):
-    - FBSDKCoreKit (~> 5.0)
-  - Firebase (6.26.0):
-    - Firebase/Core (= 6.26.0)
-  - Firebase/Auth (6.26.0):
+  - FBSDKLoginKit (7.1.1):
+    - FBSDKLoginKit/Login (= 7.1.1)
+  - FBSDKLoginKit/Login (7.1.1):
+    - FBSDKCoreKit (~> 7.1.1)
+  - Firebase (6.33.0):
+    - Firebase/Core (= 6.33.0)
+  - Firebase/Auth (6.33.0):
     - Firebase/CoreOnly
-    - FirebaseAuth (~> 6.5.3)
-  - Firebase/Core (6.26.0):
+    - FirebaseAuth (~> 6.9.2)
+  - Firebase/Core (6.33.0):
     - Firebase/CoreOnly
-    - FirebaseAnalytics (= 6.6.0)
-  - Firebase/CoreOnly (6.26.0):
-    - FirebaseCore (= 6.7.2)
-  - Firebase/Database (6.26.0):
+    - FirebaseAnalytics (= 6.8.3)
+  - Firebase/CoreOnly (6.33.0):
+    - FirebaseCore (= 6.10.3)
+  - Firebase/Database (6.33.0):
     - Firebase/CoreOnly
-    - FirebaseDatabase (~> 6.2.1)
-  - Firebase/Messaging (6.26.0):
+    - FirebaseDatabase (~> 6.6.0)
+  - Firebase/Messaging (6.33.0):
     - Firebase/CoreOnly
-    - FirebaseMessaging (~> 4.4.1)
-  - firebase_auth (0.18.0-1):
-    - Firebase/Auth (~> 6.26.0)
-    - Firebase/CoreOnly (~> 6.26.0)
+    - FirebaseMessaging (~> 4.7.0)
+  - firebase_auth (0.18.2):
+    - Firebase/Auth (~> 6.33.0)
+    - Firebase/CoreOnly (~> 6.33.0)
     - firebase_core
     - Flutter
   - firebase_auth_ui (0.0.1):
@@ -46,96 +46,89 @@ PODS:
     - FirebaseUI/OAuth
     - FirebaseUI/Phone
     - Flutter
-  - firebase_core (0.5.0):
-    - Firebase/CoreOnly (~> 6.26.0)
+  - firebase_core (0.5.1):
+    - Firebase/CoreOnly (~> 6.33.0)
     - Flutter
-  - firebase_database (4.0.0):
-    - Firebase/CoreOnly (~> 6.26.0)
-    - Firebase/Database (~> 6.26.0)
+  - firebase_database (4.2.0):
+    - Firebase/CoreOnly (~> 6.33.0)
+    - Firebase/Database (~> 6.33.0)
     - firebase_core
     - Flutter
-  - firebase_messaging (7.0.0):
-    - Firebase/CoreOnly (~> 6.26.0)
-    - Firebase/Messaging (~> 6.26.0)
+  - firebase_messaging (7.0.3):
+    - Firebase/CoreOnly (~> 6.33.0)
+    - Firebase/Messaging (~> 6.33.0)
     - firebase_core
     - Flutter
-  - FirebaseAnalytics (6.6.0):
-    - FirebaseCore (~> 6.7)
-    - FirebaseInstallations (~> 1.3)
-    - GoogleAppMeasurement (= 6.6.0)
-    - GoogleUtilities/AppDelegateSwizzler (~> 6.0)
-    - GoogleUtilities/MethodSwizzler (~> 6.0)
-    - GoogleUtilities/Network (~> 6.0)
-    - "GoogleUtilities/NSData+zlib (~> 6.0)"
-    - nanopb (~> 1.30905.0)
-  - FirebaseAnalyticsInterop (1.5.0)
-  - FirebaseAuth (6.5.3):
-    - FirebaseAuthInterop (~> 1.0)
-    - FirebaseCore (~> 6.6)
-    - GoogleUtilities/AppDelegateSwizzler (~> 6.5)
-    - GoogleUtilities/Environment (~> 6.5)
+  - FirebaseAnalytics (6.8.3):
+    - FirebaseCore (~> 6.10)
+    - FirebaseInstallations (~> 1.6)
+    - GoogleAppMeasurement (= 6.8.3)
+    - GoogleUtilities/AppDelegateSwizzler (~> 6.7)
+    - GoogleUtilities/MethodSwizzler (~> 6.7)
+    - GoogleUtilities/Network (~> 6.7)
+    - "GoogleUtilities/NSData+zlib (~> 6.7)"
+    - nanopb (~> 1.30906.0)
+  - FirebaseAuth (6.9.2):
+    - FirebaseCore (~> 6.10)
+    - GoogleUtilities/AppDelegateSwizzler (~> 6.7)
+    - GoogleUtilities/Environment (~> 6.7)
     - GTMSessionFetcher/Core (~> 1.1)
-  - FirebaseAuthInterop (1.1.0)
-  - FirebaseCore (6.7.2):
-    - FirebaseCoreDiagnostics (~> 1.3)
-    - FirebaseCoreDiagnosticsInterop (~> 1.2)
-    - GoogleUtilities/Environment (~> 6.5)
-    - GoogleUtilities/Logger (~> 6.5)
-  - FirebaseCoreDiagnostics (1.5.0):
-    - GoogleDataTransport (~> 7.0)
+  - FirebaseCore (6.10.3):
+    - FirebaseCoreDiagnostics (~> 1.6)
     - GoogleUtilities/Environment (~> 6.7)
     - GoogleUtilities/Logger (~> 6.7)
-    - nanopb (~> 1.30905.0)
-  - FirebaseCoreDiagnosticsInterop (1.2.0)
-  - FirebaseDatabase (6.2.1):
-    - FirebaseAuthInterop (~> 1.0)
-    - FirebaseCore (~> 6.0)
+  - FirebaseCoreDiagnostics (1.7.0):
+    - GoogleDataTransport (~> 7.4)
+    - GoogleUtilities/Environment (~> 6.7)
+    - GoogleUtilities/Logger (~> 6.7)
+    - nanopb (~> 1.30906.0)
+  - FirebaseDatabase (6.6.0):
+    - FirebaseCore (~> 6.10)
     - leveldb-library (~> 1.22)
-  - FirebaseInstallations (1.3.0):
-    - FirebaseCore (~> 6.6)
-    - GoogleUtilities/Environment (~> 6.6)
-    - GoogleUtilities/UserDefaults (~> 6.6)
+  - FirebaseInstallations (1.7.0):
+    - FirebaseCore (~> 6.10)
+    - GoogleUtilities/Environment (~> 6.7)
+    - GoogleUtilities/UserDefaults (~> 6.7)
     - PromisesObjC (~> 1.2)
-  - FirebaseInstanceID (4.3.4):
-    - FirebaseCore (~> 6.6)
-    - FirebaseInstallations (~> 1.0)
-    - GoogleUtilities/Environment (~> 6.5)
-    - GoogleUtilities/UserDefaults (~> 6.5)
-  - FirebaseMessaging (4.4.1):
-    - FirebaseAnalyticsInterop (~> 1.5)
-    - FirebaseCore (~> 6.6)
-    - FirebaseInstanceID (~> 4.3)
-    - GoogleUtilities/AppDelegateSwizzler (~> 6.5)
-    - GoogleUtilities/Environment (~> 6.5)
-    - GoogleUtilities/Reachability (~> 6.5)
-    - GoogleUtilities/UserDefaults (~> 6.5)
+  - FirebaseInstanceID (4.8.0):
+    - FirebaseCore (~> 6.10)
+    - FirebaseInstallations (~> 1.6)
+    - GoogleUtilities/Environment (~> 6.7)
+    - GoogleUtilities/UserDefaults (~> 6.7)
+  - FirebaseMessaging (4.7.1):
+    - FirebaseCore (~> 6.10)
+    - FirebaseInstanceID (~> 4.7)
+    - GoogleUtilities/AppDelegateSwizzler (~> 6.7)
+    - GoogleUtilities/Environment (~> 6.7)
+    - GoogleUtilities/Reachability (~> 6.7)
+    - GoogleUtilities/UserDefaults (~> 6.7)
     - Protobuf (>= 3.9.2, ~> 3.9)
-  - FirebaseUI/Auth (8.4.2):
-    - Firebase/Auth (~> 6.0)
+  - FirebaseUI/Auth (9.0.0):
+    - Firebase/Auth
     - GoogleUtilities/UserDefaults
-  - FirebaseUI/Email (8.4.2):
+  - FirebaseUI/Email (9.0.0):
     - FirebaseUI/Auth
-  - FirebaseUI/Facebook (8.4.2):
-    - FBSDKLoginKit (~> 5.0)
+  - FirebaseUI/Facebook (9.0.0):
+    - FBSDKLoginKit (~> 7.0)
     - FirebaseUI/Auth
-  - FirebaseUI/Google (8.4.2):
+  - FirebaseUI/Google (9.0.0):
     - FirebaseUI/Auth
     - GoogleSignIn (~> 5.0)
-  - FirebaseUI/OAuth (8.4.2):
+  - FirebaseUI/OAuth (9.0.0):
     - FirebaseUI/Auth
-  - FirebaseUI/Phone (8.4.2):
+  - FirebaseUI/Phone (9.0.0):
     - FirebaseUI/Auth
   - Flutter (1.0.0)
   - flutter_barcode_scanner (1.0.1):
     - Flutter
-  - GoogleAppMeasurement (6.6.0):
-    - GoogleUtilities/AppDelegateSwizzler (~> 6.0)
-    - GoogleUtilities/MethodSwizzler (~> 6.0)
-    - GoogleUtilities/Network (~> 6.0)
-    - "GoogleUtilities/NSData+zlib (~> 6.0)"
-    - nanopb (~> 1.30905.0)
-  - GoogleDataTransport (7.2.0):
-    - nanopb (~> 1.30905.0)
+  - GoogleAppMeasurement (6.8.3):
+    - GoogleUtilities/AppDelegateSwizzler (~> 6.7)
+    - GoogleUtilities/MethodSwizzler (~> 6.7)
+    - GoogleUtilities/Network (~> 6.7)
+    - "GoogleUtilities/NSData+zlib (~> 6.7)"
+    - nanopb (~> 1.30906.0)
+  - GoogleDataTransport (7.5.1):
+    - nanopb (~> 1.30906.0)
   - GoogleSignIn (5.0.2):
     - AppAuth (~> 1.2)
     - GTMAppAuth (~> 1.0)
@@ -159,24 +152,24 @@ PODS:
     - GoogleUtilities/Logger
   - GoogleUtilities/UserDefaults (6.7.2):
     - GoogleUtilities/Logger
-  - GTMAppAuth (1.0.0):
-    - AppAuth/Core (~> 1.0)
-    - GTMSessionFetcher (~> 1.1)
-  - GTMSessionFetcher (1.4.0):
-    - GTMSessionFetcher/Full (= 1.4.0)
-  - GTMSessionFetcher/Core (1.4.0)
-  - GTMSessionFetcher/Full (1.4.0):
-    - GTMSessionFetcher/Core (= 1.4.0)
+  - GTMAppAuth (1.1.0):
+    - AppAuth/Core (~> 1.4)
+    - GTMSessionFetcher (~> 1.4)
+  - GTMSessionFetcher (1.5.0):
+    - GTMSessionFetcher/Full (= 1.5.0)
+  - GTMSessionFetcher/Core (1.5.0)
+  - GTMSessionFetcher/Full (1.5.0):
+    - GTMSessionFetcher/Core (= 1.5.0)
   - leveldb-library (1.22)
-  - nanopb (1.30905.0):
-    - nanopb/decode (= 1.30905.0)
-    - nanopb/encode (= 1.30905.0)
-  - nanopb/decode (1.30905.0)
-  - nanopb/encode (1.30905.0)
+  - nanopb (1.30906.0):
+    - nanopb/decode (= 1.30906.0)
+    - nanopb/encode (= 1.30906.0)
+  - nanopb/decode (1.30906.0)
+  - nanopb/encode (1.30906.0)
   - path_provider (0.0.1):
     - Flutter
-  - PromisesObjC (1.2.10)
-  - Protobuf (3.12.0)
+  - PromisesObjC (1.2.11)
+  - Protobuf (3.13.0)
   - shared_preferences (0.0.1):
     - Flutter
   - url_launcher (0.0.1):
@@ -201,12 +194,9 @@ SPEC REPOS:
     - FBSDKLoginKit
     - Firebase
     - FirebaseAnalytics
-    - FirebaseAnalyticsInterop
     - FirebaseAuth
-    - FirebaseAuthInterop
     - FirebaseCore
     - FirebaseCoreDiagnostics
-    - FirebaseCoreDiagnosticsInterop
     - FirebaseDatabase
     - FirebaseInstallations
     - FirebaseInstanceID
@@ -247,39 +237,36 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
-  FBSDKCoreKit: 1d5acf7c9d7a2f92bb1a242dc60cae5b7adb91df
-  FBSDKLoginKit: f1ea8026a58b52d30c9f2e6a58ca7d813619fb83
-  Firebase: 7cf5f9c67f03cb3b606d1d6535286e1080e57eb6
-  firebase_auth: c42c06a212439824b5da53437da905931e8e6b9a
+  FBSDKCoreKit: b46507dc8b8cefed31d644e74d7cc30e2a715ef8
+  FBSDKLoginKit: 1a61d79e2b25e2fc0d03dccab1e34b38bbdf2546
+  Firebase: 8db6f2d1b2c5e2984efba4949a145875a8f65fe5
+  firebase_auth: 11173868a022c9cece0290a250087f2b8c1ea2ad
   firebase_auth_ui: 01517d0bcdc078de1d2d3dd37d9543adfb43e1f0
-  firebase_core: 3134fe79d257d430f163b558caf52a10a87efe8a
-  firebase_database: a45844f55a7881e37d1a5dc61cccc214731a4643
-  firebase_messaging: 6061cbdfe4463502a0d4d7049820c25d1757a095
-  FirebaseAnalytics: 96634d356482d4f3af8fe459a0ebf19a99c71b75
-  FirebaseAnalyticsInterop: 3f86269c38ae41f47afeb43ebf32a001f58fcdae
-  FirebaseAuth: 7047aec89c0b17ecd924a550c853f0c27ac6015e
-  FirebaseAuthInterop: a0f37ae05833af156e72028f648d313f7e7592e9
-  FirebaseCore: f42e5e5f382cdcf6b617ed737bf6c871a6947b17
-  FirebaseCoreDiagnostics: 7535fe695737f8c5b350584292a70b7f8ff0357b
-  FirebaseCoreDiagnosticsInterop: 296e2c5f5314500a850ad0b83e9e7c10b011a850
-  FirebaseDatabase: 4e99c0c475d1ee0aa64ae2b53c93f80b7b60d7d9
-  FirebaseInstallations: 6f5f680e65dc374397a483c32d1799ba822a395b
-  FirebaseInstanceID: cef67c4967c7cecb56ea65d8acbb4834825c587b
-  FirebaseMessaging: 29543feb343b09546ab3aa04d008ee8595b43c44
-  FirebaseUI: e57e9b9c4340631151fbe67a14206d23d0974f37
+  firebase_core: aa25a5dc6b492ecab37587c53d8420135f0cac90
+  firebase_database: beac891635872e3b42571d6b510c6c1b4d94eeb1
+  firebase_messaging: 0aea2cd5885b65e19ede58ee3507f485c992cc75
+  FirebaseAnalytics: 5dd088bd2e67bb9d13dbf792d1164ceaf3052193
+  FirebaseAuth: c92d49ada7948d1a23466e3db17bc4c2039dddc3
+  FirebaseCore: d889d9e12535b7f36ac8bfbf1713a0836a3012cd
+  FirebaseCoreDiagnostics: 770ac5958e1372ce67959ae4b4f31d8e127c3ac1
+  FirebaseDatabase: 13a865a4b85897462b930eb683bda8f52583713f
+  FirebaseInstallations: 466c7b4d1f58fe16707693091da253726a731ed2
+  FirebaseInstanceID: bd3ffc24367f901a43c063b36c640b345a4a5dd1
+  FirebaseMessaging: 5eca4ef173de76253352511aafef774caa1cba2a
+  FirebaseUI: f0677a1cc235f6da602cbd5c9b5fbbd24544a6b3
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_barcode_scanner: 49cd22fac3304077a6c1672f63bee4a2572ffd85
-  GoogleAppMeasurement: 67458367830514fb20fd9e233496f1eef9d90185
-  GoogleDataTransport: 672fb0ce96fe7f7f31d43672fca62ad2c9c86f7b
+  GoogleAppMeasurement: 966e88df9d19c15715137bb2ddaf52373f111436
+  GoogleDataTransport: f56af7caa4ed338dc8e138a5d7c5973e66440833
   GoogleSignIn: 7137d297ddc022a7e0aa4619c86d72c909fa7213
   GoogleUtilities: 7f2f5a07f888cdb145101d6042bc4422f57e70b3
-  GTMAppAuth: 4deac854479704f348309e7b66189e604cf5e01e
-  GTMSessionFetcher: 6f5c8abbab8a9bce4bb3f057e317728ec6182b10
+  GTMAppAuth: 197a8dabfea5d665224aa00d17f164fc2248dab9
+  GTMSessionFetcher: b3503b20a988c4e20cc189aa798fd18220133f52
   leveldb-library: 55d93ee664b4007aac644a782d11da33fba316f7
-  nanopb: c43f40fadfe79e8b8db116583945847910cbabc9
+  nanopb: 59317e09cf1f1a0af72f12af412d54edf52603fc
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
-  PromisesObjC: b14b1c6b68e306650688599de8a45e49fae81151
-  Protobuf: 2793fcd0622a00b546c60e7cbbcc493e043e9bb9
+  PromisesObjC: 8c196f5a328c2cba3e74624585467a557dcb482f
+  Protobuf: 3dac39b34a08151c6d949560efe3f86134a3f748
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
 
