@@ -9,6 +9,7 @@ import 'package:firebase_auth_ui/providers.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
 
@@ -23,7 +24,10 @@ const ERE_GREY = Color(0xff2f2f2f);
 
 Str str;
 
-void main() => runApp(MaterialApp(home: MainActivity()));
+void main() {
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarBrightness: Brightness.dark));
+  runApp(MaterialApp(home: MainActivity()));
+}
 
 class MainActivity extends StatefulWidget {
   _MainActivityState createState() => _MainActivityState();

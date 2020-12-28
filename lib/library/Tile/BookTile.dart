@@ -34,7 +34,7 @@ class _BookTileState extends State<BookTile> {
     return RaisedButton(
       padding: EdgeInsets.zero,
       textColor: ERE_YELLOW,
-      color: widget.isAdmin ? stateColor : ERE_GREY,
+      color: stateColor,
       child: Row(
         children: [
           Container(
@@ -70,7 +70,19 @@ class _BookTileState extends State<BookTile> {
         ],
       ),
       onPressed: !widget.isAdmin && !widget.book.isAvailable
-          ? null
+          ? () {
+              showDialog(
+                  context: context,
+                  builder: (_) => AlertDialog(
+                        content: Text(str.lang == '한국어' ? '대출 중인 도서입니다.' : 'This is not available now.'),
+                        actions: [
+                          FlatButton(
+                            child: Text(str.ok),
+                            onPressed: () => Navigator.pop(context),
+                          )
+                        ],
+                      ));
+            }
           : () {
               showDialog(
                   context: context,

@@ -35,7 +35,7 @@ class _LectureBookTileState extends State<LectureBookTile> {
     return RaisedButton(
       padding: EdgeInsets.zero,
       textColor: ERE_YELLOW,
-      color: isOwner ? stateColor : ERE_GREY,
+      color: stateColor,
       child: Row(
         children: [
           Container(
@@ -238,7 +238,19 @@ class _LectureBookTileState extends State<LectureBookTile> {
                             ],
                           ));
                 }
-              : null,
+              : () {
+                  showDialog(
+                      context: context,
+                      builder: (_) => AlertDialog(
+                            content: Text(str.lang == '한국어' ? '제공자가 비활성화한 교재입니다.' : 'This is deactivated.'),
+                            actions: [
+                              FlatButton(
+                                child: Text(str.ok),
+                                onPressed: () => Navigator.pop(context),
+                              )
+                            ],
+                          ));
+                },
     );
   }
 }
